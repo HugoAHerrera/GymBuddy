@@ -2,7 +2,7 @@ Enlaces a los Wireframes
 inicio: https://wireframe.cc/z2Bged
 Ejercicios: https://wireframe.cc/BP4lOy
 Progreso: https://wireframe.cc/W8yCb1
-Tienda:
+Tienda: https://wireframe.cc/gyIbEg
 Carro: https://wireframe.cc/HW6Xj9
 Pago: https://wireframe.cc/ijHgUA
 Obtener Producto: https://wireframe.cc/KpRyux
