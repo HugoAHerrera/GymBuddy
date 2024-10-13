@@ -1,6 +1,7 @@
 Enlace para el Sitemap: https://octopus.do/02k8chgc3mgx
 Enlaces a los Wireframes
 inicio: https://wireframe.cc/z2Bged
+Guía de Ejercicios: https://wireframe.cc/tHgSGk
 Ejercicios: https://wireframe.cc/BP4lOy
 Progreso/Estadisticas/Graficos: https://wireframe.cc/W8yCb1
 Tienda: https://wireframe.cc/gyIbEg
