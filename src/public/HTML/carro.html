@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Progreso Fitness</title>
-    <link rel="stylesheet" href="paginaBasica.css">
+    <link rel="stylesheet" href="../CSS/carro.css">
 </head>
 <body>
     <header>
@@ -17,7 +17,7 @@
             </div>
         </div>
         <nav>
-            <button>Tienda</button>
+            <button class="resaltar">Tienda</button>
             <button>Progreso</button>
             <button>Rutinas</button>
             <div class="logo">
@@ -28,6 +28,30 @@
             <button>Soporte</button>
         </nav>
     </header>
+
+    <div class="progreso-compra">
+        <label for="carrito">Carro</label>
+        <input type="range" id="carrito" name="progreso" min="0" max="100" value="33">
+        <label for="producto">Obtener el producto</label>
+    </div>
+
+    <main>
+    <div class="contenedor">
+        <div class="producto">
+            <img src="imagen-del-producto.png" alt="Producto">
+            <p>Detalles del producto...</p>
+        </div>
+        <div class="resumen-compra">
+            <h3>Resumen de la compra</h3>
+            <p>Confirmar después y pasar a pago.</p>
+        </div>
+    </div>
+    <div class="productos-relacionados">
+        <h3>Productos parecidos</h3>
+        <!-- Añade los productos relacionados aquí -->
+    </div>
+    </main>
+
 
     <footer>
         <p>Términos y condiciones | Contactos | Correo | etc</p>
