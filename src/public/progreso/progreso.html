@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Progreso Fitness</title>
+    <link rel="stylesheet" href="progreso.css">
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <button class="premium-btn">Premium</button>
+            <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
+            <div class="profile-search">
+                <button class="profile-btn">Perfil</button>
+                <input type="text" class="search-bar" placeholder="Buscar...">
+            </div>
+        </div>
+        <nav>
+            <button>tienda</button>
+            <button>progreso</button>
+            <button>rutinas</button>
+            <div class="logo">
+                <img src="imagen.png" alt="Logo de Fitness" />
+            </div>
+            <button>comunidad</button>
+            <button>objetivos</button>
+            <button>soporte</button>
+        </nav>
+    </header>
+
+    <main>
+    <div class="progress-container">
+        <!-- Contenedor de las gráficas en formato vertical -->
+        <div class="chart-section-container">
+            <div class="chart-section" id="max-distance" onclick="expandChart('max-distance')">
+                <h3>Max distance</h3>
+                <div class="chart-placeholder">[Gráfico]</div>
+            </div>
+            <div class="chart-section" id="pr" onclick="expandChart('pr')">
+                <h3>PR</h3>
+                <div class="chart-placeholder">[Gráfico]</div>
+            </div>
+            <div class="chart-section" id="etc" onclick="expandChart('etc')">
+                <h3>ETC</h3>
+                <div class="chart-placeholder">[Gráfico]</div>
+            </div>
+        </div>
+
+        <!-- Información del usuario en la parte derecha -->
+        <div class="user-info">
+            <img src="avatar.png" alt="Avatar del usuario" class="user-avatar">
+            <div class="user-stats">
+                <p><strong>Número de sesiones completadas:</strong> 45</p>
+                <p><strong>Distancia total recorrida:</strong> 120 km</p>
+                <p><strong>Calorías quemadas:</strong> 3000 kcal</p>
+            </div>
+        </div>
+    </div>
+    </main>
+
+
+    <footer>
+        <p>Términos y condiciones | Contactos | Correo | etc</p>
+    </footer>
+
+    <script src="progreso.js"></script>
+</body>
+</html>
