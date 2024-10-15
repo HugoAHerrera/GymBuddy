@@ -125,13 +125,35 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 20px;
+    margin: 20px 0;
+    padding: 10px 0;
 }
 
-.progreso-compra input[type="range"] {
-    width: 70%;
-    cursor: pointer;
+.etapa {
+    text-align: center;
+    flex: 1; /* Cada etapa ocupa el mismo espacio */
 }
+
+.etapa-icono {
+    font-size: 2rem; /* Ajusta el tamaño del icono */
+    margin-bottom: 5px; /* Espaciado debajo del icono */
+    border: 1px solid #003366; /* Borde azul oscuro */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    background-color: #f4f4f4; /* Fondo claro */
+    transition: background-color 0.3s ease; /* Efecto al pasar el ratón */
+}
+
+.etapa-icono:hover {
+    background-color: #3399cc; /* Cambia el color al pasar el ratón */
+    color: white; /* Texto blanco al pasar el ratón */
+}
+
+p {
+    margin-top: 5px; /* Espaciado entre el icono y el texto */
+    color: #003366; /* Color del texto */
+}
+
 
 .contenedor {
     display: flex;
@@ -182,7 +204,7 @@ footer {
     background-color: #003366;
     color: white;
     text-align: center;
-    padding: 20px;
+    padding: 10px;
     position: fixed;
     bottom: 0;
     width: 100%;
