@@ -1,44 +1,150 @@
-/* Asegura que el body tenga el 100% de altura del viewport */
-body {
-    margin: 0; /* Elimina el margen por defecto */
+html, body {
+    height: 100vh;
+    margin: 0;
     overflow: hidden;
-    height: 96vh; /* 100% de la altura de la ventana */
 }
 
-/* Estilo para el header */
 #header {
-    background-color: #4CAF50; /* Color de fondo del header */
-    height: 15%; /* Ocupa el 15% del viewport */
+    display: flex;
+    align-items: center;
+    background-color: #4CAF50;
+    height: 15%;
+    padding: 0 20px;
 }
 
-/* Estilo para la sección central */
+.logo {
+    height: auto;
+    max-height: 80%;
+    width: auto;
+}
+
+.header-title {
+    color: white;
+    font-size: 24px;
+    margin: 0;
+}
+
 #central {
-    background-color: #f0f0f0; /* Color de fondo del contenido central */
-    height: 75%; /* Ocupa el 75% del viewport */
+    display: flex;
+    height: 72%;
+}
+
+#left-div {
+    background-color: #f0f0f0;
+    width: 50%;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+#div-texto{
+    background-color: red;
+    width: 80%;
+    height: 80%;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    font-size: 500%;
+    color: white;
+    text-align: center;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    padding: 10px;
+}
+
+#right-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin: 0;
+    background-color: #e0e0e0;
+}
+
+.inner-div {
+    height: auto;
+    width: 70%;
+    background-color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.inner-inner-div {
+    height: 20%;
+    width: 100%;
+    background-color: rebeccapurple;
+    text-align: center;
+    border-radius: 5px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.yellow-div {
+    background-color: yellow;
+    padding: 10px;
+    margin: 0 40px;
+    border-radius: 5px;
 }
 
 #bottom {
-    display: flex; /* Usa Flexbox para el footer */
-    justify-content: space-between; /* Espacio igual entre los items */
-    align-items: center; /* Centra verticalmente */
-    background-color: #2196F3; /* Color de fondo del footer */
-    height: 15%; /* Ocupa el 15% del viewport */
-    padding: 0 10%; /* Agrega padding a los lados del footer */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2196F3;
+    height: 16%;
+    padding: 0 10%;
 }
 
-/* Estilo para los items del footer */
 .footer-item {
-    margin: 0 10%; /* Margen horizontal del 10% */
-    padding: 10px; /* Espaciado interno */
-    background-color: white; /* Color de fondo blanco */
-    text-align: center; /* Centrar texto */
-    border-radius: 5px; /* Bordes redondeados */
-    flex-grow: 1; /* Permite que se expandan para llenar el espacio */
-    cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
+    margin: 0 10%;
+    padding: 10px;
+    background-color: white;
+    text-align: center;
+    border-radius: 5px;
+    flex-grow: 1;
+    cursor: pointer;
 }
 
-/* Cambia el color del fondo al pasar el mouse */
 .footer-item:hover {
-    background-color: #e0e0e0; /* Color de fondo en hover */
+    background-color: #e0e0e0;
 }
 
+#formulario {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#formulario label {
+    font-weight: bold;
+}
+
+#formulario input[type="email"],
+#formulario input[type="password"] {
+    margin: 5px 0;
+    width: 100%;
+}
+
+#formulario button {
+    padding: 10px 15px;
+    background-color: rebeccapurple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#formulario button:hover {
+    background-color: #5a2d99;
+}
+
+.terms-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
