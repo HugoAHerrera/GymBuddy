@@ -1,0 +1,44 @@
+/* Asegura que el body tenga el 100% de altura del viewport */
+body {
+    margin: 0; /* Elimina el margen por defecto */
+    overflow: hidden;
+    height: 96vh; /* 100% de la altura de la ventana */
+}
+
+/* Estilo para el header */
+#header {
+    background-color: #4CAF50; /* Color de fondo del header */
+    height: 15%; /* Ocupa el 15% del viewport */
+}
+
+/* Estilo para la sección central */
+#central {
+    background-color: #f0f0f0; /* Color de fondo del contenido central */
+    height: 75%; /* Ocupa el 75% del viewport */
+}
+
+#bottom {
+    display: flex; /* Usa Flexbox para el footer */
+    justify-content: space-between; /* Espacio igual entre los items */
+    align-items: center; /* Centra verticalmente */
+    background-color: #2196F3; /* Color de fondo del footer */
+    height: 15%; /* Ocupa el 15% del viewport */
+    padding: 0 10%; /* Agrega padding a los lados del footer */
+}
+
+/* Estilo para los items del footer */
+.footer-item {
+    margin: 0 10%; /* Margen horizontal del 10% */
+    padding: 10px; /* Espaciado interno */
+    background-color: white; /* Color de fondo blanco */
+    text-align: center; /* Centrar texto */
+    border-radius: 5px; /* Bordes redondeados */
+    flex-grow: 1; /* Permite que se expandan para llenar el espacio */
+    cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
+}
+
+/* Cambia el color del fondo al pasar el mouse */
+.footer-item:hover {
+    background-color: #e0e0e0; /* Color de fondo en hover */
+}
+
