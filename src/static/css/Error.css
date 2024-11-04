@@ -1,0 +1,22 @@
+body {
+    display: flex;
+    justify-content: center;
+    background-color: #FCFDF7;
+    height: 800px;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#warning_image {
+    height: 500px;
+    background-color: #FCFDF7;
+}
+
+#bench_press_image {
+    height: 500px;
+}
