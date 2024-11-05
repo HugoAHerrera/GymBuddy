@@ -1,0 +1,134 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #003366;
+    color: white;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #006699;
+}
+
+.premium-btn {
+    background-color: #3399cc;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.header-marquee {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #ffd700;
+}
+
+.profile-search {
+    display: flex;
+    align-items: center;
+}
+
+.profile-btn, .search-bar {
+    padding: 5px;
+    margin-right: 10px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: #003366;
+    padding: 15px;
+}
+
+nav button {
+    background-color: #3399cc;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+nav .logo img {
+    height: 50px;
+}
+
+.recomendaciones {
+    background-color: #cc3333; 
+    padding: 20px;
+}
+
+.recomendaciones h2 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.recomendaciones-container {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 10px; 
+    padding-bottom: 10px;
+}
+
+.recomendacion {
+    width: calc(20% - 10px); 
+    padding: 10px;
+    background-color: white;
+    color: #333;
+    text-align: center;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.rutinas {
+    background-color: #4CAF50;
+    padding: 20px;
+}
+
+.rutina-seccion {
+    margin-bottom: 20px;
+}
+
+.rutina-seccion h2 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.rutinas-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.rutina {
+    width: calc(20% - 10px); 
+    padding: 20px;
+    background-color: white;
+    color: #333;
+    text-align: center;
+    border: 1px solid #ccc;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+footer {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
