@@ -15,7 +15,7 @@ body {
 #header {
     display: flex;
     align-items: center;
-    background-color: #4CAF50;
+    background: linear-gradient(to bottom, rgb(76, 157, 175) 0%, rgba(76, 175, 80, 0) 100%);
     height: 15%;
     padding: 0 20px;
 }
