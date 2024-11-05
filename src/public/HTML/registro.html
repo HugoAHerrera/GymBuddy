@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/registro.css">
-    <script src="../js/registro.js" defer></script>
     <title>Registro</title>
 </head>
 <body>
@@ -21,8 +20,8 @@
         <div id="right-div">
             <div class="inner-div">
                 <div class="inner-inner-div">
-                    <div class="yellow-div">Iniciar sesión</div>
-                    <div class="yellow-div">Crear cuenta</div>
+                    <a id="div-iniciar-sesion">Iniciar sesión</a>
+                    <a id="div-crear-cuenta">Crear cuenta</a>
                 </div>
                 <div id="formulario">
                     <form>
@@ -47,11 +46,10 @@
             </div>
         </div>
     </div>
-    <div id="bottom">
-        <div class="footer-item">Idioma</div>
-        <div class="footer-item">Términos y condiciones</div>
-        <div class="footer-item">Soporte técnico</div>
-    </div>
+    <footer>
+        <p>Términos y condiciones | Contactos | Correo | etc</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/registro.js" defer></script>
 </body>
 </html>
-
