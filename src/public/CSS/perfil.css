@@ -1,0 +1,253 @@
+/* General */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4; /* Fondo claro */
+    color: #333; /* Color del texto */
+}
+
+header {
+    background-color: #003366; /* Azul oscuro */
+    color: white; /* Texto en blanco */
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #006699; /* Azul medio */
+}
+
+.premium-btn {
+    background-color: #3399cc; /* Azul claro */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.premium-btn:hover {
+    background-color: #007acc; /* Azul más oscuro */
+}
+
+.header-marquee {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #ffd700; /* Dorado para resaltar */
+}
+
+.profile-search {
+    display: flex;
+    align-items: center;
+}
+
+.profile-btn {
+    background-color: white;
+    border: 1px solid #444; /* Color oscuro para el borde */
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 10px;
+    color: #003366; /* Azul oscuro */
+}
+
+.search-bar {
+    border: 1px solid #444; /* Borde oscuro */
+    padding: 8px 15px;
+    border-radius: 20px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.search-bar:focus {
+    border-color: #3399cc; /* Azul claro al enfocar */
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: #003366; /* Azul oscuro */
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav button {
+    background-color: #3399cc; /* Azul claro */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav button:hover {
+    background-color: #007acc; /* Azul más oscuro al pasar el ratón */
+}
+
+nav .logo img {
+    height: 50px;
+    width: auto;
+}
+
+/* Estilos para los paneles de contenido */
+.content-container {
+    display: flex;
+    margin: auto;
+}
+
+.left-panel {
+    flex: 0 0 33%; /* Ocupa el 33% */
+    background-color: #036600;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.left-panel div {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    color: #003366;
+}
+
+.right-panel {
+    flex: 0 0 67%;
+    background-color: #cc3333; 
+    font-size: 1.5rem;
+    color: white;
+}
+
+/* FOOTER */
+footer {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Cabecera de las rutinas */
+.Cabecera-rutina {
+    display: flex;
+    width: 100%;
+    height: 80px;
+    align-items: center;
+    justify-content: center;
+    background-color: #666;
+}
+
+.Cabecera-rutina h1 {
+    margin-right: 20px;
+}
+
+/* Estilos adicionales (About Us) */
+.about-us {
+    background-color: #fff; /* Fondo blanco */
+    border: 1px solid #ddd; /* Borde gris */
+    border-radius: 10px;
+    height: auto;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+.about-us h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #006699; /* Azul medio */
+}
+
+.about-us p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #666; /* Gris oscuro */
+}
+
+.right-panel {
+    flex: 0 0 67%;
+    background-color: #cc3333;
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+    height: 500px;
+    overflow-y: auto;
+}
+
+.perfil-section h2,
+.actividad-section h2,
+.amigos-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.perfil-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    background-color: white;
+    color: #333;
+}
+
+.perfil-foto {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #ccc;
+}
+
+.perfil-detalles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cambiar-btn {
+    background-color: #007acc; /* Azul más oscuro */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+/* Estilos para la sección de Actividad */
+.actividad-section .actividad-info {
+    padding: 20px;
+    background-color: white; /* Fondo blanco */
+    color: #333;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 1rem;
+}
+
+/* Estilos para la sección de Amigos */
+.amigos-section .amigos-info {
+    padding: 20px;
+    background-color: white; /* Fondo blanco */
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1rem;
+}
