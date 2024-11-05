@@ -4,6 +4,14 @@ html, body {
     overflow: hidden;
 }
 
+body {
+    background-image: url('../Imagenes/registro_imagen.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+
 #header {
     display: flex;
     align-items: center;
@@ -30,7 +38,6 @@ html, body {
 }
 
 #left-div {
-    background-color: #f0f0f0;
     width: 50%;
     margin: 0;
     justify-content: center;
@@ -38,20 +45,19 @@ html, body {
     display: flex;
 }
 
-#div-texto{
-    background-color: red;
+#div-texto {
     width: 80%;
     height: 80%;
-    display: block;
-    justify-content: center;
-    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
     font-size: 500%;
-    color: white;
+    color: rgb(63, 179, 17);
     text-align: center;
     overflow-wrap: break-word;
-    hyphens: auto;
     padding: 10px;
 }
+
 
 #right-div {
     display: flex;
@@ -59,7 +65,6 @@ html, body {
     align-items: center;
     width: 50%;
     margin: 0;
-    background-color: #e0e0e0;
 }
 
 .inner-div {
