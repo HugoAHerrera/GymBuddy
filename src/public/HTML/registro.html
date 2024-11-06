@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/registro.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
     <title>Registro</title>
 </head>
 <body>
     <div id="header">
-        <img src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo">
+        <img src="../Imagenes/logo-inicio.png" alt="Logo GymBuddy" class="logo">
         <h1 class="header-title">GymBuddy</h1>
     </div>
     <div id="central">
@@ -19,35 +21,47 @@
         </div>
         <div id="right-div">
             <div class="inner-div">
-                <div class="inner-inner-div">
+                <div class="info-cuenta-div">
                     <a id="div-iniciar-sesion">Iniciar sesión</a>
                     <a id="div-crear-cuenta">Crear cuenta</a>
                 </div>
                 <div id="formulario">
-                    <form>
-                        <label for="email">Email:</label><br>
-                        <input type="email" id="email" name="email" required><br>
-                        
-                        <label for="password">Contraseña:</label><br>
-                        <input type="password" id="password" name="password" required>
-                        <input type="checkbox" id="showPassword"> Mostrar contraseña<br><br>
-                        
-                        <label for="repeatPassword">Repetir contraseña:</label><br>
-                        <input type="password" id="repeatPassword" name="repeatPassword" required><br>
-                        
-                        <div class="terms-container">
-                            <input type="checkbox" id="terms" name="terms" required>
-                            <label for="terms"> Aceptar términos y condiciones</label>
-                        </div>
+                    <label for="email">Email:</label><br>
+                    <input type="email" id="email" class="pass" required>
+                    
+                    <label for="contraseña_original">Contraseña:</label><br>
+                    <div class="contraseña">
+                        <input type="password" id="contraseña_original" class="pass" required>
+                        <i class = "bx bx-show-alt"></i>
+                    </div>
+                    
+                    <label for="contraseña_repeticion">Repetir contraseña:</label><br>
+                    <div class="contraseña">
+                        <input type="password" id="contraseña_repeticion" class="pass" required>
+                        <i class = "bx bx-show-alt"></i>
+                    </div>
+                    
+                    <div class="terms-container">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label> Aceptar términos y condiciones</label>
+                    </div>
 
-                        <button type="submit">Enviar</button>
-                    </form>
+                    <button type="button" id="submit-btn">Enviar</button>
+                    <p id="contraseñas-error" style="color: red; display: none; margin-top: 5px;">Las contraseñas no coinciden</p>
+                    <p id="contraseñas-vacias" style="color: red; display: none; margin-top: 5px;">La contraseñas no pueden estar vacías</p>
+                    <p id="email-error" style="color: red; display: none; margin-top: 5px;">Ingrese un email válido</p>
+                    <p id="terms-error" style="color: red; display: none; margin-top: 5px;">Acepta los términos y condiciones</p>
                 </div>
             </div>
         </div>
     </div>
     <footer>
-        <p>Términos y condiciones | Contactos | Correo | etc</p>
+        <p>
+            <a href="term.html" class="footer-enlace">Términos y condiciones</a> | 
+            <a href="contacto.html" class="footer-enlace">Cookies</a> | 
+            <a href="correo.html" class="footer-enlace">Soporte técnico</a> | 
+            <a>GymBuddy &copy; 2024</a>
+        </p>
     </footer>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../js/registro.js" defer></script>
