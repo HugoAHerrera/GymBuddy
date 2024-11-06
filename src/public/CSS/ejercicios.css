@@ -105,42 +105,96 @@ nav .logo img {
 }
 
 /* CABECERA */
+/* Estilos generales */
 
-.filter-container {
+
+.contenedor-filtro {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    flex-direction:row;
+    max-width: 80%;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }
 
-.filter-container select, .filter-container button {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #333;
-    border-radius: 5px;
+#equipo-necesario, #objetivo, #dificultad{
+    margin-left: 5%;
 }
 
-.section {
+
+/* Estilos de la selección personalizada */
+.custom-select {
+    position: relative;
     width: 100%;
-    max-width: 600px;
-    margin-bottom: 20px;
 }
 
-.section h3 {
+.select-box {
+    max-width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.select-box .arrow {
+    font-size: 12px;
+}
+
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    padding: 10px;
+}
+
+.show {
+    display: block;
+}
+
+.dropdown label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.dropdown label input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/*Ejercicios*/
+.contenedor-ejercicios {
+    display: flex;
+    flex-direction:row;
+    max-width: 80%;
+    margin: 20px auto;
+    padding: 15px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.contenedor-ejercicios h3 {
     border-bottom: 1px solid #333;
     padding-bottom: 5px;
     margin-bottom: 10px;
-}
-
-.exercise-grid {
-    display: flex;
-    gap: 10px;
-}
-
-.exercise-card {
-    border: 1px solid #333;
-    padding: 20px;
-    text-align: center;
-    width: 100px;
-    font-size: 16px;
-    border-radius: 5px;
+    width: 100%; /* Se asegura que el h3 ocupe el 100% */
+    box-sizing: border-box; /* Asegura que el padding y el border estén dentro del ancho total */
 }
