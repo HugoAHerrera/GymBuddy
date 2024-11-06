@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title> Galería de Ejercicios </title>
+  <meta name="description" content="Todos los Ejercicios">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../CSS/ejercicios.css">
+  <link rel="logo" href="../Imagenes/logo.png" type="image/png">
+</head>
+<body>
+    <!-- CABECERA, no establecida-->
+    <header>
+        <div class="header-top">
+            <button class="premium-btn">Premium</button>
+            <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
+            <div class="profile-search">
+                <input type="text" class="search-bar" placeholder="¿Qué quieres buscar? 🔍">
+                <button class="profile-btn"></button>
+            </div>
+        </div>
+        <nav id="navegator">
+            <div class="even-nav">
+                <button class="nav-buttons">Tienda</button>
+                <button class="nav-buttons">Progreso</button>
+                <button class="nav-buttons">Rutinas</button>
+            </div>
+            <div class="logo">
+                <img id="logotype" src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
+            </div>
+            <div class="even-nav">
+                <button class="nav-buttons">Comunidad</button>
+                <button class="nav-buttons">Objetivos</button>
+                <button class="nav-buttons">Soporte</button>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="contendor-filtro">
+            <select name="zona-ejercitar" id="zona-ejercitar">
+                <option value="brazo">Brazo</option>
+                <option value="espalda">Espalda</option>
+                <option value="gluteos">Glúteos</option>
+                <option value="pecho">Pecho</option>
+                <option value="piernas">Piernas</option>
+                <option value="completo">Todo el Cuerpo</option>
+            </select>
+            <select name="equipo-necesario" id="equipo-necesario">
+                <option value="peso-corporal">Peso Corporal</option>
+                <option value="mancuernas">Mancuernas</option>
+                <option value="barra-pesas">Barra de pesas</option>
+                <option value="banco">Banco</option>
+                <option value="barra">Barra</option>
+                <option value="maquina">Máquina</option>
+                <option value="pesas"> Pesas</option>
+            </select>
+            <select name="objetivo" id="objetivo">
+                <option value="fuerza">Fuerza</option>
+                <option value="flexibilidad">Flexibilidad</option>
+            </select>
+            <select name="dificultad" id="dificultad">
+                <option value="principiante">Principiante</option>
+                <option value="intermedio">Intermedio</option>
+                <option value="avanzado">Avanzado</option>
+            </select>
+        </div>
+
+    </main>
+</body>
+</html>
