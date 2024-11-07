@@ -1,0 +1,97 @@
+/* Contenedor de desafíos */
+.challenges-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+}
+
+/* Fila de tarjetas de desafío */
+.challenges-container .card-row {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto; /* Scroll horizontal si hay más tarjetas de las que caben */
+}
+
+/* Tarjeta de desafío */
+.challenge-card {
+    position: relative;
+    width: 200px;
+    height: 250px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.challenge-card .card-front, .challenge-card .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    transition: transform 0.6s;
+}
+
+.card-front {
+    background-color: #f1d3b9;
+    color: #333;
+}
+
+.card-back {
+    background-color: #d97e3d;
+    color: white;
+    transform: rotateY(180deg);
+}
+
+.challenge-card.flipped .card-front {
+    transform: rotateY(180deg);
+}
+
+.challenge-card.flipped .card-back {
+    transform: rotateY(360deg);
+}
+
+/* Botón para aceptar el desafío */
+.accept-btn {
+    background-color: darkgoldenrod;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.accept-btn:hover {
+    background-color: goldenrod;
+}
+
+/* Barra de progreso */
+.progress-bar {
+    width: 80%;
+    height: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.progress {
+    height: 100%;
+    background-color: #ffd700;
+    border-radius: 5px;
+}
+
+.progress-text {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: white;
+}
+
