@@ -1,0 +1,46 @@
+/* Estilos adicionales para el formulario de contacto */
+.contact-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f1d3b9; /* Fondo coherente con el estilo general */
+    border: 2px solid #d97e3d; /* Bordes en tonos anaranjados */
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-container h2 {
+    color: #d97e3d;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.contact-container label {
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+}
+
+.contact-container input,
+.contact-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.contact-container button {
+    background-color: #d97e3d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.contact-container button:hover {
+    background-color: #c7691b;
+}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contacto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../CSS/ejercicios.css"> <!-- Usa la misma CSS para coherencia de estilo -->
+  <link rel="stylesheet" href="../CSS/contacto.css"> <!-- Estilos adicionales específicos para la página de contacto -->
+</head>
+<body>
+    <!-- CABECERA -->
+    <header>
+        <div class="header-top">
+            <button class="premium-btn">Premium</button>
+            <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
+            <div class="profile-search">
+                <input type="text" class="search-bar" placeholder="¿Qué quieres buscar? 🔍">
+                <button class="profile-btn"></button>
+            </div>
+        </div>
+        <nav id="navegator">
+            <div class="even-nav">
+                <button class="nav-buttons">Tienda</button>
+                <button class="nav-buttons">Progreso</button>
+                <button class="nav-buttons">Rutinas</button>
+            </div>
+            <div class="logo">
+                <img id="logotype" src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
+            </div>
+            <div class="even-nav">
+                <button class="nav-buttons">Comunidad</button>
+                <button class="nav-buttons">Objetivos</button>
+                <button class="nav-buttons">Soporte</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="contact-container">
+            <h2>Contáctanos</h2>
+            <form id="contact-form">
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Mensaje:</label>
+                <textarea id="message" name="message" required></textarea>
+
+                <button type="submit">Enviar</button>
+            </form>
+            <p id="response-message"></p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <a href="/terminos-y-condiciones" class="footer-link">Términos y Condiciones</a>
+            <a href="/contacto" class="footer-link">Contacto</a>
+            <a href="mailto:info@progresofitness.com" class="footer-link">Correo</a>
+            <a href="/redes-sociales" class="footer-link">Redes Sociales</a>
+        </div>
+        <p>&copy; 2024 Progreso Fitness. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../JS/contacto.js" defer></script>
+</body>
+</html>
