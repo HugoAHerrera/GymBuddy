@@ -3,71 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Progreso Fitness</title>
+    <title>Carrito de Compras</title>
     <link rel="stylesheet" href="../CSS/carro.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+<!-- CABECERA -->
 <header>
     <div class="header-top">
         <button class="premium-btn">Premium</button>
         <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
         <div class="profile-search">
-            <button class="profile-btn">Perfil</button>
-            <input type="text" class="search-bar" placeholder="Buscar...">
+            <input type="text" class="search-bar" placeholder="¿Qué quieres buscar? 🔍">
+            <button class="profile-btn"></button>
         </div>
     </div>
-    <nav>
-        <button class="resaltar">Tienda</button>
-        <button>Progreso</button>
-        <button>Rutinas</button>
-        <div class="logo">
-            <img src="../IMAGENES/imagen.png" alt="Logo de Fitness"/>
+    <nav id="navegator">
+        <div class="even-nav">
+            <button class="nav-buttons">Tienda</button>
+            <button class="nav-buttons">Progreso</button>
+            <button class="nav-buttons">Rutinas</button>
         </div>
-        <button>Comunidad</button>
-        <button>Objetivos</button>
-        <button>Soporte</button>
+        <div class="logo">
+            <img id="logotype" src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
+        </div>
+        <div class="even-nav">
+            <button class="nav-buttons">Comunidad</button>
+            <button class="nav-buttons">Objetivos</button>
+            <button class="nav-buttons">Soporte</button>
+        </div>
     </nav>
 </header>
 
 <div class="progreso-compra">
     <div class="etapa text-center">
-        <p>Carro</p>
-        <i class="bi bi-cart-fill" style="font-size: 2rem;"></i> <!-- Icono de carrito -->
+        <p>Carrito</p>
+        <i class="bi bi-cart-fill" style="font-size: 2rem; color: rgb(223,190,80);"></i>
     </div>
     <div class="etapa text-center">
         <p>Pago</p>
-        <i class="bi bi-credit-card-fill" style="font-size: 2rem;"></i> <!-- Icono de tarjeta de crédito -->
+        <i class="bi bi-credit-card-fill" style="font-size: 2rem;"></i>
     </div>
     <div class="etapa text-center">
         <p>Obtener producto</p>
-        <i class="bi bi-box-fill" style="font-size: 2rem;"></i> <!-- Icono de caja -->
+        <i class="bi bi-box-fill" style="font-size: 2rem;"></i>
     </div>
 </div>
 
+<div class="modal fade" id="pagarModal" tabindex="-1" aria-labelledby="pagarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pagarModalLabel">Confirmación de Pago</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ¿Deseas proceder al pago o seguir comprando?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Seguir Comprando</button>
+                <button type="button" class="btn btn-primary" id="confirmarPago">Proceder al Pago</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <main>
     <div class="contenedor">
         <div class="producto">
             <img src="imagen-del-producto.png" alt="Producto">
-            <p>Detalles del producto...</p>
+            <h2>Nombre del Producto</h2>
+            <p class="precio">Precio: $20.00</p>
+            <p class="descripcion">Descripción: Este es un producto de alta calidad que ofrece excelentes características y beneficios.</p>
+            <p class="caracteristicas">Características:</p>
+            <ul>
+                <li>Característica 1</li>
+                <li>Característica 2</li>
+                <li>Característica 3</li>
+            </ul>
         </div>
         <div class="resumen-compra">
             <h3>Resumen de la compra</h3>
             <p>Confirmar después y pasar a pago.</p>
+            <button class="checkout-btn">Pagar</button>
         </div>
     </div>
-    <div class="productos-relacionados">
+    <div class="productos-relacionados-container">
         <h3>Productos parecidos</h3>
-        <!-- Añade los productos relacionados aquí -->
+        <button class="arrow left-arrow">&#9664;</button>
+        <div class="productos-relacionados">
+            <div class="slide">
+                <img src="imagen-del-producto1.png" alt="Producto 1">
+                <p>Detalles del producto 1...</p>
+            </div>
+            <div class="slide">
+                <img src="imagen-del-producto2.png" alt="Producto 2">
+                <p>Detalles del producto 2...</p>
+            </div>
+            <div class="slide">
+                <img src="imagen-del-producto3.png" alt="Producto 3">
+                <p>Detalles del producto 3...</p>
+            </div>
+            <div class="slide">
+                <img src="imagen-del-producto4.png" alt="Producto 4">
+                <p>Detalles del producto 4...</p>
+            </div>
+            <div class="slide">
+                <img src="imagen-del-producto5.png" alt="Producto 5">
+                <p>Detalles del producto 5...</p>
+            </div>
+            <div class="slide">
+                <img src="imagen-del-producto6.png" alt="Producto 6">
+                <p>Detalles del producto 6...</p>
+            </div>
+        </div>
+        <button class="arrow right-arrow">&#9654;</button>
     </div>
 </main>
 
-
 <footer>
-    <p>Términos y condiciones | Contactos | Correo | etc</p>
+    <p>
+        <a href="term.html" class="footer-enlace">Términos y condiciones</a> |
+        <a href="contacto.html" class="footer-enlace">Cookies</a> |
+        <a href="correo.html" class="footer-enlace">Soporte técnico</a> |
+        <a>GymBuddy &copy; 2024</a>
+    </p>
 </footer>
-
-<script src="../JS/progreso.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="../JS/carro.js"></script>
 </body>
 </html>
