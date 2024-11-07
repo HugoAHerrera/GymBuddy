@@ -5,63 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Progreso Fitness</title>
     <link rel="stylesheet" href="../CSS/progreso.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- CABECERA -->
     <header>
         <div class="header-top">
             <button class="premium-btn">Premium</button>
             <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
             <div class="profile-search">
-                <button class="profile-btn">Perfil</button>
-                <input type="text" class="search-bar" placeholder="Buscar...">
+                <input type="text" class="search-bar" placeholder="¿Qué quieres buscar? 🔍">
+                <button class="profile-btn"></button>
             </div>
         </div>
-        <nav>
-            <button>Tienda</button>
-            <button class="resaltar">Progreso</button>
-            <button>Rutinas</button>
-            <div class="logo">
-                <img src="../IMAGENES/imagen.png" alt="Logo de Fitness" />
+        <nav id="navegator">
+            <div class="even-nav">
+                <button class="nav-buttons">Tienda</button>
+                <button class="nav-buttons">Progreso</button>
+                <button class="nav-buttons">Rutinas</button>
             </div>
-            <button>Comunidad</button>
-            <button>Objetivos</button>
-            <button>Soporte</button>
+            <div class="logo">
+                <img id="logotype" src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
+            </div>
+            <div class="even-nav">
+                <button class="nav-buttons">Comunidad</button>
+                <button class="nav-buttons">Objetivos</button>
+                <button class="nav-buttons">Soporte</button>
+            </div>
         </nav>
     </header>
 
     <main>
-    <div class="progress-container">
-        <!-- Contenedor de las gráficas en formato vertical -->
-        <div class="chart-section-container">
-            <div class="chart-section" id="max-distance" onclick="expandChart('max-distance')">
-                <h3>Max distance</h3>
-                <div class="chart-placeholder">[Gráfico]</div>
-            </div>
-            <div class="chart-section" id="pr" onclick="expandChart('pr')">
-                <h3>PR</h3>
-                <div class="chart-placeholder">[Gráfico]</div>
-            </div>
-            <div class="chart-section" id="etc" onclick="expandChart('etc')">
-                <h3>ETC</h3>
-                <div class="chart-placeholder">[Gráfico]</div>
-            </div>
+        <div class="filter-buttons">
+            <button onclick="filterData('semana')">Semana</button>
+            <button onclick="filterData('mes')">Mes</button>
+            <button onclick="filterData('año')">Año</button>
+            <button onclick="filterData('total')">Total</button>
         </div>
-
-        <!-- Información del usuario en la parte derecha -->
-        <div class="user-info">
-            <img src="avatar.png" alt="Avatar del usuario" class="user-avatar">
-            <div class="user-stats">
-                <p><strong>Número de sesiones completadas:</strong> 45</p>
-                <p><strong>Distancia total recorrida:</strong> 120 km</p>
-                <p><strong>Calorías quemadas:</strong> 3000 kcal</p>
-            </div>
+        <div class="progress-container">
+            <!-- Existing chart sections -->
         </div>
-    </div>
     </main>
 
+    <main>
+        <div class="progress-container">
+            <!-- Contenedor de las gráficas en formato vertical -->
+            <div class="chart-section-container">
+                <div class="chart-section" id="distancia-maxima" onclick="expandChart('distancia-maxima')">
+                    <h3>Distancia Maxima</h3>
+                    <canvas id="chart-distancia-maxima"></canvas>
+                </div>
+                <div class="chart-section" id="pr" onclick="expandChart('pr')">
+                    <h3>Record Personal (PR)</h3>
+                    <canvas id="chart-pr"></canvas>
+                </div>
+                <div class="chart-section" id="calorias-quemadas" onclick="expandChart('calorias-quemadas')">
+                    <h3>Calorias Quemadas</h3>
+                    <canvas id="chart-calorias-quemadas"></canvas>
+                </div>
+                <div class="chart-section" id="duracion-sesion" onclick="expandChart('duracion-sesion')">
+                    <h3>Duración de Sesión</h3>
+                    <canvas id="chart-duracion-sesion"></canvas>
+                </div>
+                <div class="chart-section" id="peso-corporal" onclick="expandChart('peso-corporal')">
+                    <h3>Peso Corporal</h3>
+                    <canvas id="chart-peso-corporal"></canvas>
+                </div>
+                <div class="chart-section" id="frecuencia-cardiaca" onclick="expandChart('frecuencia-cardiaca')">
+                    <h3>Frecuencia Cardiaca</h3>
+                    <canvas id="chart-frecuencia-cardiaca"></canvas>
+                </div>
+            </div>
+
+            <!-- Información del usuario en la parte derecha -->
+            <div class="user-info">
+                <img src="../Imagenes/avatar.jpg" alt="Avatar del usuario" class="user-avatar">
+                <div class="user-stats">
+                    <p><strong>Sesiones Completadas:</strong> 45</p>
+                    <p><strong>Distancia recorrida:</strong> 120 km</p>
+                    <p><strong>Calorías quemadas:</strong> 3000 kcal</p>
+                    <p><strong>Última sesión:</strong> 12/12/2020</p>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <footer>
-        <p>Términos y condiciones | Contactos | Correo | etc</p>
+        <p>
+            <a href="term.html" class="footer-enlace">Términos y condiciones</a> |
+            <a href="contacto.html" class="footer-enlace">Cookies</a> |
+            <a href="correo.html" class="footer-enlace">Soporte técnico</a> |
+            <a>GymBuddy &copy; 2024</a>
+        </p>
     </footer>
 
     <script src="../JS/progreso.js"></script>
