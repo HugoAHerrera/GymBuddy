@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
 body {
@@ -10,38 +11,39 @@ body {
     color: #333; /* Color del texto */
 }
 
-header {
-    background-color: #003366; /* Azul oscuro */
-    color: white; /* Texto en blanco */
-}
-
+/*
+    Atributos del header
+*/
 .header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #006699; /* Azul medio */
+    background-color: rgb(2, 126, 243);
+    border-bottom: 1px solid white;
 }
 
 .premium-btn {
-    background-color: #3399cc; /* Azul claro */
-    color: white;
-    border: none;
+    background-color: rgb(0, 104, 202);
+    color: rgb(255, 251, 0);
+    border: 2px solid black;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;
+    margin-left: 75px;
 }
 
 .premium-btn:hover {
-    background-color: #007acc; /* Azul más oscuro */
+    background-color: rgb(0, 91, 175);
 }
 
 .header-marquee {
     font-weight: bold;
     font-size: 1.2rem;
-    color: #ffd700; /* Dorado para resaltar */
+    margin: 0 10px;
+    color: rgb(255, 251, 0);
 }
 
 .profile-search {
@@ -50,53 +52,62 @@ header {
 }
 
 .profile-btn {
-    background-color: white;
-    border: 1px solid #444; /* Color oscuro para el borde */
-    padding: 5px 15px;
+    /*background-color: white;*/
+    background-size: cover;
+    border: 2px solid black;
+    padding: 25px 25px;
     cursor: pointer;
-    border-radius: 5px;
-    margin-right: 10px;
-    color: #003366; /* Azul oscuro */
+    border-radius: 50%;
+    margin-right: 75px;
+    color: black;
+    background-image: url("../Imagenes/avatar.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
 }
 
 .search-bar {
-    border: 1px solid #444; /* Borde oscuro */
-    padding: 8px 15px;
+    border: 2px solid black;
+    text-align: center;
+    padding: 8px 30px;
     border-radius: 20px;
     outline: none;
     transition: border-color 0.3s ease;
+    margin-right: 20px;
 }
 
 .search-bar:focus {
-    border-color: #3399cc; /* Azul claro al enfocar */
+    border-color: #3399cc;
 }
 
-nav {
+#navegator {
     display: flex;
-    justify-content: space-around;
-    background-color: #003366; /* Azul oscuro */
-    padding: 15px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    justify-content: space-evenly;
+    background-color: rgb(196, 217, 237)
 }
 
-nav button {
-    background-color: #3399cc; /* Azul claro */
-    border: none;
-    color: white;
-    padding: 10px 20px;
+.even-nav {
+    width: 100%;
+    display: flex;
+}
+
+.nav-buttons {
+    flex: 1;
+    background-color: rgb(196, 217, 237);
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    color: black;
+}
+nav button:hover {
+    background-color: rgb(180, 200, 219); /* Azul más oscuro al pasar el ratón */
 }
 
-nav button:hover {
-    background-color: #007acc; /* Azul más oscuro al pasar el ratón */
+.nav-buttons, .logo {
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
 }
 
 nav .logo img {
-    height: 50px;
+    height: 75px;
     width: auto;
 }
 
@@ -131,15 +142,6 @@ main {
     font-size: 1.2rem;
     line-height: 1.6;
     color: #666; /* Gris oscuro */
-}
-
-footer {
-    background-color: #003366;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    bottom: 0;
-    width: 100%;
 }
 
 .Cabecera-rutina {
@@ -207,4 +209,25 @@ footer {
     margin-left: auto; /* Empuja el texto hacia el centro */
     text-align: center; /* Centra el texto */
     flex: 1; /* Permite que el h1 ocupe el espacio restante */
+}
+
+/*
+    Atributos del footer
+*/
+footer {
+    background-color: rgb(2, 126, 243);
+    color: rgb(196, 217, 237);
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a.footer-enlace:hover {
+    text-decoration: underline;
+    color: rgb(154, 233, 233);
 }

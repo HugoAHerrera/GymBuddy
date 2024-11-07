@@ -109,63 +109,64 @@ nav .logo img {
     width: auto;
 }
 
-.recomendaciones {
-    background-color: #cc3333; 
+main {
     padding: 20px;
 }
 
-.recomendaciones h2 {
-    color: white;
-    margin-bottom: 10px;
+.rutinas{
+    margin-top: 20px;
 }
 
-.recomendaciones-container {
-    display: flex;
-    flex-wrap: wrap; 
-    gap: 10px; 
-    padding-bottom: 10px;
-}
-
-.recomendacion {
-    width: calc(20% - 10px); 
-    padding: 10px;
-    background-color: white;
-    color: #333;
-    text-align: center;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-}
-
-.rutinas {
-    background-color: #4CAF50;
+.recomendaciones,
+.rutinas{
+    background-color: rgb(188, 223, 255);
     padding: 20px;
+    border-radius: 2%; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.rutina-seccion {
-    margin-bottom: 20px;
-}
-
-.rutina-seccion h2 {
-    color: white;
-    margin-bottom: 10px;
-}
-
-.rutinas-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
+.recomendacion,
 .rutina {
     width: calc(20% - 10px); 
     padding: 20px;
-    background-color: white;
+    background-color: rgb(228, 237, 247);
     color: #333;
     text-align: center;
     border: 1px solid #ccc;
     display: flex; 
     align-items: center; 
-    justify-content: center; 
+    justify-content: center;
+    transition: transform 0.1s, box-shadow 0.1s, background-color 0.1s; /* Suaviza la transición al hacer clic */
+    cursor: pointer;
+}
+
+.recomendacion:active,
+.rutina:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background-color: #e0e0e0;
+}
+
+.recomendacion:hover,
+.rutina:hover {
+    background-color: rgb(204, 223, 244);
+}
+
+h2 {
+    color: black;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+.rutinas h2{
+    margin-top: 2px;
+}
+
+.recomendaciones-container,
+.rutinas-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 footer {
