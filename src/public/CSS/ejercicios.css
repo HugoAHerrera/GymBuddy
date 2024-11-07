@@ -198,3 +198,21 @@ nav .logo img {
     width: 100%; /* Se asegura que el h3 ocupe el 100% */
     box-sizing: border-box; /* Asegura que el padding y el border estén dentro del ancho total */
 }
+
+footer {
+    background-color: rgb(2, 126, 243);
+    color: rgb(196, 217, 237);
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a.footer-enlace:hover {
+    text-decoration: underline;
+    color: rgb(154, 233, 233);
+}

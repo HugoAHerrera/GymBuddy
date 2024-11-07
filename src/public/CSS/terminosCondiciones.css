@@ -1,4 +1,3 @@
-/* Estilos básicos y restablecimiento */
 * {
     margin: 0;
     padding: 0;
@@ -110,24 +109,22 @@ nav .logo img {
     width: auto;
 }
 
-/* Ajustes de main */
 main {
     display: flex;
     flex: 1;
     padding: 20px;
     width: 100%;
-    max-width: 1200px; /* Tamaño máximo opcional para centrar */
-    margin: 0 auto; /* Centra el contenido */
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* Sidebar con scroll interno si es necesario */
 .sidebar {
     width: 200px;
     background-color: #f0f0f0;
     padding: 15px;
     position: sticky;
     top: 0;
-    max-height: 80vh; /* Limitar altura en pantalla */
+    max-height: 80vh;
     overflow-y: auto;
 }
 
@@ -151,7 +148,6 @@ main {
     background-color: #ddd;
 }
 
-/* Contenido principal */
 .content {
     flex: 1;
     padding: 20px;
@@ -160,14 +156,13 @@ main {
 
 /* Justificar el texto de los párrafos */
 section p {
-    text-align: justify; /* Justificar todo el texto de los párrafos */
-    margin-bottom: 15px; /* Separación entre párrafos */
+    text-align: justify;
+    margin-bottom: 15px;
 }
 
-/* Eliminar bordes entre las secciones */
 .section {
     padding-bottom: 30px;
-    border-bottom: none; /* Eliminar la línea divisoria entre párrafos */
+    border-bottom: none;
 }
 
 /* Títulos */
