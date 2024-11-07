@@ -49,7 +49,6 @@ body {
 }
 
 .profile-btn {
-    /*background-color: white;*/
     background-size: cover;
     border: 2px solid black;
     padding: 25px 25px;
@@ -96,7 +95,7 @@ body {
     color: black;
 }
 nav button:hover {
-    background-color: rgb(180, 200, 219); /* Azul más oscuro al pasar el ratón */
+    background-color: rgb(180, 200, 219); 
 }
 
 .nav-buttons, .logo {
@@ -112,13 +111,13 @@ nav .logo img {
 /* Contenedor main */
 
 .contenedor {
-    width: 90%;               /* Ancho del contenedor */
+    width: 90%;               
     max-width: 80%;
-    margin-left: 10%;        /* Ancho máximo del contenedor */
-    padding: 1%;            /* Espaciado interno */
-    background-color: #fff;   /* Fondo blanco */
-    border-radius: 8px;       /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para el contenedor */
+    margin-left: 10%;        
+    padding: 1%;            
+    background-color: #fff;  
+    border-radius: 8px;     
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
     flex-direction: column;
     margin-top: 2.5%;
 }
@@ -137,13 +136,13 @@ nav .logo img {
 }
 
 h1 {
-    font-size: 2rem;            /* Tamaño de la fuente */
-    font-weight: bold;            /* Texto en negrita */
-    color: #333;                  /* Color del texto */
-    text-align: center;           /* Centrado del texto */
-    margin-bottom: 20px;          /* Espaciado inferior */
-    text-transform: uppercase;    /* Texto en mayúsculas */
-    letter-spacing: 1px;          /* Espaciado entre letras */
+    font-size: 2rem;        
+    font-weight: bold;       
+    color: #333;         
+    text-align: center;          
+    margin-bottom: 20px;        
+    text-transform: uppercase; 
+    letter-spacing: 1px;       
 }
 
 /* Información lateral del ejercicio */
@@ -167,9 +166,12 @@ h1 {
 .contenedor .linea {
     border: 1px solid black;
     width: 100%;
-    margin: 0; /* ajusta el margen si necesitas */
+    margin: 0; 
 }
 
+ol {
+    margin-left: 1.5%;
+}
 /* footer */
 
 footer {
