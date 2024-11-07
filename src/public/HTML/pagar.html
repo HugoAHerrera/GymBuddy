@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar</title>
+    <link rel="stylesheet" href="../CSS/carro.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<!-- CABECERA -->
+<header>
+    <div class="header-top">
+        <button class="premium-btn">Premium</button>
+        <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
+        <div class="profile-search">
+            <input type="text" class="search-bar" placeholder="¿Qué quieres buscar? 🔍">
+            <button class="profile-btn"></button>
+        </div>
+    </div>
+    <nav id="navegator">
+        <div class="even-nav">
+            <button class="nav-buttons">Tienda</button>
+            <button class="nav-buttons">Progreso</button>
+            <button class="nav-buttons">Rutinas</button>
+        </div>
+        <div class="logo">
+            <img id="logotype" src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
+        </div>
+        <div class="even-nav">
+            <button class="nav-buttons">Comunidad</button>
+            <button class="nav-buttons">Objetivos</button>
+            <button class="nav-buttons">Soporte</button>
+        </div>
+    </nav>
+</header>
+
+<div class="progreso-compra">
+    <div class="etapa text-center">
+        <p>Carrito</p>
+        <i class="bi bi-cart-fill" style="font-size: 2rem;"></i>
+    </div>
+    <div class="etapa text-center">
+        <p>Pago</p>
+        <i class="bi bi-credit-card-fill" style="font-size: 2rem; color: rgb(223,190,80);"></i>
+    </div>
+    <div class="etapa text-center">
+        <p>Obtener producto</p>
+        <i class="bi bi-box-fill" style="font-size: 2rem;"></i>
+    </div>
+</div>
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Métodos de Pago</h3>
+            <ul class="payment-methods">
+                <li class="payment-method" id="mastercard">
+                    <h4>• MasterCard</h4>
+                    <div class="payment-details">
+                        <input type="text" id="mc-number" placeholder="Número de tarjeta">
+                        <input type="text" id="mc-expiry" placeholder="Fecha de expiración">
+                        <input type="text" id="mc-cvc" placeholder="CVC">
+                    </div>
+                </li>
+                <li class="payment-method" id="paypal">
+                    <h4>• PayPal</h4>
+                    <div class="payment-details">
+                        <input type="email" id="pp-email" placeholder="Correo electrónico">
+                        <input type="password" id="pp-password" placeholder="Contraseña">
+                    </div>
+                </li>
+                <li class="payment-method" id="visa">
+                    <h4>• Visa</h4>
+                    <div class="payment-details">
+                        <input type="text" id="visa-number" placeholder="Número de tarjeta">
+                        <input type="text" id="visa-expiry" placeholder="Fecha de expiración">
+                        <input type="text" id="visa-cvc" placeholder="CVC">
+                    </div>
+                </li>
+                <li class="payment-method" id="amex">
+                    <h4>• American Express</h4>
+                    <div class="payment-details">
+                        <input type="text" id="amex-number" placeholder="Número de tarjeta">
+                        <input type="text" id="amex-expiry" placeholder="Fecha de expiración">
+                        <input type="text" id="amex-cvc" placeholder="CVC">
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h3>Resumen del Carrito</h3>
+            <ul id="cart-summary">
+                <li>Producto 1 - $20</li>
+                <li>Producto 2 - $200</li>
+                <li>Producto 3 - $300</li>
+            </ul>
+            <button class="btn btn-primary" id="pay-button">Pagar</button>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>
+        <a href="term.html" class="footer-enlace">Términos y condiciones</a> |
+        <a href="contacto.html" class="footer-enlace">Cookies</a> |
+        <a href="correo.html" class="footer-enlace">Soporte técnico</a> |
+        <a>GymBuddy &copy; 2024</a>
+    </p>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="../JS/carro.js"></script>
+</body>
+</html>
