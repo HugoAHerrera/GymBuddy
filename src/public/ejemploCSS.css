@@ -40,7 +40,6 @@
 
 .profile-btn {
     /*background-color: white;*/
-    background-image: url("/src/public/Imagenes/avatar.jpg");
     background-size: cover;
     border: 2px solid black;
     padding: 25px 25px;
@@ -48,6 +47,10 @@
     border-radius: 50%;
     margin-right: 75px;
     color: black;
+    background-image: url("../Imagenes/avatar.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
 }
 
 .search-bar {
