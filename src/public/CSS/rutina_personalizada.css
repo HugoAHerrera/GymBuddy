@@ -1,3 +1,4 @@
+/* Cabecera */
 * {
     margin: 0;
     padding: 0;
@@ -107,67 +108,96 @@ nav .logo img {
     height: 75px;
     width: auto;
 }
-
-/* Contenedor main */
-
-.contenedor {
-    width: 90%;               /* Ancho del contenedor */
-    max-width: 80%;
-    margin-left: 10%;        /* Ancho máximo del contenedor */
-    padding: 1%;            /* Espaciado interno */
-    background-color: #fff;   /* Fondo blanco */
-    border-radius: 8px;       /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para el contenedor */
-    flex-direction: column;
-    margin-top: 2.5%;
-}
-
-#preparacion{
-    margin-top: 1%;
-}
-
-#ejecucion{
-    margin-top: 1%;
-}
-
-#consejos {
-    margin-top: 1%;
-    margin-bottom: 5%;
-}
-
+/* main */
+/* Título principal */
 h1 {
-    font-size: 2rem;            /* Tamaño de la fuente */
-    font-weight: bold;            /* Texto en negrita */
-    color: #333;                  /* Color del texto */
-    text-align: center;           /* Centrado del texto */
-    margin-bottom: 20px;          /* Espaciado inferior */
-    text-transform: uppercase;    /* Texto en mayúsculas */
-    letter-spacing: 1px;          /* Espaciado entre letras */
+    font-size: 2em;
+    color: #333;
+    margin-top: 20px;
+    text-align: center;
+    margin-bottom: 2%;
 }
 
-/* Información lateral del ejercicio */
-
-.info {
-    width: 40%;
-    display:inline-block;
-    flex-direction: column;
-    gap: 10px;
+/* Contenedor principal */
+.contenedor {
     margin-left: 10%;
+    width: 90%;
+    max-width: 80%;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre los ejercicios */
+    margin-top: 20px;
 }
 
-.info-item {
-    padding: 2%;
-    border: 1px solid #ccc;
+/* Contenedor de cada ejercicio */
+.ejercicio {
+    margin-left: 5%;
+    margin-right: 5%;
     margin-top: 2%;
+    display: flex;
+    align-items: center;
+    background-color: #4CAF50;
+    border-radius: 10px;
+    padding: 15px;
+    gap: 15px;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* Información en los contenedores de abajo */
-
-.contenedor .linea {
-    border: 1px solid black;
-    width: 100%;
-    margin: 0; /* ajusta el margen si necesitas */
+/* Imagen del ejercicio */
+.imagen-ejercicio {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
 }
+
+/* Título del ejercicio */
+.ejercicio h1 {
+    margin: 0;
+    flex: 1; /* Para ocupar el espacio restante y centrar */
+    text-align: center;
+}
+
+.contenedor-boton {
+    display: flex;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center; /* Centrado vertical */
+    height: 10vh; /* Altura completa de la ventana */
+}
+
+#añadir-ejercicio {
+    background-color: #007BFF; /* Azul brillante */
+    color: white; /* Texto blanco */
+    border: 2px solid #007BFF; /* Borde azul */
+    padding: 12px 24px; /* Espaciado más generoso */
+    font-size: 18px; /* Tamaño de fuente mayor */
+    font-weight: bold; /* Texto en negrita */
+    border-radius: 50px; /* Bordes redondeados extremos */
+    cursor: pointer; /* Cambiar cursor */
+    transition: all 0.3s ease; /* Transición suave para cambios */
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3); /* Sombra sutil */
+    outline: none; /* Sin borde al hacer clic */
+}
+
+#añadir-ejercicio:hover {
+    background-color: #0056b3; /* Azul oscuro en hover */
+    border-color: #0056b3; /* Borde coincide con el fondo */
+    transform: translateY(-2px); /* Elevar ligeramente el botón */
+    box-shadow: 0 8px 12px rgba(0, 123, 255, 0.4); /* Aumentar sombra en hover */
+}
+
+#añadir-ejercicio:active {
+    background-color: #004085; /* Azul aún más oscuro al hacer clic */
+    border-color: #004085;
+    transform: translateY(0); /* Restablecer al estado normal */
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3); /* Sombra normal */
+}
+
 
 /* footer */
 
