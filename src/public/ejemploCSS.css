@@ -1,16 +1,6 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    user-select: none;
-}
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
+/*
+    Atributos del header
+*/
 .header-top {
     display: flex;
     justify-content: space-between;
@@ -80,17 +70,6 @@ body {
     background-color: rgb(196, 217, 237)
 }
 
-.profile-btn {
-    background-image: url("../Imagenes/avatar.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 100px;
-    height: 100px;
-    border: none;
-}
-
-
 .even-nav {
     width: 100%;
     display: flex;
@@ -116,65 +95,14 @@ nav .logo img {
     width: auto;
 }
 
-.recomendaciones {
-    background-color: #cc3333; 
-    padding: 20px;
-}
+/*
+    Atributos del div central
+*/
 
-.recomendaciones h2 {
-    color: white;
-    margin-bottom: 10px;
-}
 
-.recomendaciones-container {
-    display: flex;
-    flex-wrap: wrap; 
-    gap: 10px; 
-    padding-bottom: 10px;
-}
-
-.recomendacion {
-    width: calc(20% - 10px); 
-    padding: 10px;
-    background-color: white;
-    color: #333;
-    text-align: center;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-}
-
-.rutinas {
-    background-color: #4CAF50;
-    padding: 20px;
-}
-
-.rutina-seccion {
-    margin-bottom: 20px;
-}
-
-.rutina-seccion h2 {
-    color: white;
-    margin-bottom: 10px;
-}
-
-.rutinas-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.rutina {
-    width: calc(20% - 10px); 
-    padding: 20px;
-    background-color: white;
-    color: #333;
-    text-align: center;
-    border: 1px solid #ccc;
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-}
-
+/*
+    Atributos del footer
+*/
 footer {
     background-color: rgb(2, 126, 243);
     color: rgb(196, 217, 237);
@@ -195,4 +123,3 @@ footer a.footer-enlace:hover {
     text-decoration: underline;
     color: rgb(154, 233, 233);
 }
-
