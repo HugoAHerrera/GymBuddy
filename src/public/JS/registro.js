@@ -2,40 +2,46 @@ $(document).ready(function () {
     const iniciarSesionHTML = `
         <form>
             <label for="email">Email:</label><br>
-            <input type="email" id="pass" class="pass" required>
+            <input type="email" id="email" class="pass" required>
             
-            <label for="password">Contraseña:</label><br>
+            <label for="contraseña_original">Contraseña:</label><br>
             <div class="contraseña">
-                <input type="password" id="pass" class="pass" required>
-                <i class = "bx bx-show-alt"></i>
+                <input type="password" id="contraseña_original" class="pass" required>
+                <i class="bx bx-show-alt"></i>
             </div>
-            <button type="submit">Enviar</button>
+            <button type="submit" id="submit-btn-inicio-sesion">Enviar</button>
+            <p id="contraseñas-vacias" style="color: red; display: none;">La contraseña no puede estar vacía</p>
+            <p id="email-error" style="color: red; display: none;">Ingrese un email válido</p>
         </form>
     `;
 
     const crearCuentaHTML = `
         <form>
             <label for="email">Email:</label><br>
-            <input type="email" id="pass" class="pass" required>
+            <input type="email" id="email" class="pass" required>
             
-            <label for="password">Contraseña:</label><br>
+            <label for="contraseña_original">Contraseña:</label><br>
             <div class="contraseña">
-                <input type="password" id="pass" class="pass" required>
-                <i class = "bx bx-show-alt"></i>
+                <input type="password" id="contraseña_original" class="pass" required>
+                <i class="bx bx-show-alt"></i>
             </div>
             
-            <label for="repeatPassword">Repetir contraseña:</label><br>
+            <label for="contraseña_repeticion">Repetir contraseña:</label><br>
             <div class="contraseña">
-                <input type="password" id="pass" class="pass" required>
-                <i class = "bx bx-show-alt"></i>
+                <input type="password" id="contraseña_repeticion" class="pass" required>
+                <i class="bx bx-show-alt"></i>
             </div>
             
             <div class="terms-container">
                 <input type="checkbox" id="terms" name="terms" required>
-                <label for="terms"> Aceptar términos y condiciones</label>
+                <label> Aceptar términos y condiciones</label>
             </div>
 
-            <button type="submit">Enviar</button>
+            <button type="submit" id="submit-btn">Enviar</button>
+            <p id="contraseñas-error" style="color: red; display: none;">Las contraseñas no coinciden</p>
+            <p id="contraseñas-vacias" style="color: red; display: none;">Las contraseñas no pueden estar vacías</p>
+            <p id="email-error" style="color: red; display: none;">Ingrese un email válido</p>
+            <p id="terms-error" style="color: red; display: none;">Debe aceptar los términos y condiciones</p>
         </form>
     `;
 
@@ -50,53 +56,73 @@ $(document).ready(function () {
         $('#div-crear-cuenta').addClass('boton-pulsado');
         $('#div-iniciar-sesion').removeClass('boton-pulsado');
     });
-});
 
-const form = document.querySelector("form");
-const contraseñaUsuario = document.getElementById("contraseña_original");
-const contaseñaRepeticion = document.getElementById("contraseña_repeticion");
-const contraseñasDistintas = document.getElementById("contraseñas-error");
+    $("#formulario").on("click", "#submit-btn-inicio-sesion", function(event) {
+        event.preventDefault();
 
-document.getElementById('submit-btn').addEventListener('click', function(event) {
-    event.preventDefault();
+        const contraseñaUsuario = document.getElementById('contraseña_original').value;
+        const email = document.getElementById('email').value;
+        
+        $("#contraseñas-vacias, #email-error").hide();
 
-    const contraseñaUsuario = document.getElementById('contraseña_original').value;
-    const contaseñaRepeticion = document.getElementById('contraseña_repeticion').value;
-    const email = document.getElementById('email').value;
-    const aceptarTerminos = document.getElementById('terms').checked;
+        if (contraseñaUsuario.length === 0) {
+            $("#contraseñas-vacias").show();
+            return;
+        }
 
-    const contraseñasDistintas = document.getElementById('contraseñas-error');
-    const contraseñasVacias = document.getElementById('contraseñas-vacias');
-    const emailError = document.getElementById('email-error');
-    const termsError = document.getElementById('terms-error');
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailRegex.test(email)) {
+            $("#email-error").show();
+            return;
+        }
 
-    contraseñasDistintas.style.display = "none";
-    contraseñasVacias.style.display = "none";
-    emailError.style.display = "none";
-    termsError.style.display = "none";
+        window.location.href = "rutina.html";
+    });
 
-    if (contraseñaUsuario.length === 0 || contaseñaRepeticion.length === 0) {
-        contraseñasVacias.style.display = "block";
-        return;
-    }
+    $("#formulario").on("click", "#submit-btn", function(event) {
+        event.preventDefault();
 
-    if (contraseñaUsuario !== contaseñaRepeticion) {
-        contraseñasDistintas.style.display = "block";
-        return;
-    }
+        const contraseñaUsuario = document.getElementById('contraseña_original').value;
+        const contaseñaRepeticion = document.getElementById('contraseña_repeticion').value;
+        const email = document.getElementById('email').value;
+        const aceptarTerminos = document.getElementById('terms').checked;
 
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailRegex.test(email)) {
-        emailError.style.display = "block";
-        return;
-    }
+        $("#contraseñas-error, #contraseñas-vacias, #email-error, #terms-error").hide();
 
-    if (!aceptarTerminos) {
-        termsError.style.display = "block";
-        return;
-    }
+        if (contraseñaUsuario.length === 0 || contaseñaRepeticion.length === 0) {
+            $("#contraseñas-vacias").show();
+            return;
+        }
 
-    window.location.href = "rutina.html";
+        if (contraseñaUsuario !== contaseñaRepeticion) {
+            $("#contraseñas-error").show();
+            return;
+        }
+
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailRegex.test(email)) {
+            $("#email-error").show();
+            return;
+        }
+
+        if (!aceptarTerminos) {
+            $("#terms-error").show();
+            return;
+        }
+
+        window.location.href = "rutina.html";
+    });
+
+    $("#formulario").on("click", ".bx", function() {
+        const pass = $(this).siblings(".pass")[0];
+        if (pass.type === "password") {
+            pass.type = "text";
+            $(this).removeClass('bx-show-alt').addClass('bx-hide');
+        } else {
+            pass.type = "password";
+            $(this).removeClass('bx-hide').addClass('bx-show-alt');
+        }
+    });
 });
 
 const passwordContainers = document.querySelectorAll(".contraseña");
@@ -152,5 +178,3 @@ document.addEventListener("DOMContentLoaded", function() {
 
     setTimeout(borrarTexto, 2000);
 });
-
-
