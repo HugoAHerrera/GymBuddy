@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f1d3b9;
+    background-color: white;
 }
 
 .header-top {
@@ -14,7 +14,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #d97e3d;
+    background-color: rgb(2, 126, 243);
     border-bottom: 1px solid white;
 }
 
@@ -75,7 +75,7 @@ body {
 #navegator {
     display: flex;
     justify-content: space-evenly;
-    background-color: #838383;
+    background-color: rgb(196, 217, 237);
 }
 
 .even-nav {
@@ -85,9 +85,8 @@ body {
 
 .nav-buttons {
     flex: 1;
-    background-color: #838383;
+    background-color: rgb(196, 217, 237);
     cursor: pointer;
-    color: white;
 }
 nav button:hover {
     background-color: #757575; /* Azul más oscuro al pasar el ratón */
@@ -138,12 +137,17 @@ main {
 }
 
 footer {
-    background-color: #d97e3d;
+    background-color: rgb(2, 126, 243);
     color: white;
     text-align: center;
     padding: 10px;
     bottom: 0;
     width: 100%;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
 }
 
 .div-meta {
