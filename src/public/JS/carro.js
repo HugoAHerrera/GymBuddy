@@ -19,14 +19,20 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    const pagarButton = document.querySelector('.checkout-btn');
-    const confirmarPagoButton = document.getElementById('confirmarPago');
+    const payButton = document.querySelector('.checkout-btn');
+    const customAlert = document.getElementById('custom-alert');
+    const seguirComprandoButton = document.getElementById('seguir-comprando');
+    const procederPagoButton = document.getElementById('proceder-pago');
 
-    pagarButton.addEventListener('click', function () {
-        $('#pagarModal').modal('show');
+    payButton.addEventListener('click', function () {
+        customAlert.style.display = 'block';
     });
 
-    confirmarPagoButton.addEventListener('click', function () {
+    seguirComprandoButton.addEventListener('click', function () {
+        window.location.href = 'tienda.html';
+    });
+
+    procederPagoButton.addEventListener('click', function () {
         window.location.href = 'pagar.html';
     });
 });

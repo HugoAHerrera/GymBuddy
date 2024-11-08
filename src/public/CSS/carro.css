@@ -111,8 +111,6 @@ nav .logo img {
 }
 
 /* CABECERA */
-
-/* Añadir aqui */
 .resaltar {
     background-color: #8c00ff; /* Color de fondo diferente, por ejemplo, un naranja */
     color: white; /* Texto en blanco */
@@ -305,6 +303,58 @@ p {
 
 .checkout-btn:hover {
     background-color: #005bb5;
+}
+
+/*Alerta*/
+.custom-alert {
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.custom-alert .closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.custom-alert .closebtn:hover {
+    color: black;
+}
+
+.alert-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.alert-buttons button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.alert-buttons button:hover {
+    background-color: #45a049;
 }
 /* FOOTER */
 footer {
