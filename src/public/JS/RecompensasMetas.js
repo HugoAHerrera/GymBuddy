@@ -1,4 +1,3 @@
-
 /*
 Archivo para calcular el porcentage de la barra de progreso y las recompensas
 en funcion de la meta:
