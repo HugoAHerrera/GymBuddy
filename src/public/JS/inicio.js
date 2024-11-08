@@ -24,3 +24,22 @@ setInterval(rotateSlides, 4000); // Cambia las ofertas cada 4 segundos
 // Iniciar la primera diapositiva
 rotateSlides();
 
+// Espera a que el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtén la imagen por su id
+    const logoImage = document.getElementById('logotype');
+    
+    // Agrega un listener para el evento de clic
+    logoImage.addEventListener('click', function() {
+        // Redirige al usuario a la página perfil.html
+        window.location.href = 'perfil.html';
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const logoImage = document.getElementById('logotype');
+    
+    logoImage.addEventListener('click', function() {
+        window.location.href = 'perfil.html';
+    });
+  });
