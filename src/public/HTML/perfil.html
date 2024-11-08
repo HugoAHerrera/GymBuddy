@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/perfil.css">
-    <script src="../js/perfil.js" defer></script>
     <title>Perfil</title>
 </head>
 <body>
@@ -13,67 +12,230 @@
             <button class="premium-btn">Premium</button>
             <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
             <div class="profile-search">
-                <button class="profile-btn">Perfil</button>
-                <input type="text" class="search-bar" placeholder="Buscar...">
+                <input type="text" class="search-bar" placeholder="¿Qué quieres buscar? 🔍">
+                <button class="profile-btn"></button>
             </div>
         </div>
-        <nav>
-            <button>Tienda</button>
-            <button>Progreso</button>
-            <button>Rutinas</button>
-            <div class="logo">
-                <img src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
+        <nav id="navegator">
+            <div class="even-nav">
+                <button class="nav-buttons">Tienda</button>
+                <button class="nav-buttons">Progreso</button>
+                <button class="nav-buttons">Rutinas</button>
             </div>
-            <button>Comunidad</button>
-            <button>Objetivos</button>
-            <button>Soporte</button>
+            <div class="logo">
+                <img id="logotype" src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
+            </div>
+            <div class="even-nav">
+                <button class="nav-buttons">Comunidad</button>
+                <button class="nav-buttons">Objetivos</button>
+                <button class="nav-buttons">Soporte</button>
+            </div>
         </nav>
     </header>
 
     <main>
-        <div class="content-container">
-            <div class="left-panel">
-                <div>Perfil</div>
-                <div>Notificaciones</div>
-                <div>Privacidad de la cuenta</div>
-                <div>Ajustes</div>
-                <div>Estadísticas deportivas</div>
-                <div>Términos y condiciones</div>
-                <div>Cookies</div>
-            </div>
-            <div class="right-panel">
-                <div class="perfil-section">
-                    <h2>Perfil:</h2>
-                    <div class="perfil-info">
-                        <img src="../Imagenes/avatar.jpg" alt="Foto" class="perfil-foto">
-                        <div class="perfil-detalles">
-                            <p><strong>Nombre de usuario:</strong>LevantarPesas28</p>
-                            <button class="cambiar-btn">Cambiar</button>
-                            <p><strong>Mail asociado:</strong>megustaelgym@gmail.com</p>
-                            <button class="cambiar-btn">Cambiar</button>
+        <aside class="sidebar">
+            <ul>
+                <li><a href="#perfil">Perfil</a></li>
+                <li><a href="#notificaciones">Notificaciones</a></li>
+                <li><a href="#privacidad">Privacidad de la cuenta</a></li>
+                <li><a href="#ajustes">Ajustes</a></li>
+                <li><a href="#estadísticasDeportivas">Estadísticas deportivas</a></li>
+            </ul>
+        </aside>
+
+        <section class="content">
+            <h1>Términos y Condiciones</h1>
+
+            <div id="perfil" class="section">
+                <h2>Perfil:</h2>
+                <div class="perfil-info">
+                    <img src="../Imagenes/avatar.jpg" alt="Foto" class="perfil-foto" id="imagen-mostrada">
+                    <div class="perfil-detalles">
+                        
+                        <div class="perfil-campo">
+                            <p><strong>Nombre de usuario:</strong> <span id="nombre-usuario-mostrado">Manolito_runner</span></p>
+                            <input type="text" id="nombre-usuario" placeholder="Nombre usuario">
+                        </div>
+                        
+                        <div class="perfil-campo">
+                            <p><strong>Mail asociado:</strong> <span id="email-usuario-mostrado">megustaelgym@gmail.com</span></p>
+                            <input type="email" id="email-usuario" placeholder="Mail">
+                        </div>
+                        
+                        <div class="perfil-campo">
+                            <p><strong>Cambiar imagen:</strong></p>
+                            <input type="file" id="imagen-usuario">
+                        </div>
+                         
+                        <button id="guardar-cambios" class="guardar-btn">Guardar Cambios</button>
+                         
+                        <p id="mensaje-confirmacion" class="mensaje-confirmacion"></p>
+                    </div>
+                </div>
+                
+                
+                <div class="actividad-section">
+                    <h2>Tu Actividad:</h2>
+                    <div class="actividad-info">
+                        <div class="actividad-item">
+                            <h3>Tiempo total en la aplicación:</h3>
+                            <p>5 horas y 34 minutos</p>
+                        </div>
+                
+                        <div class="actividad-item">
+                            <h3>Veces que abriste la aplicación:</h3>
+                            <p>45 veces este mes</p>
+                        </div>
+                
+                        <div class="actividad-item">
+                            <h3>Frecuencia diaria promedio:</h3>
+                            <p>3.2 veces por día</p>
+                        </div>
+                
+                        <div class="actividad-item">
+                            <h3>Sesión más larga registrada:</h3>
+                            <p>1 hora y 15 minutos</p>
+                        </div>
+                
+                        <div class="actividad-item">
+                            <h3>Progreso semanal:</h3>
+                            <p>Has aumentado tu tiempo de uso un 20% en comparación a la semana pasada.</p>
+                        </div>
+                        <div class="actividad-item">
+                            <h3>Objetivos de actividad alcanzados:</h3>
+                            <p>80% de tus objetivos semanales completados.</p>
                         </div>
                     </div>
                 </div>
-                <div class="actividad-section">
-                    <h2>Tu actividad:</h2>
-                    <div class="actividad-info">
-                        Información de tiempo en la aplicación, veces que la abre, etc (Diferente a las estadísticas sobre las rutinas)
-                    </div>
-                </div>
+                
                 <div class="amigos-section">
                     <h2>Amigos:</h2>
                     <div class="amigos-info">
                         7 amigos, 0 conectados
                     </div>
                 </div>
-                <div class="amigos-section">
-                    <h2>Otro div de prueba:</h2>
-                    <div class="amigos-info">
-                        Prueba
+            </div>
+
+            <div id="notificaciones" class="section">
+                <h2>Notificaciones:</h2>
+                <div class="notificaciones-info">
+                    <p>Selecciona si deseas recibir las notificaciones de cada tipo:</p>
+                    <label for="notificaciones-promociones">Promociones</label>
+                    <input type="checkbox" id="notificaciones-promociones" checked>
+                    <label for="notificaciones-mensajes">Mensajes directos</label>
+                    <input type="checkbox" id="notificaciones-mensajes" checked>
+                    <label for="notificaciones-novedades">Novedades del gimnasio</label>
+                    <input type="checkbox" id="notificaciones-novedades">
+                </div>
+            </div>
+
+            <div id="privacidad" class="section">
+                <h2>Privacidad de la cuenta:</h2>
+                <div class="privacidad-info">
+                    <p>Revisa y ajusta la privacidad de tu cuenta para proteger tu información personal y controlar tu visibilidad en la aplicación.</p>
+                    <div class="privacy-options">
+                        <div class="privacy-option">
+                            <label for="ver-perfil-publico">¿Permitir que otros usuarios vean tu perfil?</label>
+                            <input type="checkbox" id="ver-perfil-publico" checked>
+                        </div>
+                        <div class="privacy-option">
+                            <label for="ver-actividad">¿Permitir que otros vean tu actividad en el gimnasio?</label>
+                            <input type="checkbox" id="ver-actividad" checked>
+                        </div>
+                        <div class="privacy-option">
+                            <label for="recibir-mensajes">¿Permitir que otros te envíen mensajes directos?</label>
+                            <input type="checkbox" id="recibir-mensajes" checked>
+                        </div>
+                        <div class="privacy-option">
+                            <label for="mostrar-amigos">¿Mostrar tu lista de amigos?</label>
+                            <input type="checkbox" id="mostrar-amigos" checked>
+                        </div>
                     </div>
                 </div>
-            </div>            
-        </div>
+            </div>
+            
+            <div id="ajustes" class="section">
+                <h2>Ajustes:</h2>
+                <div class="ajustes-info">
+             
+                    <div class="setting-option">
+                        <h3>Recopilación de datos de rutinas</h3>
+                        <label for="recopilar-datos">¿Permitir que se recopilen datos sobre tus rutinas de entrenamiento?</label>
+                        <input type="checkbox" id="recopilar-datos" checked>
+                    </div>
+             
+                    <div class="setting-option">
+                        <h3>Visibilidad de perfil en línea</h3>
+                        <label for="perfil-en-linea">¿Mostrar si tu perfil está en línea?</label>
+                        <input type="checkbox" id="perfil-en-linea" checked>
+                    </div>
+             
+                    <div class="setting-option">
+                        <h3>Solicitudes de amistad</h3>
+                        <label for="permitir-solicitudes">¿Permitir solicitudes de amistad de otros usuarios?</label>
+                        <input type="checkbox" id="permitir-solicitudes" checked>
+                    </div>
+             
+                    <div class="setting-option">
+                        <h3>Compartir logros</h3>
+                        <label for="compartir-logros">¿Permitir compartir tus logros en las redes sociales?</label>
+                        <input type="checkbox" id="compartir-logros" checked>
+                    </div>
+             
+                    <div class="setting-option">
+                        <h3>Registro de actividad</h3>
+                        <label for="registro-actividad">¿Registrar y hacer un seguimiento de tu actividad diaria?</label>
+                        <input type="checkbox" id="registro-actividad" checked>
+                    </div>
+             
+                    <div class="setting-option">
+                        <h3>Sugerencias personalizadas</h3>
+                        <label for="sugerencias-personalizadas">¿Recibir sugerencias de entrenamientos personalizadas?</label>
+                        <input type="checkbox" id="sugerencias-personalizadas" checked>
+                    </div>
+             
+                    <div class="setting-option">
+                        <h3>Zona Horaria</h3>
+                        <label for="zona-horaria">Selecciona tu zona horaria:</label>
+                        <select id="zona-horaria"> 
+                            <option value="GMT">GMT (Reino Unido, Irlanda)</option>
+                            <option value="GMT+1">GMT+1 (España, Francia, Alemania)</option>
+                            <option value="GMT+2">GMT+2 (Grecia, Turquía, Israel)</option>
+                            <option value="GMT+3">GMT+3 (Rusia Occidental, Moscú)</option>
+             
+                            <option value="GMT-3">GMT-3 (Argentina, Uruguay)</option>
+                            <option value="GMT-4">GMT-4 (Chile, Bolivia, Venezuela)</option>
+                            <option value="GMT-5">GMT-5 (Colombia, Ecuador, Perú)</option>
+                            <option value="GMT-6">GMT-6 (México, Guatemala, Honduras)</option>
+                            <option value="GMT-7">GMT-7 (El Salvador, Nicaragua)</option>
+                            <option value="GMT-8">GMT-8 (Los Angeles, California, EE.UU.)</option>
+                            <option value="GMT-9">GMT-9 (Alaska, EE.UU.)</option>
+                        </select>
+                    </div>
+             
+                    <div class="setting-option">
+                        <h3>Idioma</h3>
+                        <label for="idioma">Selecciona tu idioma preferido:</label>
+                        <select id="idioma">
+                            <option value="es">Español</option>
+                            <option value="en">Inglés</option>
+                            <option value="fr">Francés</option>
+                            <option value="de">Alemán</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            
+
+            <div id="estadísticasDeportivas" class="section">
+                <h2>Estadísticas Deportivas:</h2>
+                <div class="estadisticas-info">
+                    <p>Aún no hay configuraciones disponibles para las estadísticas deportivas.</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer>
@@ -84,5 +246,7 @@
             <a>GymBuddy &copy; 2024</a>
         </p>
     </footer>
+
+    <script src="../JS/perfil.js"></script>
 </body>
 </html>
