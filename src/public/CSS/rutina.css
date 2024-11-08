@@ -113,6 +113,25 @@ main {
     padding: 20px;
 }
 
+#editar-rutina_creada {
+    background-color: #4CAF50; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Eliminar el borde predeterminado */
+    padding: 10px 20px; /* Espaciado interno (padding) */
+    text-align: center; /* Alineación del texto */
+    text-decoration: none; /* Sin subrayado */
+    display: inline-block; /* Hace que el botón se comporte como un elemento en línea */
+    font-size: 16px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
+}
+
+#editar-rutina_creada:hover {
+    background-color: #45a049; /* Color de fondo al pasar el ratón */
+}
+
+
 .rutinas{
     margin-top: 20px;
 }
