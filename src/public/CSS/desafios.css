@@ -1,3 +1,98 @@
+/* Estilos generales para Header y Barra Superior */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(2, 126, 243);
+    border-bottom: 1px solid white;
+}
+
+.premium-btn {
+    background-color: rgb(0, 104, 202);
+    color: rgb(255, 251, 0);
+    border: 2px solid black;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-left: 75px;
+}
+
+.premium-btn:hover {
+    background-color: rgb(0, 91, 175);
+}
+
+.header-marquee {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0 10px;
+    color: rgb(255, 251, 0);
+}
+
+.profile-search {
+    display: flex;
+    align-items: center;
+}
+
+.profile-btn {
+    background-size: cover;
+    background-image: url("../Imagenes/avatar.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    padding: 25px 25px;
+    cursor: pointer;
+    border-radius: 50%;
+    margin-right: 75px;
+}
+
+.search-bar {
+    border: 2px solid black;
+    text-align: center;
+    padding: 8px 30px;
+    border-radius: 20px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    margin-right: 20px;
+}
+
+.search-bar:focus {
+    border-color: #3399cc;
+}
+
+#navegator {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: rgb(196, 217, 237);
+}
+
+.even-nav {
+    width: 100%;
+    display: flex;
+}
+
+.nav-buttons {
+    flex: 1;
+    background-color: rgb(196, 217, 237);
+    cursor: pointer;
+    color: black;
+}
+
+.nav-buttons:hover {
+    background-color: rgb(180, 200, 219);
+}
+
+.nav-buttons, .logo {
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
+}
+
+nav .logo img {
+    height: 75px;
+    width: auto;
+}
 /* Contenedor de desafíos */
 .challenges-container {
     display: flex;
@@ -5,15 +100,14 @@
     align-items: center;
     gap: 20px;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: rgb(188, 223, 255);
     border-radius: 10px;
 }
 
-/* Fila de tarjetas de desafío */
-.challenges-container .card-row {
+.card-row {
     display: flex;
     gap: 20px;
-    overflow-x: auto; /* Scroll horizontal si hay más tarjetas de las que caben */
+    overflow-x: auto;
 }
 
 /* Tarjeta de desafío */
@@ -23,6 +117,15 @@
     height: 250px;
     perspective: 1000px;
     cursor: pointer;
+    background-color: rgb(228, 237, 247);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.challenge-card:hover {
+    transform: scale(1.05);
 }
 
 .challenge-card .card-front, .challenge-card .card-back {
@@ -31,7 +134,6 @@
     height: 100%;
     backface-visibility: hidden;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,12 +143,12 @@
 }
 
 .card-front {
-    background-color: #f1d3b9;
+    background-color: rgb(228, 237, 247);
     color: #333;
 }
 
 .card-back {
-    background-color: #d97e3d;
+    background-color: rgb(2, 126, 243);
     color: white;
     transform: rotateY(180deg);
 }
@@ -61,17 +163,17 @@
 
 /* Botón para aceptar el desafío */
 .accept-btn {
-    background-color: darkgoldenrod;
-    color: white;
-    border: none;
+    background-color: rgb(0, 104, 202);
+    color: rgb(255, 251, 0);
+    border: 2px solid black;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
+    font-weight: bold;
 }
 
 .accept-btn:hover {
-    background-color: goldenrod;
+    background-color: rgb(0, 91, 175);
 }
 
 /* Barra de progreso */
@@ -93,5 +195,22 @@
     margin-top: 5px;
     font-size: 0.9rem;
     color: white;
+}
+footer {
+    background-color: rgb(2, 126, 243); /* Azul de fondo del footer */
+    color: rgb(196, 217, 237); /* Texto en azul claro */
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a.footer-enlace:hover {
+    text-decoration: underline;
+    color: rgb(154, 233, 233); /* Azul celeste al pasar el cursor */
 }
 

@@ -1,23 +1,119 @@
-/* Estilos adicionales para el formulario de contacto */
+/* Estilos generales para Header y Barra Superior */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(2, 126, 243);
+    border-bottom: 1px solid white;
+}
+
+.premium-btn {
+    background-color: rgb(0, 104, 202);
+    color: rgb(255, 251, 0);
+    border: 2px solid black;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-left: 75px;
+}
+
+.premium-btn:hover {
+    background-color: rgb(0, 91, 175);
+}
+
+.header-marquee {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0 10px;
+    color: rgb(255, 251, 0);
+}
+
+.profile-search {
+    display: flex;
+    align-items: center;
+}
+
+.profile-btn {
+    background-size: cover;
+    background-image: url("../Imagenes/avatar.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    padding: 25px 25px;
+    cursor: pointer;
+    border-radius: 50%;
+    margin-right: 75px;
+}
+
+.search-bar {
+    border: 2px solid black;
+    text-align: center;
+    padding: 8px 30px;
+    border-radius: 20px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    margin-right: 20px;
+}
+
+.search-bar:focus {
+    border-color: #3399cc;
+}
+
+#navegator {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: rgb(196, 217, 237);
+}
+
+.even-nav {
+    width: 100%;
+    display: flex;
+}
+
+.nav-buttons {
+    flex: 1;
+    background-color: rgb(196, 217, 237);
+    cursor: pointer;
+    color: black;
+}
+
+.nav-buttons:hover {
+    background-color: rgb(180, 200, 219);
+}
+
+.nav-buttons, .logo {
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
+}
+
+nav .logo img {
+    height: 75px;
+    width: auto;
+}
+/* Contenedor principal de contacto */
 .contact-container {
     max-width: 600px;
-    margin: 20px auto;
+    margin: 30px auto;
     padding: 20px;
-    background-color: #f1d3b9; /* Fondo coherente con el estilo general */
-    border: 2px solid #d97e3d; /* Bordes en tonos anaranjados */
+    background-color: rgb(188, 223, 255);
     border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgb(2, 126, 243);
 }
 
 .contact-container h2 {
-    color: #d97e3d;
+    color: black;
     text-align: center;
     margin-bottom: 20px;
+    text-decoration: underline;
 }
 
 .contact-container label {
     font-weight: bold;
-    color: #333;
+    color: black;
     margin-top: 10px;
 }
 
@@ -27,20 +123,17 @@
     padding: 10px;
     margin-top: 5px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    border: 2px solid rgb(0, 104, 202);
     border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.contact-container input:focus,
+.contact-container textarea:focus {
+    border-color: rgb(0, 91, 175);
 }
 
 .contact-container button {
-    background-color: #d97e3d;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.contact-container button:hover {
-    background-color: #c7691b;
+    background-color: rgb(blue);
 }
