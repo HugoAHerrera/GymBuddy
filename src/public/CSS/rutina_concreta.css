@@ -114,7 +114,6 @@ nav .logo img {
     height: 80px;
     align-items: center;
     justify-content: center;
-    background-color: #666;
 }
 
 .Cabecera-rutina h1 {
@@ -145,10 +144,16 @@ nav .logo img {
     background-color: #a0b839;
 }
 
-.boton-empezar-rutina:hover, 
-.boton-crear-rutina:hover,
+.boton-empezar-rutina:hover {
+    background-color: #409443;
+}
+
+.boton-crear-rutina:hover {
+    background-color: #d83a2f;
+}
+
 .boton-pausar-rutina:hover {
-    background-color: #5f7c96;
+    background-color: #889c30;
 }
 
 .btn-guia {
@@ -199,24 +204,6 @@ nav .logo img {
     flex: 1;
 }
 
-footer {
-    background-color: rgb(2, 126, 243);
-    color: rgb(196, 217, 237);
-    text-align: center;
-    padding: 10px;
-    width: auto;
-}
-
-footer a {
-    color: white;
-    text-decoration: none;
-}
-
-footer a.footer-enlace:hover {
-    text-decoration: underline;
-    color: rgb(154, 233, 233);
-}
-
 #ejercicio-container {
     display: flex;
     flex-direction: column;
@@ -261,7 +248,7 @@ footer a.footer-enlace:hover {
 }
 
 #siguiente-ejercicio {
-    display: none; /* Oculto inicialmente */
+    display: none;
     width: 80%;
     background-color: #f3f3f3;
     padding: 15px;
@@ -272,3 +259,20 @@ footer a.footer-enlace:hover {
     color: #333;
 }
 
+footer {
+    background-color: rgb(2, 126, 243);
+    color: rgb(196, 217, 237);
+    text-align: center;
+    padding: 10px;
+    width: auto;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a.footer-enlace:hover {
+    text-decoration: underline;
+    color: rgb(154, 233, 233);
+}
