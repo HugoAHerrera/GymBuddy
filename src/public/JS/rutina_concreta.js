@@ -87,8 +87,7 @@ function iniciarRutina() {
     if (primeraEjecucion) {
         document.querySelector('.boton-empezar-rutina').disabled = true;
         document.querySelector('.boton-empezar-rutina').removeEventListener('click', iniciarRutina);
-        document.querySelector('.boton-modificar-rutina').style.display = 'none';
-        document.querySelector('.boton-guardar-cambios').style.display = 'none';
+        document.querySelector('.boton-crear-rutina').style.display = 'none';
         document.querySelector('.boton-pausar-rutina').style.display = 'flex';
         document.querySelector('.boton-empezar-rutina').textContent = 'Reanudar rutina';
         document.querySelector('.barra-progreso-container').style.display = 'block';
@@ -124,3 +123,19 @@ function reanudarRutina() {
 
 document.querySelector('.boton-empezar-rutina').addEventListener('click', iniciarRutina);
 document.querySelector('.boton-pausar-rutina').addEventListener('click', pausarRutina);
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.btn-guia').forEach(button => {
+        button.addEventListener('click', () => {
+            window.open('guia_ejercicios.html', '_blank');
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.boton-crear-rutina').forEach(button => {
+        button.addEventListener('click', () => {
+            window.location.href = "rutina_personalizada_nueva.html";
+        });
+    });
+});

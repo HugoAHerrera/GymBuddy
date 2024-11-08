@@ -122,8 +122,7 @@ nav .logo img {
 }
 
 .boton-empezar-rutina, 
-.boton-guardar-cambios, 
-.boton-modificar-rutina,
+.boton-crear-rutina,
 .boton-pausar-rutina {
     height: 70%;
     width: 20%;
@@ -138,21 +137,16 @@ nav .logo img {
     background-color: #4CAF50;
 }
 
-.boton-guardar-cambios {
-    background-color: #2196F3;
-}
-
-.boton-modificar-rutina {
+.boton-crear-rutina {
     background-color: #f44336;
 }
 
 .boton-pausar-rutina {
-    background-color: rgb(122, 65, 65);
+    background-color: #a0b839;
 }
 
 .boton-empezar-rutina:hover, 
-.boton-guardar-cambios:hover, 
-.boton-modificar-rutina:hover,
+.boton-crear-rutina:hover,
 .boton-pausar-rutina:hover {
     background-color: #5f7c96;
 }
