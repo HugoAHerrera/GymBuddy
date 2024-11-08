@@ -27,15 +27,17 @@ document.addEventListener("DOMContentLoaded", function () {
         button.addEventListener("click", function () {
             // Encuentra el contenedor principal de esta meta
             const metaContainer = button.closest(".meta");
-            // Selecciona la barra de progreso dentro del contenedor de la meta
+            // Selecciona la barra de progreso y la etiqueta de recompensa dentro del contenedor de la meta
             const progressBar = metaContainer.querySelector(".progress_bar");
+            const rewardLabel = metaContainer.querySelector("div[id$='-gift']");
 
             // Comprueba si el progreso está al 100%
             if (progressBar.value === 100) {
-                alert("¡Recompensa reclamada con éxito!");
+                alert(`¡Recompensa reclamada con éxito! Has ganado: ${rewardLabel.textContent}`);
             } else {
                 alert("No puedes reclamar la recompensa hasta completar el 100% de progreso.");
             }
         });
     });
 });
+
