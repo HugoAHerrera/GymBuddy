@@ -170,6 +170,13 @@ h1 {
     height: 10vh; /* Altura completa de la ventana */
 }
 
+#contenedor-guardar{
+    height: 0vh;
+    justify-content: end;
+    align-items: end;
+    margin-right: 10%;
+}
+
 #añadir-ejercicio {
     background-color: #007BFF; /* Azul brillante */
     color: white; /* Texto blanco */
@@ -184,19 +191,34 @@ h1 {
     outline: none; /* Sin borde al hacer clic */
 }
 
-#añadir-ejercicio:hover {
+#guardar {
+    background-color: #007BFF; /* Azul brillante */
+    color: white; /* Texto blanco */
+    border: 2px solid #007BFF; /* Borde azul */
+    padding: 12px 24px; /* Espaciado más generoso */
+    font-size: 18px; /* Tamaño de fuente mayor */
+    font-weight: bold; /* Texto en negrita */
+    border-radius: 50px; /* Bordes redondeados extremos */
+    cursor: pointer; /* Cambiar cursor */
+    transition: all 0.3s ease; /* Transición suave para cambios */
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3); /* Sombra sutil */
+    outline: none; /* Sin borde al hacer clic */
+}
+
+#añadir-ejercicio:hover, #guardar:hover {
     background-color: #0056b3; /* Azul oscuro en hover */
     border-color: #0056b3; /* Borde coincide con el fondo */
     transform: translateY(-2px); /* Elevar ligeramente el botón */
     box-shadow: 0 8px 12px rgba(0, 123, 255, 0.4); /* Aumentar sombra en hover */
 }
 
-#añadir-ejercicio:active {
+#añadir-ejercicio:active, #guardar:active {
     background-color: #004085; /* Azul aún más oscuro al hacer clic */
     border-color: #004085;
     transform: translateY(0); /* Restablecer al estado normal */
     box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3); /* Sombra normal */
 }
+
 
 
 /* footer */
