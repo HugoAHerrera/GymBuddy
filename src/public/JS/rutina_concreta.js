@@ -1,8 +1,9 @@
-let tiempoInicial = 5;
+let tiempoInicial = 10;
 let tiempoRestante = tiempoInicial;
-let ejercicioEnCurso = true; 
-let tiempoIntervalo; 
-let pausado = false; 
+let ejercicioEnCurso = true;
+let tiempoIntervalo;
+let pausado = false;
+let primeraEjecucion = true;
 
 const barraProgreso = document.querySelector('.barra-inner');
 const contadorDisplay = document.getElementById('contador');
@@ -33,7 +34,7 @@ function actualizarContador() {
             contadorDisplay.textContent = `Tiempo restante: ${tiempoRestante} segundos`;
         } else {
             ejercicioEnCurso = false;
-            tiempoRestante = tiempoInicial; 
+            tiempoRestante = tiempoInicial;
         }
     } else {
         if (tiempoRestante) {
@@ -41,7 +42,7 @@ function actualizarContador() {
             const porcentaje = ((tiempoInicial - tiempoRestante) / tiempoInicial) * 100;
             barraProgreso.style.width = `${porcentaje}%`;
             contadorDisplay.textContent = `Tiempo descanso: ${tiempoRestante} segundos`;
-            if (tiempoRestante <= 0){
+            if (tiempoRestante <= 0) {
                 ejercicioEnCurso = true;
                 tiempoRestante = tiempoInicial;
                 actualizarEjercicio(); 
@@ -53,7 +54,7 @@ function actualizarContador() {
 
 function actualizarEjercicio() {
     if (ejercicios_restantes.length === 0 || imagenes_ejercicios_restantes.length === 0) {
-        clearInterval(tiempoIntervalo); 
+        clearInterval(tiempoIntervalo);
         document.getElementById('contador-container').style.display = 'none';
         document.getElementById('mensaje-terminado').style.display = 'block';
         return;
@@ -78,17 +79,24 @@ function cambiarEjercicio() {
     } else {
         tiempoRestante = tiempoInicial;
         ejercicioEnCurso = true;
-
         actualizarEjercicio();
     }
 }
 
 function iniciarRutina() {
-    document.querySelector('.boton-modificar-rutina').style.display = 'none';
-    document.querySelector('.boton-guardar-cambios').style.display = 'none';
-    document.querySelector('.boton-pausar-rutina').style.display = 'flex';
-    document.querySelector('.boton-empezar-rutina').textContent = 'Reanudar rutina';
+    if (primeraEjecucion) {
+        document.querySelector('.boton-empezar-rutina').disabled = true;
+        document.querySelector('.boton-empezar-rutina').removeEventListener('click', iniciarRutina);
+        document.querySelector('.boton-modificar-rutina').style.display = 'none';
+        document.querySelector('.boton-guardar-cambios').style.display = 'none';
+        document.querySelector('.boton-pausar-rutina').style.display = 'flex';
+        document.querySelector('.boton-empezar-rutina').textContent = 'Reanudar rutina';
+        document.querySelector('.barra-progreso-container').style.display = 'block';
+        primeraEjecucion = false;
+    }
 
+    actualizarEjercicio();
+    
     if (!pausado) {
         tiempoIntervalo = setInterval(actualizarContador, 1000);
     } else {
@@ -100,6 +108,18 @@ function iniciarRutina() {
 function pausarRutina() {
     pausado = true;
     clearInterval(tiempoIntervalo);
+    document.querySelector('.boton-empezar-rutina').disabled = false;
+    document.querySelector('.boton-empezar-rutina').textContent = 'Reanudar rutina';
+    document.querySelector('.boton-empezar-rutina').removeEventListener('click', iniciarRutina);
+    document.querySelector('.boton-empezar-rutina').addEventListener('click', reanudarRutina);
+}
+
+function reanudarRutina() {
+    document.querySelector('.boton-empezar-rutina').disabled = true;
+    document.querySelector('.boton-empezar-rutina').removeEventListener('click', reanudarRutina);
+    tiempoIntervalo = setInterval(actualizarContador, 1000);
+    document.querySelector('.boton-pausar-rutina').style.display = 'flex';
+    document.querySelector('.barra-progreso-container').style.display = 'block';
 }
 
 document.querySelector('.boton-empezar-rutina').addEventListener('click', iniciarRutina);

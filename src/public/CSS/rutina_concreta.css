@@ -263,6 +263,7 @@ footer a.footer-enlace:hover {
     background-color: #ccc;
     height: 10px;
     margin: 20px 0;
+    display: none;
 }
 
 #siguiente-ejercicio {
