@@ -17,3 +17,25 @@ RECOMPENSAS:
     - Por establecer la cantidad de KG por ejercicio / set propuesto -> se calcula en base a la cantidad final la recompensa
 
  */
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Selecciona todos los botones de "Reclamar"
+    const claimButtons = document.querySelectorAll(".claim-gift");
+
+    // Recorre cada botón y añade el evento de clic
+    claimButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            // Encuentra el contenedor principal de esta meta
+            const metaContainer = button.closest(".meta");
+            // Selecciona la barra de progreso dentro del contenedor de la meta
+            const progressBar = metaContainer.querySelector(".progress_bar");
+
+            // Comprueba si el progreso está al 100%
+            if (progressBar.value === 100) {
+                alert("¡Recompensa reclamada con éxito!");
+            } else {
+                alert("No puedes reclamar la recompensa hasta completar el 100% de progreso.");
+            }
+        });
+    });
+});
