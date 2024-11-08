@@ -38,7 +38,7 @@ body {
     font-weight: bold;
     font-size: 1.2rem;
     margin: 0 10px;
-    color: #ffd700;
+    color: rgb(255, 251, 0);
 }
 
 .profile-search {
@@ -199,4 +199,5 @@ footer a {
     border-radius: 10px;
     border: 2px solid black;
     background-color: #c53e3e;
+    cursor: pointer;
 }
