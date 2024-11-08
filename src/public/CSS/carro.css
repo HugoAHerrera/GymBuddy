@@ -50,7 +50,6 @@ body {
 }
 
 .profile-btn {
-    /*background-color: white;*/
     background-size: cover;
     border: 2px solid black;
     padding: 25px 25px;
@@ -97,7 +96,7 @@ body {
     color: black;
 }
 nav button:hover {
-    background-color: rgb(180, 200, 219); /* Azul más oscuro al pasar el ratón */
+    background-color: rgb(180, 200, 219);
 }
 
 .nav-buttons, .logo {
@@ -112,8 +111,8 @@ nav .logo img {
 
 /* CABECERA */
 .resaltar {
-    background-color: #8c00ff; /* Color de fondo diferente, por ejemplo, un naranja */
-    color: white; /* Texto en blanco */
+    background-color: #8c00ff;
+    color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
@@ -122,7 +121,7 @@ nav .logo img {
 }
 
 .resaltar:hover {
-    background-color: #480188; /* Un naranja más oscuro al pasar el ratón */
+    background-color: #480188;
 }
 
 .progreso-compra {
@@ -139,23 +138,23 @@ nav .logo img {
 }
 
 .etapa-icono {
-    font-size: 2rem; /* Ajusta el tamaño del icono */
-    margin-bottom: 5px; /* Espaciado debajo del icono */
-    border: 1px solid #003366; /* Borde azul oscuro */
-    border-radius: 10px; /* Bordes redondeados */
-    padding: 10px; /* Espaciado interno */
-    background-color: #f4f4f4; /* Fondo claro */
-    transition: background-color 0.3s ease; /* Efecto al pasar el ratón */
+    font-size: 2rem;
+    margin-bottom: 5px;
+    border: 1px solid #003366;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    transition: background-color 0.3s ease;
 }
 
 .etapa-icono:hover {
-    background-color: #3399cc; /* Cambia el color al pasar el ratón */
-    color: white; /* Texto blanco al pasar el ratón */
+    background-color: #3399cc;
+    color: white;
 }
 
 p {
-    margin-top: 5px; /* Espaciado entre el icono y el texto */
-    color: #003366; /* Color del texto */
+    margin-top: 5px;
+    color: #003366;
 }
 
 
@@ -308,7 +307,7 @@ p {
 /*Alerta*/
 .custom-alert {
     padding: 20px;
-    background-color: #f44336; /* Red */
+    background-color: #f44336;
     color: white;
     margin-bottom: 15px;
     border-radius: 5px;
@@ -344,7 +343,7 @@ p {
 }
 
 .alert-buttons button {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -366,6 +365,8 @@ footer {
     /*
         Poner el footer abajo de la pantalla fijo: position: fixed; bottom: 0;
     */
+    position: fixed;
+    bottom: 0;
 }
 
 footer a {

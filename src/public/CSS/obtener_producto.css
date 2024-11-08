@@ -157,118 +157,53 @@ p {
     color: #003366; /* Color del texto */
 }
 /* MAIN */
-.payment-section {
+.container {
     display: flex;
-    justify-content: space-between;
-    margin: 20px;
-}
-
-.payment-methods {
-    background-color: #fff;
-    padding: 20px;
-    margin-left: 20px;
+    width: 80%;
+    max-width: 1200px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 60%;
-    display: flex;
-    flex-direction: column;
+    overflow: hidden;
+    margin: 20px auto;
 }
 
-.payment-method {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.payment-method:hover {
-    background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.payment-method h4 {
-    margin-bottom: 10px;
-    font-size: 1.2em;
-    color: #333;
-}
-
-.payment-details input {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: border-color 0.3s ease;
-}
-
-.payment-details input:focus {
-    border-color: #007bff;
-    outline: none;
-}
-
-.cart-summary-container {
-    background-color: #f4f4f4;
+.productos, .mensaje {
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 35%;
+    width: 50%;
 }
 
-#cart-summary {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.productos {
+    border-right: 1px solid #ddd;
+    margin-right: 5px;
 }
 
-#cart-summary h2 {
+.productos h2, .mensaje h2 {
     font-size: 1.5em;
     margin-bottom: 20px;
     color: #333;
 }
 
-#cart-summary ul {
+.productos ul {
     list-style-type: none;
     padding: 0;
 }
 
-#cart-summary ul li {
+.productos ul li {
     padding: 10px 0;
     border-bottom: 1px solid #ddd;
     font-size: 1.1em;
     color: #555;
 }
 
-#cart-summary ul li:last-child {
+.productos ul li:last-child {
     border-bottom: none;
-    font-weight: bold;
-    color: #333;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 5px;
 }
 
-#pay-button {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.mensaje p {
     font-size: 1.2em;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
+    color: #555;
 }
-
-#pay-button:hover {
-    background-color: #0056b3;
-}
-
 /*FIN MAIN */
 /* FOOTER */
 footer {
@@ -293,5 +228,4 @@ footer a.footer-enlace:hover {
     text-decoration: underline;
     color: rgb(154, 233, 233);
 }
-
 

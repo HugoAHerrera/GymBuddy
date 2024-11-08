@@ -221,6 +221,8 @@ footer {
     /*
         Poner el footer abajo de la pantalla fijo: position: fixed; bottom: 0;
     */
+    position: fixed;
+    bottom: 0;
 }
 
 footer a {
