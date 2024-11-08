@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/rutina_concreta.css">
-    <script src="../js/rutina_concreta.js" defer></script>
     <title>Rutina concreta</title>
 </head>
 <body>
@@ -33,42 +32,63 @@
             </div>
         </nav>
     </header>
+
     <div class="center">
         <div class="Cabecera-rutina">
             <h1>Rutina de hombro</h1>
             <div class="boton-empezar-rutina">Empezar Rutina</div>
             <div class="boton-guardar-cambios">Guardar Cambios</div>
             <div class="boton-modificar-rutina">Modificar Rutina</div>
+            <div class="boton-pausar-rutina" style="display: none;">Pausar Rutina</div>
         </div>
         <div class="div-ejercicios">
             <div class="ejercicio">
-                <img src="../Imagenes/curl_pesas.png" alt="Logo GymBuddy" class="imagen_ejercicio">
+                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio 1" class="imagen_ejercicio">
                 <h1>Ejercicio 1: Curl Ancho</h1>
                 <button class="btn-guia">Ver Guía</button>
             </div>
             <div class="ejercicio">
-                <img src="../Imagenes/curl_pesas.png" alt="Logo GymBuddy" class="imagen_ejercicio">
+                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio 2" class="imagen_ejercicio">
                 <h1>Ejercicio 2: Curl Ancho</h1>
                 <button class="btn-guia">Ver Guía</button>
             </div>
             <div class="ejercicio">
-                <img src="../Imagenes/curl_pesas.png" alt="Logo GymBuddy" class="imagen_ejercicio">
+                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio 3" class="imagen_ejercicio">
                 <h1>Ejercicio 3: Curl Ancho</h1>
                 <button class="btn-guia">Ver Guía</button>
             </div>
             <div class="ejercicio">
-                <img src="../Imagenes/curl_pesas.png" alt="Logo GymBuddy" class="imagen_ejercicio">
+                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio 4" class="imagen_ejercicio">
                 <h1>Ejercicio 4: Curl Ancho</h1>
                 <button class="btn-guia">Ver Guía</button>
             </div>
             <div class="ejercicio">
-                <img src="../Imagenes/curl_pesas.png" alt="Logo GymBuddy" class="imagen_ejercicio">
+                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio 5" class="imagen_ejercicio">
                 <h1>Ejercicio 5: Curl Ancho</h1>
                 <button class="btn-guia">Ver Guía</button>
             </div>
         </div>        
     </div>
-
+    <div id="mensaje-terminado" style="display: none; text-align: center; padding: 20px; background-color: #f2f2f2; border-radius: 10px;">
+        <h2 style="color: #4CAF50;">¡Has terminado la rutina!</h2>
+        <p style="font-size: 18px; color: #555;">¡Felicidades por completar todos los ejercicios! Ahora puedes descansar o comenzar otra rutina.</p>
+    </div>
+    <div id="contador-container" style="width: 80%; margin: 0 auto; text-align: center;">
+        <!-- Contador que muestra el tiempo -->
+        <div id="contador" style="text-align: center; margin-bottom: 20px;"></div> 
+    
+        <!-- Barra de progreso -->
+        <div class="barra-progreso-container" style="width: 100%; background-color: #ccc; height: 10px; margin: 20px 0;">
+            <div class="barra-inner" style="width: 0%; height: 100%; background-color: #4CAF50;"></div>
+        </div>
+    
+        <div id="ejercicio-container" style="display: none;">
+            <h1 id="ejercicio-titulo"></h1>
+            <img id="ejercicio-imagen" src="" alt="Imagen del ejercicio">
+        </div>
+    </div>
+    
+    
     <footer>
         <p>
             <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> | 
@@ -77,5 +97,8 @@
             <a>GymBuddy &copy; 2024</a>
         </p>
     </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/rutina_concreta.js" defer></script>
 </body>
 </html>
