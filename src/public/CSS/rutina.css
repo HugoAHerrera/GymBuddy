@@ -1,7 +1,6 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     user-select: none;
 }
 
@@ -9,6 +8,7 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     color: #333;
+    height: 100vh;
 }
 
 .header-top {
@@ -127,7 +127,7 @@ main {
 
 .recomendacion,
 .rutina {
-    width: calc(20% - 10px); 
+    width: calc(20% - 50px); 
     padding: 20px;
     background-color: rgb(228, 237, 247);
     color: #333;
@@ -174,10 +174,7 @@ footer {
     color: rgb(196, 217, 237);
     text-align: center;
     padding: 10px;
-    width: 100%;
-    /*
-        Poner el footer abajo de la pantalla fijo: position: fixed; bottom: 0;
-    */
+    width: auto;
 }
 
 footer a {

@@ -8,10 +8,8 @@
   <link rel="stylesheet" href="../CSS/desafios.css">
 </head>
 <body>
-    <!-- CABECERA -->
     <header>
         <div class="header-top">
-            <button class="premium-btn">Premium</button>
             <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
             <div class="profile-search">
                 <input type="text" class="search-bar" placeholder="¿Qué quieres buscar? 🔍">
@@ -20,17 +18,17 @@
         </div>
         <nav id="navegator">
             <div class="even-nav">
-                <button class="nav-buttons">Tienda</button>
-                <button class="nav-buttons">Progreso</button>
-                <button class="nav-buttons">Rutinas</button>
+                <button class="nav-buttons" onclick="window.location.href='tienda.html'">Tienda</button>
+                <button class="nav-buttons" onclick="window.location.href='Progreso.html'">Progreso</button>
+                <button class="nav-buttons" onclick="window.location.href='rutina.html'">Rutinas</button>
             </div>
             <div class="logo">
                 <img id="logotype" src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
             </div>
             <div class="even-nav">
-                <button class="nav-buttons">Comunidad</button>
-                <button class="nav-buttons">Objetivos</button>
-                <button class="nav-buttons">Soporte</button>
+                <button class="nav-buttons" onclick="window.location.href='comunidad.html'">Comunidad</button>
+                <button class="nav-buttons" onclick="window.location.href='metaspersonales.html'">Metas</button>
+                <button class="nav-buttons" onclick="window.location.href='desafios.html'">Desafios</button>
             </div>
         </nav>
     </header>
@@ -126,13 +124,12 @@
     </main>
 
     <footer>
-        <div class="footer-container">
-            <a href="terminosCondiciones.html" class="footer-link">Términos y Condiciones</a>
-            <a href="/contacto" class="footer-link">Contacto</a>
-            <a href="mailto:info@progresofitness.com" class="footer-link">Correo</a>
-            <a href="/redes-sociales" class="footer-link">Redes Sociales</a>
-        </div>
-        <p>&copy; 2024 Progreso Fitness. Todos los derechos reservados.</p>
+        <p>
+            <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> | 
+            <a href="terminosCondiciones.html" class="footer-enlace">Cookies</a> | 
+            <a href="Contacto.html" class="footer-enlace">Soporte técnico</a> | 
+            <a>GymBuddy &copy; 2024</a>
+        </p>
     </footer>
 
     <script src="../JS/desafios.js" defer></script>

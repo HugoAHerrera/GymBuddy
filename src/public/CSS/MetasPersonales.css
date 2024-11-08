@@ -1,26 +1,44 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f1d3b9;
-}
 
 .header-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #d97e3d;
+    background-color: rgb(2, 126, 243);
     border-bottom: 1px solid white;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ajuste en body */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asegura que el body abarque el 100% de la pantalla */
+}
+
+/* Main como flex para ocupar el espacio restante */
+main {
+    flex: 1; /* Permite que el main crezca para ocupar el espacio libre */
+    width: 100%;
+}
+
 .premium-btn {
-    background-color: darkgoldenrod;
-    color: white;
+    background-color: rgb(0, 104, 202);
+    color: rgb(255, 251, 0);
     border: 2px solid black;
     padding: 10px 20px;
     border-radius: 10px;
@@ -31,14 +49,14 @@ body {
 }
 
 .premium-btn:hover {
-    background-color: goldenrod;
+    background-color: rgb(0, 91, 175);
 }
 
 .header-marquee {
     font-weight: bold;
     font-size: 1.2rem;
     margin: 0 10px;
-    color: #ffd700;
+    color: rgb(255, 251, 0);
 }
 
 .profile-search {
@@ -47,15 +65,15 @@ body {
 }
 
 .profile-btn {
-    /*background-color: white;*/
-    background-image: url("/src/public/Imagenes/avatar.jpg");
     background-size: cover;
-    border: 2px solid black;
+    background-image: url("../Imagenes/avatar.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
     padding: 25px 25px;
     cursor: pointer;
     border-radius: 50%;
     margin-right: 75px;
-    color: black;
 }
 
 .search-bar {
@@ -69,13 +87,13 @@ body {
 }
 
 .search-bar:focus {
-    border-color: #3399cc; /* Azul claro al enfocar */
+    border-color: #3399cc;
 }
 
 #navegator {
     display: flex;
     justify-content: space-evenly;
-    background-color: #838383;
+    background-color: rgb(196, 217, 237);
 }
 
 .even-nav {
@@ -85,12 +103,13 @@ body {
 
 .nav-buttons {
     flex: 1;
-    background-color: #838383;
+    background-color: rgb(196, 217, 237);
     cursor: pointer;
-    color: white;
+    color: black;
 }
-nav button:hover {
-    background-color: #757575; /* Azul más oscuro al pasar el ratón */
+
+.nav-buttons:hover {
+    background-color: rgb(180, 200, 219);
 }
 
 .nav-buttons, .logo {
@@ -147,6 +166,7 @@ footer {
 }
 
 .Cabecera-meta {
+    margin-top: 2%;
     display: flex;
     width: 100%;
     height: 80px; /* Ajusta este valor según lo que necesites */
@@ -224,4 +244,22 @@ footer {
 .imagen_meta    {
     height: 150px;
     width: auto;
+}
+
+footer {
+    background-color: rgb(2, 126, 243);
+    color: rgb(196, 217, 237);
+    text-align: center;
+    padding: 10px;
+    width: auto;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a.footer-enlace:hover {
+    text-decoration: underline;
+    color: rgb(154, 233, 233);
 }
