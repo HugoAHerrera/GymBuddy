@@ -1,221 +1,191 @@
-/* CABECERA 1- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
     user-select: none;
 }
 
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-.header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: rgb(2, 126, 243);
-    border-bottom: 1px solid white;
-}
-
-.premium-btn {
-    background-color: rgb(0, 104, 202);
-    color: rgb(255, 251, 0);
-    border: 2px solid black;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    margin-left: 75px;
-}
-
-.premium-btn:hover {
-    background-color: rgb(0, 91, 175);
-}
-
-.header-marquee {
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin: 0 10px;
-    color: rgb(255, 251, 0);
-}
-
-.profile-search {
-    display: flex;
-    align-items: center;
-}
-
-.profile-btn {
-    /*background-color: white;*/
-    background-size: cover;
-    border: 2px solid black;
-    padding: 25px 25px;
-    cursor: pointer;
-    border-radius: 50%;
-    margin-right: 75px;
-    color: black;
-    background-image: url("../Imagenes/avatar.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    border: none;
-}
-
-.search-bar {
-    border: 2px solid black;
-    text-align: center;
-    padding: 8px 30px;
-    border-radius: 20px;
-    outline: none;
-    transition: border-color 0.3s ease;
-    margin-right: 20px;
-}
-
-.search-bar:focus {
-    border-color: #3399cc;
-}
-
-#navegator {
-    display: flex;
-    justify-content: space-evenly;
-    background-color: rgb(196, 217, 237)
-}
-
-
-.even-nav {
-    width: 100%;
-    display: flex;
-}
-
-.nav-buttons {
-    flex: 1;
-    background-color: rgb(196, 217, 237);
-    cursor: pointer;
-    color: black;
-}
-nav button:hover {
-    background-color: rgb(180, 200, 219); /* Azul más oscuro al pasar el ratón */
-}
-
-.nav-buttons, .logo {
-    border-bottom: 1px solid white;
-    border-right: 1px solid white;
-}
-
-nav .logo img {
-    height: 75px;
-    width: auto;
-}
-
-/* Main */
-/* MAIN STYLES */
-main {
-    padding: 20px;
-    background-color: #f4f4f4;
-}
-
-/* Offers Slider */
-.offers-slider {
-    background-color: #027ef3;
-    padding: 20px;
-    color: #fff;
-    text-align: center;
-    border-radius: 8px;
-    margin-bottom: 30px;
-    position: relative;
+html, body {
+    height: 100vh;
+    margin: 0;
     overflow: hidden;
 }
 
-.offers-slider .slides {
-    display: flex;
-    animation: slideAnimation 15s infinite linear;
+body {
+    background-image: url('../Imagenes/registro_imagen.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
 }
 
-.slide {
-    min-width: 100%;
-    font-size: 1.2rem;
+#header {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to bottom, rgb(196, 217, 237) 10%, rgba(76, 175, 80, 0) 100%);
+    height: 15%;
+    padding: 0 20px;
+}
+
+.logo {
+    height: auto;
+    max-height: 80%;
+    width: auto;
+}
+
+.header-title {
+    color: white;
+    font-size: 24px;
+    margin: 0;
+}
+
+#central {
+    display: flex;
+    height: 72%;
+}
+
+#left-div {
+    width: 50%;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+#div-texto {
+    font-family: 'Dancing Script', cursive;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    font-size: 3.8rem;
+    justify-content: center;
+    align-items: center;
+    font-size: 500%;
+    color: rgb(162, 162, 39);
+    text-shadow: 2px 2px 4px rgb(100, 100, 5);
+    text-align: center;
+    overflow-wrap: break-word;
+    padding: 10px;
+    text-shadow: 
+        -1px -1px 0 rgb(234, 0, 255)
+        1px -1px 0 rgb(234, 0, 255)
+        -1px 1px 0 rgb(234, 0, 255)
+        1px 1px 0 rgb(234, 0, 255)
+}
+
+
+#right-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin: 0;
+}
+
+.inner-div {
+    height: auto;
+    width: 70%;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.info-cuenta-div {
+    margin-top: 10px;
+    height: 20%;
+    width: 100%;
+    text-align: center;
+    border-radius: 5px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    
+}
+
+#div-iniciar-sesion, #div-crear-cuenta {
+    display:block;
+	border-style:solid;
+	border-color:#bbb #888 #666 #aaa;
+	border-width:3px 4px 4px 3px;
+	width:9em;
+	height:2em;
+	background:#ccc;
+	color:#333;
+	line-height:2;
+	text-align:center;
+	text-decoration:none;
+	font-weight:900;
+}
+
+#div-iniciar-sesion:hover, #div-crear-cuenta:hover {
+    border-color: #666 #aaa #bbb #888;
+	border-width:4px 3px 3px 4px;
+	color:#000;
+}
+
+#formulario {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    height: 260px;
+}
+
+#formulario label {
     font-weight: bold;
 }
 
-/* Slide animation */
-@keyframes slideAnimation {
-    0% { transform: translateX(0); }
-    33% { transform: translateX(-100%); }
-    66% { transform: translateX(-200%); }
-    100% { transform: translateX(0); }
+#formulario input[type="email"],
+#formulario input[type="password"],
+#formulario input[type="text"] {
+    margin: 5px 0;
+    width: 90%;
 }
 
-/* About Us Section */
-.about-us {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-}
-
-.about-us h2 {
-    font-size: 1.8rem;
-    color: #027ef3;
-    margin-bottom: 15px;
-}
-
-.about-us p {
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #333;
-}
-
-/* Testimonials Section */
-.testimonials {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.testimonials h2 {
-    font-size: 1.8rem;
-    color: #027ef3;
-    margin-bottom: 15px;
-}
-
-.testimonial {
-    background-color: #f4f4f4;
-    padding: 15px;
-    margin: 10px 0;
+#formulario button {
+    padding: 10px 15px;
+    background-color: rgb(184, 181, 11);
+    color: white;
+    border: none;
     border-radius: 5px;
-    border-left: 4px solid #027ef3;
+    cursor: pointer;
 }
 
-.testimonial p {
+#formulario button:hover {
+    background-color: rgb(146, 144, 12);
+}
+
+.terms-container {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.contraseña {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.pass{
+    height: auto;
     font-size: 1rem;
-    color: #333;
-    margin-bottom: 5px;
 }
 
-.testimonial span {
-    display: block;
-    font-size: 0.9rem;
-    color: #666;
-    font-style: italic;
-    text-align: right;
+.bx {
+    font-size: 20px;
+    transform: translateX(-35px);
+    cursor: pointer;
+    width: auto;
 }
-/* FOOTER */
+
 footer {
     background-color: rgb(2, 126, 243);
     color: rgb(196, 217, 237);
     text-align: center;
     padding: 10px;
-    width: 100%;
-    /*
-        Poner el footer abajo de la pantalla fijo: position: fixed; bottom: 0;
-    */
     position: fixed;
     bottom: 0;
+    width: 100%;
 }
 
 footer a {
@@ -227,3 +197,4 @@ footer a.footer-enlace:hover {
     text-decoration: underline;
     color: rgb(154, 233, 233);
 }
+

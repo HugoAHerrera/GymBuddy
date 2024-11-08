@@ -114,3 +114,11 @@ window.onclick = function(event) {
         menuCarrito.style.display = "none";
     }
 };
+
+document.addEventListener('DOMContentLoaded', function() {
+    const logoImage = document.getElementById('logotype');
+    
+    logoImage.addEventListener('click', function() {
+        window.location.href = 'perfil.html';
+    });
+  });

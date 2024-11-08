@@ -48,3 +48,11 @@ document.getElementById('añadir-ejercicio').addEventListener('click', function(
     // Desplazar la página hacia abajo después de añadir el ejercicio
     window.scrollTo(0, document.body.scrollHeight);
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const logoImage = document.getElementById('logotype');
+    
+    logoImage.addEventListener('click', function() {
+        window.location.href = 'perfil.html';
+    });
+  });
