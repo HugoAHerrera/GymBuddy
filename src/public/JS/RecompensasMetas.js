@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-document.addEventListener('DOMContentLoaded', function() {
-    const logoImage = document.getElementById('logotype');
-    
-    logoImage.addEventListener('click', function() {
-        window.location.href = 'perfil.html';
-    });
-  });
-=======
+
 /*
 Archivo para calcular el porcentage de la barra de progreso y las recompensas
 en funcion de la meta:
@@ -49,8 +41,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-<<<<<<< HEAD
-
-=======
->>>>>>> 9825e08cf252a8f8e00093286237fe112a600e3f
->>>>>>> 7ffd8fb00064d3dbdc7390eb3457d190e855d2c2
