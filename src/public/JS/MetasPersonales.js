@@ -62,11 +62,3 @@ document.addEventListener("DOMContentLoaded", function () {
     // Asignar el evento al botón
     addMetaButton.addEventListener("click", crearNuevaMeta);
 });
-
-document.addEventListener('DOMContentLoaded', function() {
-    const logoImage = document.getElementById('logotype');
-    
-    logoImage.addEventListener('click', function() {
-        window.location.href = 'perfil.html';
-    });
-  });
