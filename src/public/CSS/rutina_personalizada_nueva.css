@@ -173,6 +173,8 @@ h1 {
     justify-content: center; /* Centrado horizontal */
     align-items: center; /* Centrado vertical */
     height: 10vh; /* Altura completa de la ventana */
+    margin-top: 1%;
+    margin-bottom: 3%;
 }
 
 #contenedor-guardar{
