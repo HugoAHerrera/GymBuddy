@@ -1,8 +1,6 @@
-/* CABECERA 1- */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     user-select: none;
 }
 
@@ -10,6 +8,7 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     color: #333;
+    height: 100vh;
 }
 
 .header-top {
@@ -50,6 +49,7 @@ body {
 }
 
 .profile-btn {
+    /*background-color: white;*/
     background-size: cover;
     border: 2px solid black;
     padding: 25px 25px;
@@ -96,7 +96,7 @@ body {
     color: black;
 }
 nav button:hover {
-    background-color: rgb(180, 200, 219);
+    background-color: rgb(180, 200, 219); /* Azul más oscuro al pasar el ratón */
 }
 
 .nav-buttons, .logo {

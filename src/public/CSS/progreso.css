@@ -1,8 +1,6 @@
-/* CABECERA 1- */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     user-select: none;
 }
 
@@ -10,6 +8,7 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     color: #333;
+    height: 100vh;
 }
 
 .header-top {
@@ -109,7 +108,6 @@ nav .logo img {
     height: 75px;
     width: auto;
 }
-
 /* CABECERA */
 
 /* Main content area */
