@@ -17,12 +17,14 @@ connection.getConnection((err) => {
     }
 });
 
+//Aqui añadir los métodos que necesiteis sobre la BBDD
 const databaseMethods = {
-    getAllUsers: async () => {
+    addUser: async (user) => {
         return new Promise((resolve, reject) => {
-            connection.query('SELECT * FROM gymbuddy.usuario', (err, results) => {
+            const sql = 'INSERT INTO usuario (nombre_usuario, contraseña, correo) VALUES (?, ?, ?)';
+            connection.query(sql, [user.nombre_usuario, user.contraseña, user.correo], (err, result) => {
                 if (err) return reject(err);
-                resolve(results);
+                resolve(result);
             });
         });
     },

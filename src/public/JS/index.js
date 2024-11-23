@@ -39,7 +39,7 @@ $(document).ready(function () {
 
             <button type="submit" id="submit-btn">Enviar</button>
             <p id="contraseñas-error" style="color: red; display: none;">Las contraseñas no coinciden</p>
-            <p id="contraseñas-vacias" style="color: red; display: none;">Las contraseñas no pueden estar vacías</p>
+            <p id="contraseñas-vacias" style="color: red; display: none;">La contraseñas no pueden estar vacías: 1 mayúscula, 1 número, 8 letras mínimo</p>
             <p id="email-error" style="color: red; display: none;">Ingrese un email válido</p>
             <p id="terms-error" style="color: red; display: none;">Debe aceptar los términos y condiciones</p>
         </form>
@@ -89,7 +89,8 @@ $(document).ready(function () {
 
         $("#contraseñas-error, #contraseñas-vacias, #email-error, #terms-error").hide();
 
-        if (contraseñaUsuario.length === 0 || contaseñaRepeticion.length === 0) {
+        let regexContraseña = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (contraseñaUsuario.length === 0 || contaseñaRepeticion.length === 0 || !regexContraseña.test(contraseñaUsuario)) {
             $("#contraseñas-vacias").show();
             return;
         }
@@ -110,7 +111,27 @@ $(document).ready(function () {
             return;
         }
 
-        window.location.href = "inicio.html";
+        const userData = {
+            nombre_usuario: contraseñaUsuario, //Pendiente: Añadir el recuadro de nombre de usuario
+            contraseña: contraseñaUsuario,
+            correo: email,
+        };
+
+        console.log(userData);
+    
+        // Enviar a server.js
+        $.ajax({
+            url: '/api/register',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(userData),
+            success: function(response) {
+                window.location.href = "inicio";
+            },
+            error: function(xhr, status, error) {
+                alert('Hubo un error al registrar el usuario: ' + xhr.responseJSON.message);
+            }
+        });
     });
 
     $("#formulario").on("click", ".bx", function() {
