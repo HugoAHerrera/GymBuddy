@@ -188,6 +188,7 @@ footer {
     border-radius: 10px;
     cursor: pointer;
     transition: transform 0.3s;
+    margin-bottom: 20px;
 }
 
 .boton-annadir-meta:hover, .boton-reclamar:hover {
@@ -195,12 +196,18 @@ footer {
     transform: scale(1.1);
 }
 
+.center {
+    flex: 1;
+}
+
 .div-metas {
-    display: flex;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    flex: 1;
+    gap: 20px;
     margin: 10px 50px;
+    justify-content: center;
     align-items: center; /* Centra los ejercicios horizontalmente */
-    height: 500px;
 }
 
 .meta {
@@ -211,12 +218,15 @@ footer {
     background-color: #4CAF50; /* Fondo verde */
     border-radius: 10px; /* Bordes redondeados */
     padding: 10px; /* Espacio interno */
-    width: 80%; /* Ancho del div (ajusta según necesites) */
-    height: 90%;
+    /*width: 80%; /* Ancho del div (ajusta según necesites) */
+    /*height: 90%;*/
+    width: 332px;
+    height: 450px;
     flex-direction: column; /* O LO PONGO EN goal-container? */
     border: 2px solid black;
     cursor: pointer;
     gap: 20px;
+    transition: transform 0.3s;
 }
 
 .meta:hover {
@@ -233,9 +243,10 @@ footer {
 
 .progress-container {
     display: flex;
+    text-align: center;
     flex-direction: column;
-    gap: 10px;
-    /*border: 2px solid purple;*/
+    gap: 5px;
+    font-weight: bold;
 }
 
 .goal-title {
