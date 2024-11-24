@@ -226,6 +226,7 @@ footer {
     border: 2px solid black;
     cursor: pointer;
     gap: 20px;
+    transition: transform 0.3s;
 }
 
 .meta:hover {
@@ -242,6 +243,7 @@ footer {
 
 .progress-container {
     display: flex;
+    text-align: center;
     flex-direction: column;
     gap: 5px;
     font-weight: bold;
