@@ -19,6 +19,31 @@ connection.getConnection((err) => {
 
 //Aqui añadir los métodos que necesiteis sobre la BBDD
 const databaseMethods = {
+    comprobarUsuarioExistente: async (nombre_usuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM usuario WHERE nombre_usuario = ?';
+            connection.query(sql, [nombre_usuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results.length > 0);//True o False si está usado el usuario
+            });
+        });
+    },
+
+    comprobarCorreoExistente: async (correo) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM usuario WHERE correo = ?';
+            connection.query(sql, [correo], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                if (results.length > 0) {
+                    return resolve(true); // El correo ya está en uso
+                }
+                return resolve(false); // El correo no está en uso
+            });
+        });
+    },
+
     registrarUsuario: async (user) => {
         return new Promise((resolve, reject) => {
             const sql = 'INSERT INTO usuario (nombre_usuario, contraseña, correo) VALUES (?, ?, ?)';

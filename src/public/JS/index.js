@@ -18,6 +18,9 @@ $(document).ready(function () {
 
     const crearCuentaHTML = `
         <form>
+            <label for="nombre_usuario">Nombre usuario:</label><br>
+            <input type="nombre_usuario" id="nombre_usuario" class="pass" required><br>
+
             <label for="email">Email:</label><br>
             <input type="email" id="email" class="pass" required>
             
@@ -39,9 +42,12 @@ $(document).ready(function () {
             </div>
 
             <button type="submit" id="submit-btn">Enviar</button>
+            <p id="usuario-repetido" style="color: red; display: none;">Nombre de usuario ya en uso</p>
+            <p id="usuario-vacio" style="color: red; display: none;">Inserte un nombre de usuario</p>
             <p id="contraseñas-error" style="color: red; display: none;">Las contraseñas no coinciden</p>
             <p id="contraseñas-vacias" style="color: red; display: none;">La contraseñas no pueden estar vacías: 1 mayúscula, 1 número, 8 letras mínimo</p>
             <p id="email-error" style="color: red; display: none;">Ingrese un email válido</p>
+            <p id="email-repetido" style="color: red; display: none;">Email ya en uso</p>
             <p id="terms-error" style="color: red; display: none;">Debe aceptar los términos y condiciones</p>
         </form>
     `;
@@ -100,15 +106,39 @@ $(document).ready(function () {
         });
     });
 
+    function verificarUsuarioExistente(nombre_usuario) {
+        return $.ajax({
+            url: '/api/usuario-existe',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ nombre_usuario: nombre_usuario }),
+        });
+    }
+    
+    function verificarCorreoExistente(correo) {
+        return $.ajax({
+            url: '/api/correo-existe',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ correo: correo }),
+        });
+    }
+
     $("#formulario").on("click", "#submit-btn", function(event) {
         event.preventDefault();
 
+        const nombreUsuario = document.getElementById('nombre_usuario').value;
         const contraseñaUsuario = document.getElementById('contraseña_original').value;
         const contaseñaRepeticion = document.getElementById('contraseña_repeticion').value;
         const email = document.getElementById('email').value;
         const aceptarTerminos = document.getElementById('terms').checked;
 
-        $("#contraseñas-error, #contraseñas-vacias, #email-error, #terms-error").hide();
+        $("#usuario-repetido, #usuario-vacio, #contraseñas-error, #contraseñas-vacias, #email-error, #email-repetido, #terms-error").hide();
+
+        if (nombreUsuario.length==0) {
+            $("#usuario-vacio").show();
+            return;
+        }
 
         let regexContraseña = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
         if (contraseñaUsuario.length === 0 || contaseñaRepeticion.length === 0 || !regexContraseña.test(contraseñaUsuario)) {
@@ -133,23 +163,36 @@ $(document).ready(function () {
         }
 
         const userData = {
-            nombre_usuario: contraseñaUsuario, //Pendiente: Añadir el recuadro de nombre de usuario
+            nombre_usuario: nombreUsuario,
             contraseña: contraseñaUsuario,
             correo: email,
         };
     
-        // Enviar a server.js
-        $.ajax({
-            url: '/api/registro',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(userData),
-            success: function(response) {
-                window.location.href = "inicio";
-            },
-            error: function(xhr, status, error) {
-                alert('Hubo un error al registrar el usuario: ' + xhr.responseJSON.message);
-            }
+        // Verificar nombre usuario
+        verificarUsuarioExistente(userData.nombre_usuario)
+        .done(function() {
+
+            // Verificar correo
+            verificarCorreoExistente(userData.correo)
+                .done(function() {
+
+                    // Registrar el usuario
+                    $.ajax({
+                        url: '/api/registro',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(userData),
+                        success: function() {
+                            window.location.href = "inicio";
+                        }
+                    });
+                })
+                .fail(function(xhr) {
+                    $("#email-repetido").show();
+                });
+        })
+        .fail(function(xhr) {
+            $("#usuario-repetido").show();
         });
     });
 

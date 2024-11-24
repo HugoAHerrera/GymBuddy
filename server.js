@@ -14,14 +14,46 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/index.html'));
 });
 
+app.post('/api/usuario-existe', async (req, res) => {
+  const { nombre_usuario } = req.body;
+
+  try {
+      const user = await database.comprobarUsuarioExistente(nombre_usuario);
+
+      if (user) {
+          return res.status(400).json({ usuarioExiste: true });
+      }
+
+      res.status(200).json({ usuarioExiste: false });
+  } catch (error) {
+      console.error('Error al verificar el usuario:', error);
+      res.status(500).json({ message: 'Error interno del servidor', error: error.message });
+  }
+});
+
+app.post('/api/correo-existe', async (req, res) => {
+  const { correo } = req.body;
+
+  try {
+      const correoExiste = await database.comprobarCorreoExistente(correo);
+      
+      if (correoExiste) {
+          return res.status(400).json({ correoExiste: true });
+      }
+
+      res.status(200).json({ correoExiste: false });
+  } catch (error) {
+      console.error('Error al verificar el correo electrónico:', error);
+      res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
 app.post('/api/registro', async (req, res) => {
   const { nombre_usuario, contraseña, correo } = req.body;
 
   if (!nombre_usuario || !contraseña || !correo) {
     return res.status(400).json({ message: 'Faltan datos requeridos' });
   }
-
-  console.log(req.body);
 
   try {
     const contraseñaHashed = await encriptarContraseña(contraseña);
