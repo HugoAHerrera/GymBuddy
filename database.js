@@ -29,16 +29,12 @@ const databaseMethods = {
         });
     },
 
-    comprobarCredenciales: async (email, contraseña) => {
+    comprobarCredenciales: async (email) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM usuario WHERE correo = ? AND contraseña = ?';
-            connection.query(sql, [email, contraseña], (err, results) => {
+            const sql = 'SELECT * FROM usuario WHERE correo = ?';
+            connection.query(sql, [email], (err, results) => {
                 if (err) return reject(err);
-                if (results.length > 0) {
-                    resolve(results[0]);
-                } else {
-                    resolve(null);
-                }
+                resolve(results[0]);
             });
         });
     },

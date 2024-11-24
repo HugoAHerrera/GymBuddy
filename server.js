@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 require('dotenv').config();
 const database = require('./database');
+const { encriptarContraseña, compararContraseña } = require('./encryptor');
 
 const app = express();
 
@@ -17,13 +18,18 @@ app.post('/api/registro', async (req, res) => {
   const { nombre_usuario, contraseña, correo } = req.body;
 
   if (!nombre_usuario || !contraseña || !correo) {
-      return res.status(400).json({ message: 'Faltan datos requeridos' });
+    return res.status(400).json({ message: 'Faltan datos requeridos' });
   }
 
   console.log(req.body);
 
   try {
-    const result = await database.registrarUsuario({ nombre_usuario, contraseña, correo });
+    const contraseñaHashed = await encriptarContraseña(contraseña);
+    const result = await database.registrarUsuario({ 
+        nombre_usuario, 
+        contraseña: contraseñaHashed, 
+        correo 
+    });
     res.status(201).json({ message: 'Usuario registrado con éxito', id: result.insertId });
   } catch (error) {
     console.error('Error:', error); 
@@ -39,13 +45,19 @@ app.post('/api/login', async (req, res) => {
   }
 
   try {
-      const user = await database.comprobarCredenciales(email, contraseña);
+    const user = await database.comprobarCredenciales(email);
 
-      if (!user) {
-          return res.status(401).json({ message: 'Credenciales incorrectas' });
-      }
+    if (!user) {
+        return res.status(401).json({ message: 'Credenciales incorrectas' });
+    }
 
-      res.status(200).json({ message: 'Inicio de sesión exitoso', user });
+    const isValid = await compararContraseña(contraseña, user.contraseña);
+
+    if (!isValid) {
+        return res.status(401).json({ message: 'Credenciales incorrectas' });
+    }
+
+    res.status(200).json({ message: 'Inicio de sesión exitoso', user });
   } catch (error) {
       console.error('Error al iniciar sesión:', error);
       res.status(500).json({ message: 'Error interno del servidor' });
