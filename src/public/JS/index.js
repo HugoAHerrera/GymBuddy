@@ -12,6 +12,7 @@ $(document).ready(function () {
             <button type="submit" id="submit-btn-inicio-sesion">Enviar</button>
             <p id="contraseñas-vacias" style="color: red; display: none;">La contraseña no puede estar vacía</p>
             <p id="email-error" style="color: red; display: none;">Ingrese un email válido</p>
+            <p id="credenciales-incorrectas" style="color: red; display: none;">Mail o contraseña incorrecto</p>
         </form>
     `;
 
@@ -76,7 +77,27 @@ $(document).ready(function () {
             return;
         }
 
-        window.location.href = "inicio.html";
+        const userData = {
+            email: email,
+            contraseña: contraseñaUsuario
+        };
+    
+        $.ajax({
+            url: '/api/login',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(userData),
+            success: function(response) {
+                window.location.href = "inicio";
+            },
+            error: function(xhr, status, error) {
+                if (xhr.status === 401) { //No autorizado
+                    $("#credenciales-incorrectas").show();
+                } else {
+                    alert('Hubo un error al iniciar sesión: ' + xhr.responseJSON.message);
+                }
+            }
+        });
     });
 
     $("#formulario").on("click", "#submit-btn", function(event) {
@@ -116,12 +137,10 @@ $(document).ready(function () {
             contraseña: contraseñaUsuario,
             correo: email,
         };
-
-        console.log(userData);
     
         // Enviar a server.js
         $.ajax({
-            url: '/api/register',
+            url: '/api/registro',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(userData),

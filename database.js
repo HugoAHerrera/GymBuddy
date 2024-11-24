@@ -19,12 +19,26 @@ connection.getConnection((err) => {
 
 //Aqui añadir los métodos que necesiteis sobre la BBDD
 const databaseMethods = {
-    addUser: async (user) => {
+    registrarUsuario: async (user) => {
         return new Promise((resolve, reject) => {
             const sql = 'INSERT INTO usuario (nombre_usuario, contraseña, correo) VALUES (?, ?, ?)';
             connection.query(sql, [user.nombre_usuario, user.contraseña, user.correo], (err, result) => {
                 if (err) return reject(err);
                 resolve(result);
+            });
+        });
+    },
+
+    comprobarCredenciales: async (email, contraseña) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM usuario WHERE correo = ? AND contraseña = ?';
+            connection.query(sql, [email, contraseña], (err, results) => {
+                if (err) return reject(err);
+                if (results.length > 0) {
+                    resolve(results[0]);
+                } else {
+                    resolve(null);
+                }
             });
         });
     },
