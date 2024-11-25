@@ -27,6 +27,9 @@
                     <a id="div-crear-cuenta">Crear cuenta</a>
                 </div>
                 <div id="formulario">
+                    <label for="nombre_usuario">Nombre usuario:</label><br>
+                    <input type="nombre_usuario" id="nombre_usuario" class="pass" required><br>
+
                     <label for="email">Email:</label><br>
                     <input type="email" id="email" class="pass" required>
                     
@@ -38,7 +41,7 @@
                     
                     <label for="contraseña_repeticion">Repetir contraseña:</label><br>
                     <div class="contraseña">
-                        <input type="password" id="contraseña_repeticion" class="pass" required>
+                        <input type="password" id="contraseña_repeticion" class="pass" required onpaste="return false;">
                         <i class = "bx bx-show-alt"></i>
                     </div>
                     
@@ -48,9 +51,12 @@
                     </div>
 
                     <button type="button" id="submit-btn">Enviar</button>
+                    <p id="usuario-repetido" style="color: red; display: none;">Nombre de usuario ya en uso</p>
+                    <p id="usuario-vacio" style="color: red; display: none;">Inserte un nombre de usuario</p>   
                     <p id="contraseñas-error" style="color: red; display: none; margin-top: 5px;">Las contraseñas no coinciden</p>
                     <p id="contraseñas-vacias" style="color: red; display: none; margin-top: 5px;">La contraseñas no pueden estar vacías: 1 mayúscula, 1 número, 8 letras mínimo</p>
                     <p id="email-error" style="color: red; display: none; margin-top: 5px;">Ingrese un email válido</p>
+                    <p id="email-repetido" style="color: red; display: none;">Email ya en uso</p>
                     <p id="terms-error" style="color: red; display: none; margin-top: 5px;">Acepta los términos y condiciones</p>
                 </div>
             </div>

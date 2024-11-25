@@ -20,7 +20,7 @@ body {
     display: flex;
     align-items: center;
     background: linear-gradient(to bottom, rgb(196, 217, 237) 10%, rgba(76, 175, 80, 0) 100%);
-    height: 15%;
+    height: 12%;
     padding: 0 20px;
 }
 
@@ -123,17 +123,22 @@ body {
 
 #formulario {
     margin-top: 20px;
-    padding: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    height: 260px;
+    min-height: 290px;
+    height: auto;
 }
 
 #formulario label {
     font-weight: bold;
 }
 
+#formulario input[type="nombre_usuario"],
 #formulario input[type="email"],
 #formulario input[type="password"],
 #formulario input[type="text"] {
@@ -182,7 +187,6 @@ footer {
     background-color: rgb(2, 126, 243);
     color: rgb(196, 217, 237);
     text-align: center;
-    padding: 10px;
     position: fixed;
     bottom: 0;
     width: 100%;
