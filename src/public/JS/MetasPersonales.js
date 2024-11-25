@@ -40,6 +40,7 @@ function crearNuevaMeta() {
         const barContainer = document.createElement("span");
         const textoProgresoMeta = document.createTextNode(" Progreso:");
         const progresoMeta = document.createElement("progress");
+        progresoMeta.id = `Meta ${metasContainer.children.length + 1}`;
         progresoMeta.max = 100;
         progresoMeta.value = 0;
         progresoMeta.style.marginBottom = "15px";
@@ -63,10 +64,7 @@ function crearNuevaMeta() {
         recompensaContainer.appendChild(recom);
         recompensaContainer.appendChild(imagenKC);
 
-        // Añadir los elementos al contenedor de progreso
-        progressContainer.appendChild(document.createElement("br")); // Salto de línea
-        //progressContainer.appendChild(textoProgresoMeta);
-        //progressContainer.appendChild(progresoMeta);
+        // Añadir los elementos al contenedor de progreso;
         progressContainer.appendChild(barContainer);
         progressContainer.appendChild(recompensaContainer);
 
@@ -80,6 +78,7 @@ function crearNuevaMeta() {
 
         // Añadir la nueva meta al contenedor de metas
         metasContainer.appendChild(nuevaMeta);
+        GoalCompleted();
     }
 }
 // falta que no se cree el elemento si no se pone una descripcion
@@ -99,6 +98,7 @@ function GoalDescription(progressContainer) {
         spanContainer.style.wordWrap = "break-word";
         spanContainer.style.wordBreak = "break-word";
         spanContainer.style.maxWidth = "100%"
+        spanContainer.style.marginBottom = "10px";
 
         spanContainer.appendChild(objetivoText);
         spanContainer.appendChild(nextLine);
@@ -114,7 +114,21 @@ function GoalDescription(progressContainer) {
 }
 
 function GoalCompleted() {
-
+    document.querySelectorAll('.meta').forEach((container) => {
+        container.addEventListener('click', () => {
+            // Obtener el ID de la barra de progreso
+            //const progressBar = container.querySelector(".goal-container .progress-container span progress");
+            const progressBar = container.querySelector(".progress-container span progress");
+            if (progressBar.value === 100) {
+                // hacer que obtenga la recompensa
+                // animacion?
+                alert("Enhorabuena!! Has conseguido KC!!");
+            }
+            else {
+                alert(`El progreso actual de la meta está en: ${progressBar.value}%`)
+            }
+        });
+    });
 }
 
 /*
