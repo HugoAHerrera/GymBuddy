@@ -48,7 +48,7 @@ function crearNuevaMeta() {
         const progresoMeta = document.createElement("progress");
         progresoMeta.id = `Meta ${metasContainer.children.length + 1}`;
         progresoMeta.max = 100;
-        progresoMeta.value = 95; //Math.floor(Math.random() * 101); // 0
+        progresoMeta.value = Math.floor(Math.random() * 101); // 0
         progresoMeta.style.marginBottom = "15px";
 
         barContainer.appendChild(textoProgresoMeta);
