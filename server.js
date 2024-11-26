@@ -101,6 +101,9 @@ app.get('/inicio', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
 });
 
+app.get('/rutina', (req, res) => {
+  res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
