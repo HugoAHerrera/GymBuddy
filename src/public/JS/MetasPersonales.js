@@ -46,9 +46,9 @@ function crearNuevaMeta() {
         const barContainer = document.createElement("span");
         const textoProgresoMeta = document.createTextNode(" Progreso:");
         const progresoMeta = document.createElement("progress");
-        progresoMeta.id = `Meta ${metasContainer.children.length + 1}`;
+        progresoMeta.id = `Barra ${metasContainer.children.length + 1}`;
         progresoMeta.max = 100;
-        progresoMeta.value = Math.floor(Math.random() * 101); // 0
+        progresoMeta.value = 98; //Math.floor(Math.random() * 101); // 0
         progresoMeta.style.marginBottom = "15px";
 
         barContainer.appendChild(textoProgresoMeta);
@@ -185,7 +185,10 @@ function RequestReward(KC) {
                 if (progressBar.value === 100) {
                     // hacer que obtenga la recompensa
                     // animacion?
-                    alert(`Enhorabuena!! Has conseguido ${KC} KC!!`);
+                    AnimacionMonedas(container);
+                    setTimeout(() => QuitarMeta(container), 10);
+
+                    //alert(`Enhorabuena!! Has conseguido ${KC} KC!!`);
                 } else {
                     alert(`El progreso actual de la meta está en: ${progressBar.value}%`)
                 }
@@ -226,6 +229,7 @@ function comprobarEstadoProgreso() {
         const intervalo = setInterval(() => {
             const metaContainer = barra.closest(".task");
             const logo = metaContainer.querySelector(".imagen_meta");
+            const tituloMeta = metaContainer.querySelector(".goal-title");
 
             if (barra.value > 49) {
                 // Cambiar el color del fondo si el progreso supera el 49%
@@ -239,10 +243,11 @@ function comprobarEstadoProgreso() {
                 // Cambiar el fondo de la meta completada
                 metaContainer.style.backgroundColor = "#6be524";
                 metaContainer.style.transition = "all 0.5s ease";
+                tituloMeta.textContent = "Reclamar";
 
                 // Cambiar la imagen del logo
                 if (logo) {
-                    logo.src = "../Imagenes/trophy-2.gif"; // Ruta de la nueva imagen
+                    logo.src = "https://cdn-icons-png.flaticon.com/512/1006/1006656.png"; // Ruta de la nueva imagen
                     logo.style.filter = "drop-shadow(1px 1px 1px rgba(0, 0, 0, 1))";
                 }
             }
@@ -250,8 +255,53 @@ function comprobarEstadoProgreso() {
     });
 }
 
-
 function KCAmount() {
     // calcular la cantidad de KC propicia segun la dificultad de la meta
     return  Math.floor(Math.random() * 15) + 1; //0;
+}
+
+function QuitarMeta(meta) {
+    meta.remove();
+}
+
+function sleep(ms) {
+    var esperarHasta = new Date().getTime() + ms;
+    while(new Date().getTime() < esperarHasta) continue;
+}
+
+function AnimacionMonedas(container) {
+        // Generar monedas
+    for (let i = 0; i < 50; i++) {
+        const coin = document.createElement("div");
+        coin.classList.add("coin");
+
+        // Generar posición inicial aleatoria dentro del contenedor
+        const startX = Math.random() * 100; // 0% a 100% del ancho
+        const startY = Math.random() * 100; // 0% a 100% del alto
+
+        // Generar dirección de movimiento aleatoria
+        const endX = Math.random() * 400 - 200; // De -200px a 200px (horizontal)
+        const endY = -(Math.random() * 300 + 100); // De -100px a -400px (vertical)
+
+        // Aplicar posición inicial
+        coin.style.left = `${startX}%`;
+        coin.style.top = `${startY}%`;
+
+        // Crear animación personalizada
+        coin.animate(
+            [
+                { transform: `translate(0, 0)`, opacity: 1 },
+                { transform: `translate(${endX}px, ${endY}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+            ],
+            {
+                duration: 1200,
+                easing: "ease-out",
+                fill: "forwards"
+            }
+        );
+
+        container.appendChild(coin);
+        // Eliminar la moneda después de la animación
+        setTimeout(() => coin.remove(), 2000);
+    }
 }
