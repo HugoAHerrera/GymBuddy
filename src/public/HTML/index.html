@@ -3,52 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Inicio Fitness</title>
-    <link rel="stylesheet" href="../CSS/index.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="icon" href="../Imagenes/logo-inicio.png" type="image/x-icon">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <title>Registro</title>
 </head>
 <body>
-    <header>
-        <div class="header-top">
-            <button class="premium-btn">Premium</button>
-            <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
-            <div class="profile-search">
-                <button class="profile-btn">Perfil</button>
-                <input type="text" class="search-bar" placeholder="Buscar...">
+    <div id="header">
+        <img src="../Imagenes/logo-inicio.png" alt="Logo GymBuddy" class="logo">
+        <h1 class="header-title">GymBuddy</h1>
+    </div>
+    <div id="central">
+        <div id="left-div">
+            <div id="div-texto">
+                STOP WISHING START DOING
             </div>
         </div>
-        <nav>
-            <button>tienda</button>
-            <button>progreso</button>
-            <button>rutinas</button>
-            <div class="logo">
-                <img src="../IMAGENES/imagen.png" alt="Logo de Fitness" />
+        <div id="right-div">
+            <div class="inner-div">
+                <div class="info-cuenta-div">
+                    <a id="div-iniciar-sesion">Iniciar sesión</a>
+                    <a id="div-crear-cuenta">Crear cuenta</a>
+                </div>
+                <div id="formulario">
+                    <label for="nombre_usuario">Nombre usuario:</label><br>
+                    <input type="nombre_usuario" id="nombre_usuario" class="pass" required><br>
+
+                    <label for="email">Email:</label><br>
+                    <input type="email" id="email" class="pass" required>
+                    
+                    <label for="contraseña_original">Contraseña:</label><br>
+                    <div class="contraseña">
+                        <input type="password" id="contraseña_original" class="pass" required>
+                        <i class = "bx bx-show-alt"></i>
+                    </div>
+                    
+                    <label for="contraseña_repeticion">Repetir contraseña:</label><br>
+                    <div class="contraseña">
+                        <input type="password" id="contraseña_repeticion" class="pass" required onpaste="return false;">
+                        <i class = "bx bx-show-alt"></i>
+                    </div>
+                    
+                    <div class="terms-container">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label> Aceptar términos y condiciones</label>
+                    </div>
+
+                    <button type="button" id="submit-btn">Enviar</button>
+                    <p id="usuario-repetido" style="color: red; display: none;">Nombre de usuario ya en uso</p>
+                    <p id="usuario-vacio" style="color: red; display: none;">Inserte un nombre de usuario</p>   
+                    <p id="contraseñas-error" style="color: red; display: none; margin-top: 5px;">Las contraseñas no coinciden</p>
+                    <p id="contraseñas-vacias" style="color: red; display: none; margin-top: 5px;">La contraseñas no pueden estar vacías: 1 mayúscula, 1 número, 8 letras mínimo</p>
+                    <p id="email-error" style="color: red; display: none; margin-top: 5px;">Ingrese un email válido</p>
+                    <p id="email-repetido" style="color: red; display: none;">Email ya en uso</p>
+                    <p id="terms-error" style="color: red; display: none; margin-top: 5px;">Acepta los términos y condiciones</p>
+                </div>
             </div>
-            <button>comunidad</button>
-            <button>objetivos</button>
-            <button>soporte</button>
-        </nav>
-    </header>
-
-    <main>
-        <section class="offers-slider">
-            <div class="slides">
-                <p>SLIDES DE OFERTAS (van rotando solas)</p>
-            </div>
-        </section>
-
-        <section class="about-us">
-            <h2>Quiénes somos</h2>
-            <p>Somos una comunidad dedicada a mejorar tu bienestar físico y mental a través de entrenamientos personalizados y el apoyo de una comunidad activa.</p>
-        </section>
-    </main>
-
+        </div>
+    </div>
     <footer>
-        <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> | 
-        <a href="contacto.html" class="footer-enlace">Cookies</a> | 
-        <a href="correo.html" class="footer-enlace">Soporte técnico</a> | 
-        <a>GymBuddy &copy; 2024</a>
+        <p>
+            <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> | 
+            <a href="contacto.html" class="footer-enlace">Cookies</a> | 
+            <a href="correo.html" class="footer-enlace">Soporte técnico</a> | 
+            <a>GymBuddy &copy; 2024</a>
+        </p>
     </footer>
-
-    <script src="../JS/index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/index.js" defer></script>
 </body>
 </html>

@@ -5,110 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../Imagenes/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="../CSS/MetasPersonales.css">
-    <script src="../JS/rutina_concreta.js" defer></script>
     <title> Metas Personales </title>
 </head>
 <body>
     <header>
         <div class="header-top">
-            <button class="premium-btn">Premium</button>
             <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
             <div class="profile-search">
                 <input type="text" class="search-bar" placeholder="¿Qué quieres buscar? 🔍">
-                <button class="profile-btn"></button>
+                <button class="profile-btn" onclick="window.location.href='perfil.html'"></button>
             </div>
         </div>
         <nav id="navegator">
             <div class="even-nav">
-                <button class="nav-buttons">Tienda</button>
-                <button class="nav-buttons">Progreso</button>
-                <button class="nav-buttons">Rutinas</button>
+                <button class="nav-buttons" onclick="window.location.href='tienda.html'">Tienda</button>
+                <button class="nav-buttons" onclick="window.location.href='Progreso.html'">Progreso</button>
+                <button class="nav-buttons" onclick="window.location.href='rutina.html'">Rutinas</button>
             </div>
             <div class="logo">
                 <img id="logotype" src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
             </div>
             <div class="even-nav">
-                <button class="nav-buttons">Comunidad</button>
-                <button class="nav-buttons">Objetivos</button>
-                <button class="nav-buttons">Soporte</button>
+                <button class="nav-buttons" onclick="window.location.href='comunidad.html'">Comunidad</button>
+                <button class="nav-buttons" onclick="window.location.href='metaspersonales.html'">Metas</button>
+                <button class="nav-buttons" onclick="window.location.href='desafios.html'">Desafios</button>
             </div>
         </nav>
     </header>
     <div class="center">
         <div class="Cabecera-meta">
             <div class="boton-annadir-meta"> Añadir Meta </div>
+            <div class="boton-borrar-meta"> Borrar Meta </div>
         </div>
-        <div class="div-metas">
-            <div class="meta">
-                <img src="../Imagenes/logo.png" alt="Logo GymBuddy" class="imagen_meta">
-                <div class="goal-container">
-                    <h1 class="goal-title"> Meta 1 </h1>
-                    <!-- PONER DOBLE BARRA: 1- indicar por donde va, 2- indicar cuanto queda para acabar el ejercicio -->
-                    <div class="progress-container">
-                        Progreso ejercicio actual:
-                        <progress max="100" value="70"></progress>
-                        Progreso Meta:
-                        <progress max="100" value="50"></progress>
-                    </div>
-                </div>
-            </div>
-            <div class="meta">
-                <img src="../Imagenes/logo.png" alt="Logo GymBuddy" class="imagen_meta">
-                <div class="goal-container">
-                    <h1 class="goal-title"> Meta 2 </h1>
-                    <div class="progress-container">
-                        Progreso ejercicio actual:
-                        <progress max="100" value="20"></progress>
-                        Progreso Meta:
-                        <progress max="100" value="10"></progress>
-                    </div>
-                </div>
-            </div>
-            <div class="meta">
-                <img src="../Imagenes/logo.png" alt="Logo GymBuddy" class="imagen_meta">
-                <div class="goal-container">
-                    <h1 class="goal-title"> Meta 3 </h1>
-                    <div class="progress-container">
-                        Progreso ejercicio actual:
-                        <progress max="100" value="40"></progress>
-                        Progreso Meta:
-                        <progress max="100" value="70"></progress>
-                    </div>
-                </div>
-            </div>
-            <div class="meta">
-                <img src="../Imagenes/logo.png" alt="Logo GymBuddy" class="imagen_meta">
-                <div class="goal-container">
-                    <h1 class="goal-title"> Meta 4 </h1>
-                    <div class="progress-container">
-                        Progreso ejercicio actual:
-                        <progress max="100" value="0"></progress>
-                        Progreso Meta:
-                        <progress max="100" value="90"></progress>
-                    </div>
-                </div>
-            </div>
-            <div class="meta">
-                <img src="../Imagenes/logo.png" alt="Logo GymBuddy" class="imagen_meta">
-                <div class="goal-container">
-                    <h1 class="goal-title"> Meta 5 </h1>
-                    <div class="progress-container">
-                        Progreso ejercicio actual:
-                        <progress max="100" value="100"></progress>
-                        Progreso Meta:
-                        <progress max="100" value="100"></progress>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="div-metas"></div>
     </div>
 
     <footer>
-        <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> | 
-        <a href="contacto.html" class="footer-enlace">Cookies</a> | 
-        <a href="correo.html" class="footer-enlace">Soporte técnico</a> | 
-        <a>GymBuddy &copy; 2024</a>
+        <p>
+            <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> | 
+            <a href="terminosCondiciones.html" class="footer-enlace">Cookies</a> | 
+            <a href="Contacto.html" class="footer-enlace">Soporte técnico</a> | 
+            <a>GymBuddy &copy; 2024</a>
+        </p>
     </footer>
+    <script src="../JS/MetasPersonales.js"></script>
 </body>
 </html>
 

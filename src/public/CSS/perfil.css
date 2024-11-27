@@ -1,4 +1,4 @@
-/* General */
+/* Estilos generales */
 * {
     margin: 0;
     padding: 0;
@@ -7,13 +7,15 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4; /* Fondo claro */
-    color: #333; /* Color del texto */
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-header {
-    background-color: #003366; /* Azul oscuro */
-    color: white; /* Texto en blanco */
+.hidden {
+    display: none;
 }
 
 .header-top {
@@ -21,28 +23,31 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-color: #006699; /* Azul medio */
+    background-color: rgb(2, 126, 243);
+    border-bottom: 1px solid white;
 }
 
 .premium-btn {
-    background-color: #3399cc; /* Azul claro */
-    color: white;
-    border: none;
+    background-color: rgb(0, 104, 202);
+    color: rgb(255, 251, 0);
+    border: 2px solid black;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;
+    margin-left: 75px;
 }
 
 .premium-btn:hover {
-    background-color: #007acc; /* Azul más oscuro */
+    background-color: rgb(0, 91, 175);
 }
 
 .header-marquee {
     font-weight: bold;
     font-size: 1.2rem;
-    color: #ffd700; /* Dorado para resaltar */
+    margin: 0 10px;
+    color: rgb(255, 251, 0);
 }
 
 .profile-search {
@@ -51,154 +56,149 @@ header {
 }
 
 .profile-btn {
-    background-color: white;
-    border: 1px solid #444; /* Color oscuro para el borde */
-    padding: 5px 15px;
+    background-size: cover;
+    border: 2px solid black;
+    padding: 25px 25px;
     cursor: pointer;
-    border-radius: 5px;
-    margin-right: 10px;
-    color: #003366; /* Azul oscuro */
+    border-radius: 50%;
+    margin-right: 75px;
+    color: black;
+    background-image: url("../Imagenes/avatar.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
 }
 
 .search-bar {
-    border: 1px solid #444; /* Borde oscuro */
-    padding: 8px 15px;
+    border: 2px solid black;
+    text-align: center;
+    padding: 8px 30px;
     border-radius: 20px;
     outline: none;
     transition: border-color 0.3s ease;
-}
-
-.search-bar:focus {
-    border-color: #3399cc; /* Azul claro al enfocar */
-}
-
-nav {
-    display: flex;
-    justify-content: space-around;
-    background-color: #003366; /* Azul oscuro */
-    padding: 15px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-nav button {
-    background-color: #3399cc; /* Azul claro */
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-nav button:hover {
-    background-color: #007acc; /* Azul más oscuro al pasar el ratón */
-}
-
-nav .logo img {
-    height: 50px;
-    width: auto;
-}
-
-/* Estilos para los paneles de contenido */
-.content-container {
-    display: flex;
-    margin: auto;
-}
-
-.left-panel {
-    flex: 0 0 33%; /* Ocupa el 33% */
-    background-color: #036600;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.left-panel div {
-    background-color: #fff;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    text-align: center;
-    font-weight: bold;
-    color: #003366;
-}
-
-.right-panel {
-    flex: 0 0 67%;
-    background-color: #cc3333; 
-    font-size: 1.5rem;
-    color: white;
-}
-
-/* FOOTER */
-footer {
-    background-color: #003366;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    bottom: 0;
-    width: 100%;
-}
-
-/* Cabecera de las rutinas */
-.Cabecera-rutina {
-    display: flex;
-    width: 100%;
-    height: 80px;
-    align-items: center;
-    justify-content: center;
-    background-color: #666;
-}
-
-.Cabecera-rutina h1 {
     margin-right: 20px;
 }
 
-/* Estilos adicionales (About Us) */
-.about-us {
-    background-color: #fff; /* Fondo blanco */
-    border: 1px solid #ddd; /* Borde gris */
-    border-radius: 10px;
-    height: auto;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+.search-bar:focus {
+    border-color: #3399cc;
 }
 
-.about-us h2 {
-    font-size: 2rem;
-    margin-bottom: 15px;
-    color: #006699; /* Azul medio */
-}
-
-.about-us p {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    color: #666; /* Gris oscuro */
-}
-
-.right-panel {
-    flex: 0 0 67%;
-    background-color: #cc3333;
-    padding: 20px;
-    color: white;
+#navegator {
     display: flex;
-    flex-direction: column;
-    gap: 20px; 
-    height: 500px;
+    justify-content: space-evenly;
+    background-color: rgb(196, 217, 237);
+}
+
+.even-nav {
+    width: 100%;
+    display: flex;
+}
+
+.nav-buttons {
+    flex: 1;
+    background-color: rgb(196, 217, 237);
+    cursor: pointer;
+    color: black;
+}
+
+nav button:hover {
+    background-color: rgb(180, 200, 219);
+}
+
+.nav-buttons, .logo {
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
+}
+
+nav .logo img {
+    height: 75px;
+    width: auto;
+}
+
+main {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #f0f0f0;
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    max-height: 80vh;
     overflow-y: auto;
 }
 
-.perfil-section h2,
-.actividad-section h2,
-.amigos-section h2 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+.sidebar ul {
+    list-style-type: none;
 }
 
+.sidebar li {
+    margin: 10px 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+    display: block;
+    padding: 5px 0;
+}
+
+.sidebar a:hover {
+    background-color: #ddd;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+.notificaciones-info label {
+    margin-right: 10px;
+    font-weight: normal;
+}
+
+.notificaciones-info input {
+    margin-left: 10px;
+}
+
+/* Estilos de Privacidad */
+.privacidad-info {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+/* Estilos de Ajustes */
+.ajustes-info {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+/* Estilos para los títulos */
+h1, h2 {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-top: 30px;
+}
+
+/* Estilos de perfil */
 .perfil-info {
     display: flex;
     align-items: center;
@@ -209,8 +209,8 @@ footer {
 }
 
 .perfil-foto {
-    width: 80px;
-    height: 80px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     object-fit: cover;
     background-color: #ccc;
@@ -222,32 +222,185 @@ footer {
     gap: 10px;
 }
 
+.perfil-campo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.perfil-campo p {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.perfil-campo span {
+    font-weight: bold;
+    color: #007acc;
+}
+
 .cambiar-btn {
-    background-color: #007acc; /* Azul más oscuro */
+    background-color: #007acc;
     color: white;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
     font-size: 0.9rem;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
-/* Estilos para la sección de Actividad */
-.actividad-section .actividad-info {
-    padding: 20px;
-    background-color: white; /* Fondo blanco */
-    color: #333;
-    border: 1px solid #ddd;
-    text-align: center;
+.cambiar-btn:hover {
+    background-color: #005f8a;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="file"] {
+    width: 200px;
+    padding: 8px;
     font-size: 1rem;
-}
-
-/* Estilos para la sección de Amigos */
-.amigos-section .amigos-info {
-    padding: 20px;
-    background-color: white; /* Fondo blanco */
-    color: #333;
+    margin-top: 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="file"]:focus {
+    border-color: #3399cc;
+}
+
+.actividad-section {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     text-align: center;
+}
+
+.actividad-section h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.actividad-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.actividad-item {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.actividad-item h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.actividad-item p {
     font-size: 1rem;
+    color: #555;
+}
+
+
+.section {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.guardar-btn {
+    background-color: rgb(2, 126, 243);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+    transition: background-color 0.3s;
+}
+
+.guardar-btn:hover {
+    background-color: #3399cc;
+}
+
+.mensaje-confirmacion {
+    color: rgb(2, 126, 243);
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#imagen-usuario,
+#email-usuario,
+#nombre-usuario{
+    width: auto;
+}
+
+.setting-option {
+    margin-top: 25px;
+}
+
+.setting-option h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.setting-option label {
+    font-size: 1rem;
+}
+
+.setting-option select,
+.setting-option input[type="checkbox"] {
+    width: auto;
+    padding: 8px;
+    font-size: 1rem;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.setting-option select:focus,
+.setting-option input:focus {
+    border-color: #3399cc;
+}
+
+.ajustes-info {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+}
+
+
+footer {
+    background-color: rgb(2, 126, 243);
+    color: rgb(196, 217, 237);
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a.footer-enlace:hover {
+    text-decoration: underline;
+    color: rgb(154, 233, 233);
 }

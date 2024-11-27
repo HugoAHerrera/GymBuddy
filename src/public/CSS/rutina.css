@@ -1,7 +1,6 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
     user-select: none;
 }
 
@@ -9,6 +8,7 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     color: #333;
+    height: 100vh;
 }
 
 .header-top {
@@ -113,6 +113,25 @@ main {
     padding: 20px;
 }
 
+#editar-rutina_creada {
+    background-color: #4CAF50; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Eliminar el borde predeterminado */
+    padding: 10px 20px; /* Espaciado interno (padding) */
+    text-align: center; /* Alineación del texto */
+    text-decoration: none; /* Sin subrayado */
+    display: inline-block; /* Hace que el botón se comporte como un elemento en línea */
+    font-size: 16px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
+}
+
+#editar-rutina_creada:hover {
+    background-color: #45a049; /* Color de fondo al pasar el ratón */
+}
+
+
 .rutinas{
     margin-top: 20px;
 }
@@ -127,7 +146,7 @@ main {
 
 .recomendacion,
 .rutina {
-    width: calc(20% - 10px); 
+    width: calc(20% - 50px); 
     padding: 20px;
     background-color: rgb(228, 237, 247);
     color: #333;
@@ -174,10 +193,7 @@ footer {
     color: rgb(196, 217, 237);
     text-align: center;
     padding: 10px;
-    width: 100%;
-    /*
-        Poner el footer abajo de la pantalla fijo: position: fixed; bottom: 0;
-    */
+    width: auto;
 }
 
 footer a {
