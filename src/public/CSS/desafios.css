@@ -1,4 +1,20 @@
-/* Estilos generales para Header y Barra Superior */
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header y Barra Superior */
 .header-top {
     display: flex;
     justify-content: space-between;
@@ -93,6 +109,7 @@ nav .logo img {
     height: 75px;
     width: auto;
 }
+
 /* Contenedor de desafíos */
 .challenges-container {
     display: flex;
@@ -102,6 +119,7 @@ nav .logo img {
     padding: 20px;
     background-color: rgb(188, 223, 255);
     border-radius: 10px;
+    flex-grow: 1;
 }
 
 .card-row {
@@ -193,24 +211,5 @@ nav .logo img {
 
 .progress-text {
     margin-top: 5px;
-    font-size: 0.9rem;
-    color: white;
+    font-size: 5px;
 }
-footer {
-    background-color: rgb(2, 126, 243); /* Azul de fondo del footer */
-    color: rgb(196, 217, 237); /* Texto en azul claro */
-    text-align: center;
-    padding: 10px;
-    width: 100%;
-}
-
-footer a {
-    color: white;
-    text-decoration: none;
-}
-
-footer a.footer-enlace:hover {
-    text-decoration: underline;
-    color: rgb(154, 233, 233); /* Azul celeste al pasar el cursor */
-}
-
