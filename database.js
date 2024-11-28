@@ -63,6 +63,23 @@ const databaseMethods = {
             });
         });
     },
+
+    obtenerRutinas: async () => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT categoria, nombre_rutina, lista_ejercicios FROM rutina';
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+
+                const rutinas = results.map(row => ({
+                    categoria: row.categoria,
+                    nombre: row.nombre_rutina,
+                    ejercicios: row.lista_ejercicios.split(',').map(Number),
+                }));
+
+                resolve(rutinas);
+            });
+        });
+    },
 };
 
 module.exports = databaseMethods;
