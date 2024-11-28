@@ -105,6 +105,10 @@ app.get('/rutina', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
 });
 
+app.get('/rutina-concreta', (req, res) => {
+  res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_concreta.html'));
+});
+
 app.get('/api/rutinas', async (req, res) => {
   try {
       const rutinas = await database.obtenerRutinas();
