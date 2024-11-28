@@ -105,6 +105,16 @@ app.get('/rutina', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
 });
 
+app.get('/api/rutinas', async (req, res) => {
+  try {
+      const rutinas = await database.obtenerRutinas();
+      res.json(rutinas);
+  } catch (error) {
+      console.error('Error al obtener rutinas:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);

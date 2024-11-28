@@ -146,7 +146,7 @@ main {
 
 .recomendacion,
 .rutina {
-    width: calc(20% - 50px); 
+    width: calc(25% - 50px); 
     padding: 20px;
     background-color: rgb(228, 237, 247);
     color: #333;
