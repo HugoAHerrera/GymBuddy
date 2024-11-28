@@ -1,3 +1,4 @@
+var block = 0;
 document.addEventListener("DOMContentLoaded", function () {
     // Añadir una meta
     const addMetaButton = document.querySelector(".boton-annadir-meta");
@@ -183,12 +184,10 @@ function RequestReward(KC) {
                 // Obtener el ID de la barra de progreso
                 const progressBar = container.querySelector(".progress-container span progress");
                 if (progressBar.value === 100) {
-                    // hacer que obtenga la recompensa
-                    // animacion?
-                    AnimacionMonedas(container);
-                    setTimeout(() => QuitarMeta(container), 10);
-
-                    //alert(`Enhorabuena!! Has conseguido ${KC} KC!!`);
+                    if(block === 0) {
+                        AnimacionMonedas(container);
+                        QuitarMeta(container);
+                    }
                 } else {
                     alert(`El progreso actual de la meta está en: ${progressBar.value}%`)
                 }
@@ -261,47 +260,54 @@ function KCAmount() {
 }
 
 function QuitarMeta(meta) {
-    meta.remove();
-}
+    // Añadir clase para el efecto de fade-out
+    meta.style.transition = "opacity 1s ease, visibility 1s ease";
+    meta.style.opacity = "0";
+    meta.style.visibility = "hidden";
 
-function sleep(ms) {
-    var esperarHasta = new Date().getTime() + ms;
-    while(new Date().getTime() < esperarHasta) continue;
+    // Esperar hasta que el efecto de fade-out termine antes de eliminar el elemento
+    setTimeout(() => {
+        meta.remove();
+        block = 0;
+    }, 1000); // El tiempo debe coincidir con la duración del transition
 }
 
 function AnimacionMonedas(container) {
+    block = 1;
+    if(block === 1) {
         // Generar monedas
-    for (let i = 0; i < 50; i++) {
-        const coin = document.createElement("div");
-        coin.classList.add("coin");
+        for (let i = 0; i < 50; i++) {
+            const coin = document.createElement("div");
+            coin.classList.add("coin");
 
-        // Generar posición inicial aleatoria dentro del contenedor
-        const startX = Math.random() * 100; // 0% a 100% del ancho
-        const startY = Math.random() * 100; // 0% a 100% del alto
+            // Generar posición inicial aleatoria dentro del contenedor
+            const startX = Math.random() * 100; // 0% a 100% del ancho
+            const startY = Math.random() * 100; // 0% a 100% del alto
 
-        // Generar dirección de movimiento aleatoria
-        const endX = Math.random() * 400 - 200; // De -200px a 200px (horizontal)
-        const endY = -(Math.random() * 300 + 100); // De -100px a -400px (vertical)
+            // Generar dirección de movimiento aleatoria
+            const endX = Math.random() * 400 - 200; // De -200px a 200px (horizontal)
+            const endY = -(Math.random() * 300 + 100); // De -100px a -400px (vertical)
 
-        // Aplicar posición inicial
-        coin.style.left = `${startX}%`;
-        coin.style.top = `${startY}%`;
+            // Aplicar posición inicial
+            coin.style.left = `${startX}%`;
+            coin.style.top = `${startY}%`;
 
-        // Crear animación personalizada
-        coin.animate(
-            [
-                { transform: `translate(0, 0)`, opacity: 1 },
-                { transform: `translate(${endX}px, ${endY}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
-            ],
-            {
-                duration: 1200,
-                easing: "ease-out",
-                fill: "forwards"
-            }
-        );
+            // Crear animación personalizada
+            coin.animate(
+                [
+                    {transform: `translate(0, 0)`, opacity: 1},
+                    {transform: `translate(${endX}px, ${endY}px) rotate(${Math.random() * 720}deg)`, opacity: 0}
+                ],
+                {
+                    duration: 1200,
+                    easing: "ease-out",
+                    fill: "forwards"
+                }
+            );
 
-        container.appendChild(coin);
-        // Eliminar la moneda después de la animación
-        setTimeout(() => coin.remove(), 2000);
+            container.appendChild(coin);
+            // Eliminar la moneda después de la animación
+            setTimeout(() => coin.remove(), 2000);
+        }
     }
 }
