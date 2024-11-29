@@ -1,3 +1,4 @@
+var block = 0;
 document.addEventListener("DOMContentLoaded", function () {
     // Añadir una meta
     const addMetaButton = document.querySelector(".boton-annadir-meta");
@@ -46,9 +47,9 @@ function crearNuevaMeta() {
         const barContainer = document.createElement("span");
         const textoProgresoMeta = document.createTextNode(" Progreso:");
         const progresoMeta = document.createElement("progress");
-        progresoMeta.id = `Meta ${metasContainer.children.length + 1}`;
+        progresoMeta.id = `Barra ${metasContainer.children.length + 1}`;
         progresoMeta.max = 100;
-        progresoMeta.value = Math.floor(Math.random() * 101); // 0
+        progresoMeta.value = 98; //Math.floor(Math.random() * 101); // 0
         progresoMeta.style.marginBottom = "15px";
 
         barContainer.appendChild(textoProgresoMeta);
@@ -183,9 +184,10 @@ function RequestReward(KC) {
                 // Obtener el ID de la barra de progreso
                 const progressBar = container.querySelector(".progress-container span progress");
                 if (progressBar.value === 100) {
-                    // hacer que obtenga la recompensa
-                    // animacion?
-                    alert(`Enhorabuena!! Has conseguido ${KC} KC!!`);
+                    if(block === 0) {
+                        AnimacionMonedas(container);
+                        QuitarMeta(container);
+                    }
                 } else {
                     alert(`El progreso actual de la meta está en: ${progressBar.value}%`)
                 }
@@ -226,6 +228,7 @@ function comprobarEstadoProgreso() {
         const intervalo = setInterval(() => {
             const metaContainer = barra.closest(".task");
             const logo = metaContainer.querySelector(".imagen_meta");
+            const tituloMeta = metaContainer.querySelector(".goal-title");
 
             if (barra.value > 49) {
                 // Cambiar el color del fondo si el progreso supera el 49%
@@ -239,10 +242,11 @@ function comprobarEstadoProgreso() {
                 // Cambiar el fondo de la meta completada
                 metaContainer.style.backgroundColor = "#6be524";
                 metaContainer.style.transition = "all 0.5s ease";
+                tituloMeta.textContent = "Reclamar";
 
                 // Cambiar la imagen del logo
                 if (logo) {
-                    logo.src = "../Imagenes/trophy-2.gif"; // Ruta de la nueva imagen
+                    logo.src = "https://cdn-icons-png.flaticon.com/512/1006/1006656.png"; // Ruta de la nueva imagen
                     logo.style.filter = "drop-shadow(1px 1px 1px rgba(0, 0, 0, 1))";
                 }
             }
@@ -250,8 +254,60 @@ function comprobarEstadoProgreso() {
     });
 }
 
-
 function KCAmount() {
     // calcular la cantidad de KC propicia segun la dificultad de la meta
     return  Math.floor(Math.random() * 15) + 1; //0;
+}
+
+function QuitarMeta(meta) {
+    // Añadir clase para el efecto de fade-out
+    meta.style.transition = "opacity 1s ease, visibility 1s ease";
+    meta.style.opacity = "0";
+    meta.style.visibility = "hidden";
+
+    // Esperar hasta que el efecto de fade-out termine antes de eliminar el elemento
+    setTimeout(() => {
+        meta.remove();
+        block = 0;
+    }, 1000); // El tiempo debe coincidir con la duración del transition
+}
+
+function AnimacionMonedas(container) {
+    block = 1;
+    if(block === 1) {
+        // Generar monedas
+        for (let i = 0; i < 50; i++) {
+            const coin = document.createElement("div");
+            coin.classList.add("coin");
+
+            // Generar posición inicial aleatoria dentro del contenedor
+            const startX = Math.random() * 100; // 0% a 100% del ancho
+            const startY = Math.random() * 100; // 0% a 100% del alto
+
+            // Generar dirección de movimiento aleatoria
+            const endX = Math.random() * 400 - 200; // De -200px a 200px (horizontal)
+            const endY = -(Math.random() * 300 + 100); // De -100px a -400px (vertical)
+
+            // Aplicar posición inicial
+            coin.style.left = `${startX}%`;
+            coin.style.top = `${startY}%`;
+
+            // Crear animación personalizada
+            coin.animate(
+                [
+                    {transform: `translate(0, 0)`, opacity: 1},
+                    {transform: `translate(${endX}px, ${endY}px) rotate(${Math.random() * 720}deg)`, opacity: 0}
+                ],
+                {
+                    duration: 1200,
+                    easing: "ease-out",
+                    fill: "forwards"
+                }
+            );
+
+            container.appendChild(coin);
+            // Eliminar la moneda después de la animación
+            setTimeout(() => coin.remove(), 2000);
+        }
+    }
 }

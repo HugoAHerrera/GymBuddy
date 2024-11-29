@@ -1,0 +1,233 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asegura que el body abarque el 100% de la pantalla */
+}
+/* HEADER */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(2, 126, 243);
+    border-bottom: 1px solid white;
+}
+
+.header-marquee {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0 10px;
+    color: rgb(255, 251, 0);
+}
+
+.profile-search {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar {
+    border: 2px solid black;
+    text-align: center;
+    padding: 8px 30px;
+    border-radius: 20px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    margin-right: 20px;
+}
+
+.search-bar:focus {
+    border-color: #3399cc;
+}
+
+.profile-btn {
+    background-size: cover;
+    background-image: url("../Imagenes/avatar.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 25px 25px;
+    cursor: pointer;
+    border-radius: 50%;
+    margin-right: 75px;
+    border: 2px solid black;
+}
+
+#navegator {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: rgb(196, 217, 237);
+    margin-bottom: 10px;
+}
+
+.even-nav {
+    width: 100%;
+    display: flex;
+}
+
+.nav-buttons {
+    flex: 1;
+    background-color: rgb(196, 217, 237);
+    cursor: pointer;
+    color: black;
+}
+
+.nav-buttons:hover {
+    background-color: rgb(180, 200, 219);
+}
+
+.nav-buttons, .logo {
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
+}
+
+nav .logo img {
+    height: 75px;
+    width: auto;
+}
+/* BODY */
+#app {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+#web-container {
+    width: 60%;
+}
+/* Primera cuestion */
+#first-inquiry, #second-inquiry {
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+#title-first-inquiry, #title-second-inquiry {
+    font-size: 46px;
+    padding: 5px;
+}
+
+#text-first-inquiry, #text-second-inquiry {
+    font-size: 20px;
+    padding: 5px;
+}
+
+/* Calculadora IMC */
+#calculator-container {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 3px solid black;
+    background-color: #e1e0e0;
+    border-radius: 20px;
+}
+
+#calculator-title {
+    margin-bottom: 5px;
+    margin-left: 20px;
+}
+
+#IMC-container {
+    background-color: #cbcbcb;
+    padding: 20px;
+    border-radius: 20px;
+    border: 2px solid white;
+    display: flex;
+}
+
+#height-container {
+    padding: 5px;
+    width: 50%;
+}
+#height-title {
+
+}
+
+#weight-container {
+    padding: 5px;
+    width: 50%;
+}
+#weight-title {
+
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+}
+
+#user-cm-input, #user-kg-input {
+    text-align: right;
+    width: 90%;
+}
+
+#button-container {
+    display: flex;
+    justify-content: right;
+}
+
+#IMC-calculation {
+    margin-right: 5%;
+    margin-top: 10px;
+
+}
+
+/* Tabla de indices IMC */
+#whole-table-container {
+    padding: 10px;
+}
+
+#table-container {
+    display: flex;
+    justify-content: center;
+}
+
+#index-table {
+    text-align: center;
+    width: 70%;
+    font-size: 22px;
+}
+
+#note-container {
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+#index-table-note {
+    width: 70%;
+    font-size: 10px;
+}
+
+/* FOOTER */
+footer {
+    margin-top: 20px;
+    background-color: rgb(2, 126, 243);
+    color: rgb(196, 217, 237);
+    text-align: center;
+    padding: 10px;
+    width: auto;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a.footer-enlace:hover {
+    text-decoration: underline;
+    color: rgb(154, 233, 233);
+}

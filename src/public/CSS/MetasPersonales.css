@@ -3,16 +3,6 @@
     padding: 0;
 }
 
-
-.header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: rgb(2, 126, 243);
-    border-bottom: 1px solid white;
-}
-
 html, body {
     height: 100%;
     margin: 0;
@@ -21,7 +11,6 @@ html, body {
     flex-direction: column;
 }
 
-/* Ajuste en body */
 body {
     font-family: 'Arial', sans-serif;
     background-color: white;
@@ -30,29 +19,15 @@ body {
     min-height: 100vh; /* Asegura que el body abarque el 100% de la pantalla */
 }
 
-/* Main como flex para ocupar el espacio restante */
-main {
-    flex: 1; /* Permite que el main crezca para ocupar el espacio libre */
-    width: 100%;
-    padding: 20px;
-    max-width: 1200px;
-    margin: auto;
-}
-
-.premium-btn {
-    background-color: rgb(0, 104, 202);
-    color: rgb(255, 251, 0);
-    border: 2px solid black;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    margin-left: 75px;
-}
-
-.premium-btn:hover {
-    background-color: rgb(0, 91, 175);
+/* HEADER */
+/* PARTE DE ARRIBA */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(2, 126, 243);
+    border-bottom: 1px solid white;
 }
 
 .header-marquee {
@@ -65,18 +40,6 @@ main {
 .profile-search {
     display: flex;
     align-items: center;
-}
-
-.profile-btn {
-    background-size: cover;
-    background-image: url("../Imagenes/avatar.jpg");
-    background-repeat: no-repeat;
-    background-position: center;
-    padding: 25px 25px;
-    cursor: pointer;
-    border-radius: 50%;
-    margin-right: 75px;
-    border: 2px solid black;
 }
 
 .search-bar {
@@ -93,6 +56,18 @@ main {
     border-color: #3399cc;
 }
 
+.profile-btn {
+    background-size: cover;
+    background-image: url("../Imagenes/avatar.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 25px 25px;
+    cursor: pointer;
+    border-radius: 50%;
+    margin-right: 75px;
+    border: 2px solid black;
+}
+/* BOTONES */
 #navegator {
     display: flex;
     justify-content: space-evenly;
@@ -126,43 +101,7 @@ nav .logo img {
     width: auto;
 }
 
-/* Añadir aqui */
-/*#logotype {
-    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 1));
-}
-
-/* FOOTER */
-.about-us {
-    background-color: #fff; /* Fondo blanco */
-    border: 1px solid #ddd; /* Borde gris */
-    border-radius: 10px;
-    height: auto;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-}
-
-.about-us h2 {
-    font-size: 2rem;
-    margin-bottom: 15px;
-    color: #006699; /* Azul medio */
-}
-
-.about-us p {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    color: #666; /* Gris oscuro */
-}
-
-footer {
-    background-color: #d97e3d;
-    color: white;
-    text-align: center;
-    padding: 10px;
-    bottom: 0;
-    width: 100%;
-}
-
+/* Dentro del body */
 .Cabecera-meta {
     margin-top: 2%;
     display: flex;
@@ -201,7 +140,7 @@ footer {
 .center {
     flex: 1;
 }
-
+/* Contenedor de metas y metas */
 .div-metas {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -222,8 +161,6 @@ footer {
     padding: 30px; /* Espacio interno */
     width: 80%; /* Ancho del div (ajusta según necesites) */
     height: 90%;
-    /*width: 332px;
-    height: 450px;*/
     flex-direction: column; /* O LO PONGO EN goal-container? */
     border: 2px solid black;
     cursor: pointer;
@@ -241,7 +178,6 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    /*border: 2px solid red;*/
 }
 
 .progress-container {
@@ -282,4 +218,34 @@ footer a.footer-enlace:hover {
 
 .moneda {
     filter: drop-shadow(5px 10px 8px rgba(0,0,0,1));
+}
+/* EFECTO DE LA RECOMPENSA DE LAS METAS */
+.coin {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-image: url("../Imagenes/moneda_dorada.png");
+    background-size: cover;
+    filter: drop-shadow(1px 50px 5px rgba(0,0,0,0.1));
+    border-radius: 50%;
+    pointer-events: none;
+    top: 50%; /* Centrar verticalmente */
+    left: 50%; /* Centrar horizontalmente */
+    transform: translate(-50%, -50%); /* Ajustar desde el centro */
+}
+
+/* Animación para las monedas */
+@keyframes jump {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-150px) rotate(360deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(200px);
+        opacity: 0;
+    }
 }
