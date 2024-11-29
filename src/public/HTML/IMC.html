@@ -9,251 +9,130 @@
     <link>
 </head>
 <body>
-    <header> HEADER </header>
-    <div id="app">
-        <div class="hero responsivegrid">
-            <div class="aem-Grid aem-Grid--12 aem-Grid--default--12 ">
-                <section class="section-container section-container--small section-container__article-hero section-container--article-over-top-small aem-GridColumn aem-GridColumn--default--12">
-                    <div id="sectioncontainer-1e2757da2d" class="cmp-container">
-                        <div class="title">
-                            <h1 id="title-abde57491a">Cómo calcular el IMC con nuestra calculadora para evaluar tu peso</h1>
-                        </div>
-                        <div class="text">
-                            <p>El índice de masa corporal (IMC) es una forma de medir el tamaño
-                              corporal. Es una herramienta para estimar la grasa corporal y detectar
-                              la obesidad y los riesgos para la salud. Poder calcular el IMC en
-                              personas adultas, hace que se puedan clasificar en perfiles de
-                              infrapeso, normopeso, sobrepeso u obesidad en función de su estatura y peso.</p>
-                        </div>
-                    </div>
-                </section>
+    <header>
+        <div class="header-top">
+            <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
+            <div class="profile-search">
+                <input type="text" class="search-bar" placeholder="¿Qué quieres buscar? 🔍">
+                <button class="profile-btn" onclick="window.location.href='perfil.html'"></button>
             </div>
         </div>
-        <main id="main">
-            <div class="aem-Grid aem-Grid--12 aem-Grid--default--12 ">
-                <div class="container responsivegrid bg--grey aem-GridColumn aem-GridColumn--default--12">
-                    <div id="container-239a195a31" class="cmp-container">
-                        <section class="section-container section-container--small section-container--dwsp-medium section-container--upward-pull-small">
-                            <div id="sectioncontainer-f13fed1e69" class="cmp-container">
-                                <div class="cmp-bmi cmp-bmi-calculator-v2">
-                                    <section class="cmp-bmi__section">
-                                        <div class="cmp-bmi__section-header">
-                                            <div class="cmp-bmi__section-heading">
-                                                <h1 id="title-d1753643bd">Descubre tu IMC y los riesgos para la salud</h1>
-                                            </div>
-                                            <div class="cmp-bmi__toggle">
-                                                <span class="cmp-bmi__toogle-metric-text cmp-bmi__toogle-metric-text--top">Sistema métrico</span>
-                                                <label class="cmp-bmi__toggle-switch">
-                                                    <input class="cmp-bmi__toggle-checkbox" type="checkbox" checked="">
-                                                    <span class="cmp-bmi__toggle-slider cmp-bmi__toggle-slider--round"></span>
-                                                </label>
-                                                <span class="cmp-bmi__toogle-imperial-text cmp-bmi__toogle-imperial-text--top">Imperial</span>
-                                                <div class="cmp-bmi__toogle-text-bottom">
-                                                    <span class="cmp-bmi__toogle-metric-text">Sistema métrico /</span>
-                                                    <span class="cmp-bmi__toogle-imperial-text">Imperial</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <form class="cmp-bmi__form cmp-bmi__metric cmp-bmi--selected" style="display: none" data-unit-type="metric" data-search-root="/content/truthaboutweight/es/es/support/whats-your-body-mass-index-bmi" data-servlet-path="/content/truthaboutweight/es/es/support/whats-your-body-mass-index-bmi.bmi.result.mapper.html">
-                                            <input type="hidden" name="gender">
-                                            <input type="hidden" name="ethnicity">
-                                            <div class="cmp-bmi__section-inputs">
-                                                <div class="cmp-bmi__input-container cmp-bmi__input-container--metric cmp-bmi__input-height">
-                                                    <label class="cmp-bmi__form-label">Altura
-                                                        <span class="cmp-bmi__input-error-message" data-error-message="Input required"></span>
-                                                    </label>
-                                                    <div class="cmp-bmi__form-input cmp-bmi__form-input--height">
-                                                        <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--up">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                            </svg>
-                                                        </button>
-                                                        <input class="cmp-bmi__input-number--custom" type="number" name="height-cm" id="height-cm" min="0">
-                                                        <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--down">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                            </svg>
-                                                        </button>
-                                                        <span>cm</span>
-                                                    </div>
-                                                </div>
-                                                <div class="cmp-bmi__input-container cmp-bmi__input-container--metric cmp-bmi__input-weight">
-                                                    <label class="cmp-bmi__form-label">Peso
-                                                        <span class="cmp-bmi__input-error-message" data-error-message="Input required"></span>
-                                                    </label>
-                                                    <div class="cmp-bmi__form-input cmp-bmi__form-input--weight">
-                                                        <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--up">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                            </svg>
-                                                        </button>
-                                                        <input class="cmp-bmi__input-number--custom" type="number" name="weight-kg" id="weight-kg" step="0.01" min="0">
-                                                        <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--down">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                            </svg>
-                                                        </button>
-                                                        <span>kg</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="cmp-bmi__section-cta">
-                                                <span class="cmp-bmi__form-error-message" data-error-message="You have not completed the required fields. Please update to get a matching result."></span>
-                                                <span class="ctabutton ctabutton--primary">
-                                                    <button class="cmp-bmi cmp-bmi__section-cta-button" type="submit">Comienza tu cambio ahora</button>
-                                                </span>
-                                            </div>
-                                        </form>
-                                        <form class="cmp-bmi__form cmp-bmi__imperial " style="display: none" data-unit-type="imperial" data-search-root="/content/truthaboutweight/es/es/support/whats-your-body-mass-index-bmi" data-servlet-path="/content/truthaboutweight/es/es/support/whats-your-body-mass-index-bmi.bmi.result.mapper.html">
-                                            <input type="hidden" name="gender">
-                                            <input type="hidden" name="ethnicity">
-                                            <div class="cmp-bmi__section-inputs">
-                                                <div class="cmp-bmi__input-container cmp-bmi__input-container--imperial cmp-bmi__input-height">
-                                                    <label class="cmp-bmi__form-label">
-                                                        Altura
-                                                        <span class="cmp-bmi__input-error-message" data-error-message="Input required"></span>
-                                                    </label>
-                                                    <div class="cmp-bmi__imperial-inputs-container">
-                                                        <div class="cmp-bmi__form-input cmp-bmi__form-input--imperial cmp-bmi__form-input--imperial-first">
-                                                            <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--up">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                    <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                                </svg>
-                                                            </button>
-                                                            <input class="cmp-bmi__input-number--custom" type="number" name="height-ft" id="height-ft" min="0">
-                                                            <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--down">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                    <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                                </svg>
-                                                            </button>
-                                                            <span>ft</span>
-                                                        </div>
-                                                        <div class="cmp-bmi__form-input cmp-bmi__form-input--imperial cmp-bmi__form-input--imperial-second">
-                                                            <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--up">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                    <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                                </svg>
-                                                            </button>
-                                                            <input class="cmp-bmi__input-number--custom" type="number" name="height-in" id="height-in" min="0" value="0">
-                                                            <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--down">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                    <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                                </svg>
-                                                            </button>
-                                                            <span>in</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="cmp-bmi__input-container cmp-bmi__input-container--imperial cmp-bmi__input-weight">
-                                                    <label class="cmp-bmi__form-label">
-                                                        Peso
-                                                        <span class="cmp-bmi__input-error-message" data-error-message="Input required"></span>
-                                                    </label>
-                                                    <div class="cmp-bmi__imperial-inputs-container">
-
-                                                        <div class="cmp-bmi__form-input cmp-bmi__form-input--imperial cmp-bmi__form-input--imperial-first">
-                                                            <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--up">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                    <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                                </svg>
-                                                            </button>
-                                                            <input class="cmp-bmi__input-number--custom" type="number" name="weight-st" id="weight-st" min="0">
-                                                            <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--down">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12     8">
-                                                                    <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                                </svg>
-                                                            </button>
-                                                            <span>st</span>
-                                                        </div>
-                                                        <div class="cmp-bmi__form-input cmp-bmi__form-input--imperial cmp-bmi__form-input--imperial-second">
-                                                            <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--up">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                    <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                                </svg>
-                                                            </button>
-                                                            <input class="cmp-bmi__input-number--custom" type="number" name="weight-lb" id="weight-lb" min="0" value="0">
-                                                            <button class="cmp-bmi__input-number-step-button cmp-bmi__input-number-step-button--down">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 8">
-                                                                    <path d="M.3 2.1 5.4 7c.1.3.4.3.6.3.2 0 .5-.1.6-.2l5.1-4.9c.1-.1.2-.2.2-.3.1-.1.1-.3.1-.4 0-.2-.1-.3-.2-.5-.1-.1-.2-.3-.4-.3-.2-.1-.3-.1-.5-.1s-.3.1-.5.2L6 5.2 1.5.9C1.4.8 1.4.8 1.2.7H.9C.8.7.7.7.6.8.5.8.4.9.3 1c-.2.1-.3.3-.3.5 0 .3.1.5.3.6z"></path>
-                                                                </svg>
-                                                            </button>
-                                                            <span>lb</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="cmp-bmi__imperial-inputs-container"></div>
-                                                </div>
-                                            </div>
-                                            <div class="cmp-bmi__section-cta">
-                                                <span class="cmp-bmi__form-error-message" data-error-message="You have not completed the required fields. Please update to get a matching result.">
-                                                </span>
-                                                <span class="ctabutton ctabutton--primary">
-                                                    <button class="cmp-bmi cmp-bmi__section-cta-button" type="submit">
-                                                        Comienza tu cambio ahora
-                                                    </button>
-                                                </span>
-                                            </div>
-                                        </form>
-                                        <style>
-                                            .cmp-bmi--selected {
-                                                display: block !important;
-                                            }
-                                        </style>
-                                        <link rel="stylesheet" href="/etc.clientlibs/truthaboutweight/clientlibs/clientlib-components/bmi-calculator-v2.min.68b329da9893e34099c7d8ad5cb9c940.css" type="text/css">
-                                        <script src="/etc.clientlibs/truthaboutweight/clientlibs/clientlib-components/bmi-calculator-v2.min.98fa00042c15744a86a1e20db870f90b.js"></script>
-                                        </section>
-                                            </div></div>
-                                        </section>
-                                        <section class="section-container section-container--small">
-                                            <div id="sectioncontainer-eb655172ff" class="cmp-container">
-                                                <div class="title title--xxs">
-                                                    <h2 id="title-03922bcf8a">Calcular el IMC: Comprueba tu índice de masa corporal ahora con la calculadora</h2>
-                                                </div>
-                                                <div class="text text--sm">
-                                                    <p>Puedes utilizar la calculadora de IMC aquí para dividir tu peso en kg
-                                                    por tu altura en metros y comparar tu resultado con las clases de IMC.
-                                                    Introduce tu estatura y peso y comprueba tus resultados en la tabla
-                                                    siguiente. Haz clic en una clase de IMC para obtener más información
-                                                    sobre ella.<br> &nbsp;</p>
-                                                </div>
-                                                <div class="table parbase">
-                                                    <table width="100%" cellspacing="0" cellpadding="1" border="1"> <tbody>
-                                                        <tr>
-                                                            <td><b>Clasificación </b></td> <td><b>IMC</b></td> </tr>
-                                                        <tr>
-                                                            <td>Bajo peso</td> <td>&lt;18,5</td> </tr>
-                                                        <tr>
-                                                            <td>Normal</td> <td>18,5-24,9</td> </tr>
-                                                        <tr>
-                                                            <td>Sobrepeso</td> <td>25,0-29,9</td> </tr>
-                                                        <tr>
-                                                            <td>Obesidad Clase I</td> <td>30,0 -34,9</td> </tr>
-                                                        <tr>
-                                                            <td>Obesidad Clase II</td> <td>35,0-39,9</td> </tr>
-                                                        <tr>
-                                                            <td>Obesidad Clase III</td> <td>&gt;40</td> </tr></tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="text text--xs">
-                                                    <p>
-                                                        <i>*Esta calculadora del IMC es para adultos de 20 años o más. Habla
-                                                        con tu médico sobre tu IMC si eres menor de 20 años.</i>
-                                                    </p>
-                                                    <p>&nbsp;</p>
-                                                </div>
-                                            </div>
-                                        </section>
-                        <section class="section-container">
-                            <div id="sectioncontainer-6e3017d5b0" class="cmp-container">
-                                <div class="text">
-                                    <p>&nbsp;</p>
-                                    <p>&nbsp;</p>
-                                </div>
-                            </div>
-                        </section>
+        <nav id="navegator">
+            <div class="even-nav">
+                <button class="nav-buttons" onclick="window.location.href='tienda.html'">Tienda</button>
+                <button class="nav-buttons" onclick="window.location.href='Progreso.html'">Progreso</button>
+                <button class="nav-buttons" onclick="window.location.href='rutina.html'">Rutinas</button>
+            </div>
+            <div class="logo">
+                <img id="logotype" src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
+            </div>
+            <div class="even-nav">
+                <button class="nav-buttons" onclick="window.location.href='comunidad.html'">Comunidad</button>
+                <button class="nav-buttons" onclick="window.location.href='metaspersonales.html'">Metas</button>
+                <button class="nav-buttons" onclick="window.location.href='desafios.html'">Desafios</button>
+            </div>
+        </nav>
+    </header>
+    <div id="app">
+        <div id="web-container">
+            <!-- PRIMER TEXTO -->
+            <div id="first-inquiry">
+                <h1 id="title-first-inquiry">Cómo calcular el IMC con nuestra calculadora para evaluar tu peso</h1>
+                <p id="text-first-inquiry">El índice de masa corporal (IMC) es una forma de medir el tamaño
+                  corporal. Es una herramienta para estimar la grasa corporal y detectar
+                  la obesidad y los riesgos para la salud. Poder calcular el IMC en
+                  personas adultas, hace que se puedan clasificar en perfiles de
+                  infrapeso, normopeso, sobrepeso u obesidad en función de su estatura y peso.</p>
+            </div>
+            <!-- CALCULADORA DE IMC -->
+            <div id="calculator-container">
+                <h1 id="calculator-title"> Descubre tu IMC </h1>
+                <div id="IMC-container">
+                    <div id="height-container">
+                        <h3 id="height-title"> Altura </h3>
+                        <label class="input-container">
+                            <input id="user-cm-input" type="number" min="0" placeholder="cm"/> <!-- "le falta la etiqueta LABEL envolviendola -->
+                        </label>
+                    </div>
+                    <div id="weight-container">
+                        <h3 id="weight-title"> Peso </h3>
+                        <label class="input-container">
+                            <input id="user-kg-input" type="number" min="0" placeholder="kg"/> <!-- "le falta la etiqueta LABEL envolviendola -->
+                        </label>
+                    </div>
+                </div>
+                <div id="button-container">
+                    <button id="IMC-calculation" onclick="IMCCalculator()"> Calcular </button>
+                </div>
+            </div>
+            <!-- SEGUNDO TEXTO + TABLA DE INDICES IMC -->
+            <div id="second-inquiry">
+                <h2 id="title-second-inquiry">Calcular el IMC: Comprueba tu índice de masa corporal ahora con la calculadora</h2>
+                <p id="text-second-inquiry">
+                    Puedes utilizar la calculadora de IMC aquí para dividir tu peso en kg
+                    por tu altura en metros y comparar tu resultado con las clases de IMC.
+                    Introduce tu estatura y peso y comprueba tus resultados en la tabla
+                    siguiente. Haz clic en una clase de IMC para obtener más información
+                    sobre ella.
+                </p>
+            </div>
+            <div id="whole-table-container">
+                <div id="table-container">
+                    <div id="index-table">
+                        <table width="100%" cellspacing="0" cellpadding="1" border="1">
+                            <tbody>
+                                <tr>
+                                    <td><b>Clasificación </b></td>
+                                    <td><b>IMC</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Bajo peso</td>
+                                    <td>&lt;18,5</td>
+                                </tr>
+                                <tr>
+                                    <td>Normal</td>
+                                    <td>18,5-24,9</td>
+                                </tr>
+                                <tr>
+                                    <td>Sobrepeso</td>
+                                    <td>25,0-29,9</td>
+                                </tr>
+                                <tr>
+                                    <td>Obesidad Clase I</td>
+                                    <td>30,0 -34,9</td>
+                                </tr>
+                                <tr>
+                                    <td>Obesidad Clase II</td>
+                                    <td>35,0-39,9</td>
+                                </tr>
+                                <tr>
+                                    <td>Obesidad Clase III</td>
+                                    <td>&gt;40</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="note-container">
+                    <div id="index-table-note">
+                        <p>
+                            <i>*Esta calculadora del IMC es para adultos de 20 años o más. Habla
+                            con tu médico sobre tu IMC si eres menor de 20 años.</i>
+                        </p>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
+    <footer>
+        <p>
+            <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> |
+            <a href="terminosCondiciones.html" class="footer-enlace">Cookies</a> |
+            <a href="Contacto.html" class="footer-enlace">Soporte técnico</a> |
+            <a>GymBuddy &copy; 2024</a>
+        </p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../JS/IMC.js"></script>
 </body>
 </html>
