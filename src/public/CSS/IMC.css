@@ -152,37 +152,75 @@ nav .logo img {
     padding: 5px;
     width: 50%;
 }
-#height-title {
-
+#height-title, #weight-title {
+    margin-left: 30px;
 }
 
 #weight-container {
     padding: 5px;
     width: 50%;
 }
-#weight-title {
-
-}
 
 .input-container {
     display: flex;
     justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+
+.user-input {
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 18px;
 }
 
 #user-cm-input, #user-kg-input {
     text-align: right;
-    width: 90%;
+    width: 70%;
 }
+
+.description {
+    margin-left: 5px;
+}
+
+.update-container {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.update-input {
+    filter: drop-shadow(1px 1px 0px rgba(0,0,0,1));
+    cursor: pointer;
+    user-select: none;
+}
+input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 
 #button-container {
     display: flex;
-    justify-content: right;
+    align-items: center;
+    margin-top: 10px;
+    justify-content: center;
+    /*justify-content: right;*/
+}
+
+#IMC-result {
+    font-size: 22px;
+    width: 80%;
+    text-align: center;
 }
 
 #IMC-calculation {
-    margin-right: 5%;
-    margin-top: 10px;
-
+    padding: 8px 20px 8px 20px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #cfddea;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 /* Tabla de indices IMC */

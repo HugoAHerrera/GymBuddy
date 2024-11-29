@@ -51,17 +51,28 @@
                     <div id="height-container">
                         <h3 id="height-title"> Altura </h3>
                         <label class="input-container">
-                            <input id="user-cm-input" type="number" min="0" placeholder="cm"/> <!-- "le falta la etiqueta LABEL envolviendola -->
+                            <input id="user-cm-input" class="user-input" type="number" min="0" placeholder="0"/> <!-- "le falta la etiqueta LABEL envolviendola -->
+                            <div class="description"> cm </div>
+                            <div class="update-container">
+                                <div class="update-input"> 🔼 </div>
+                                <div class="update-input"> 🔽 </div>
+                            </div>
                         </label>
                     </div>
                     <div id="weight-container">
                         <h3 id="weight-title"> Peso </h3>
                         <label class="input-container">
-                            <input id="user-kg-input" type="number" min="0" placeholder="kg"/> <!-- "le falta la etiqueta LABEL envolviendola -->
+                            <input id="user-kg-input" class="user-input" type="number" min="0" placeholder="0"/> <!-- "le falta la etiqueta LABEL envolviendola -->
+                            <div class="description"> kg </div>
+                            <div class="update-container">
+                                <div class="update-input"> 🔼 </div>
+                                <div class="update-input"> 🔽 </div>
+                            </div>
                         </label>
                     </div>
                 </div>
                 <div id="button-container">
+                    <div id="IMC-result">  </div>
                     <button id="IMC-calculation" onclick="IMCCalculator()"> Calcular </button>
                 </div>
             </div>
