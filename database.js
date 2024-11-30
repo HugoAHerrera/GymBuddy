@@ -80,6 +80,26 @@ const databaseMethods = {
             });
         });
     },
+
+    obtenerSesiones: async () => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kilogramos, fecha FROM sesion';
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+
+                const sesiones = results.map(row => ({
+                    tiempo: row.tiempo_ejecucion,
+                    repeticiones: row.repeticiones,
+                    sets: row.sets,
+                    kilometros: row.kilometros,
+                    kilogramos: row.kilogramos,
+                    fecha: row.fecha,
+                }));
+
+                resolve(sesiones);
+            });
+        });
+    },
 };
 
 module.exports = databaseMethods;
