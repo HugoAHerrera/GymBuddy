@@ -37,6 +37,30 @@ async function obtenerDatosSesiones() {
     }
 }
 
+async function obtenerEstadisticas() {
+    try {
+        const response = await fetch(`/api/estadisticas/`);
+        const data = await response.json();
+
+        console.log(data); // Verifica lo que estás recibiendo del backend
+
+        const sesionesCompletadas = data.sesionesCompletadas || 0;
+        const distanciaRecorrida = data.distanciaRecorrida || 0;
+        const ultimaSesion = data.ultimaSesion || 'Nunca';
+        console.log('Datos del backend:', data);
+        // Actualizar el DOM con los datos
+        document.getElementById('sesiones-completadas').innerText = sesionesCompletadas;
+        document.getElementById('distancia-recorrida').innerText = distanciaRecorrida.toFixed(1); // Para un decimal
+        document.getElementById('ultima-sesion').innerText = dayjs(ultimaSesion).format('DD-MM-YYYY');
+
+        console.log(sesionesCompletadas)
+        console.log(distanciaRecorrida)
+        console.log(ultimaSesion)
+    } catch (error) {
+        console.error('Error al obtener estadísticas del usuario:', error);
+    }
+}
+
 // Función para transformar los datos en arrays
 function transformarDatosParaGraficas(data) {
     const tiempoEjecucion = [];
@@ -50,9 +74,14 @@ function transformarDatosParaGraficas(data) {
         tiempoEjecucion.push(sesion.tiempo); // Guardar en minutos
         repeticiones.push(sesion.repeticiones);
         sets.push(sesion.sets);
-        kilometros.push(sesion.kilometros);
-        kg.push(sesion.kg);
-        fechas.push(sesion.fecha);
+
+        // Reemplazar comas por puntos y convertir a números
+        kilometros.push(parseFloat(sesion.kilometros.toString().replace(',', '.')));
+        kg.push(parseFloat(sesion.kg.toString().replace(',', '.')));
+
+        // Reformatear las fechas con Day.js al formato 'DD-MM-YYYY'
+        const fechaFormateada = dayjs(sesion.fecha).format('DD-MM-YYYY');
+        fechas.push(fechaFormateada);
     });
 
     return {
@@ -64,6 +93,7 @@ function transformarDatosParaGraficas(data) {
         fechas
     };
 }
+
 
 // Función para actualizar las gráficas
 function actualizarGraficas(sesiones) {
@@ -87,7 +117,15 @@ function actualizarGraficas(sesiones) {
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true, // Asegura que el gráfico empiece desde cero
+                    min: 0, // Evita valores negativos
+                    max: Math.max(...sesiones.kilometros) + 5, // Establecer el valor máximo
+                    stepSize: 2, // El tamaño de los pasos en el eje Y (de 2 en 2)
+                    ticks: {
+                        callback: function(value) {
+                            return value.toFixed(1); // Mostrar el valor con un decimal
+                        }
+                    }
                 }
             }
         }
@@ -108,7 +146,15 @@ function actualizarGraficas(sesiones) {
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true, // Asegura que el gráfico empiece desde cero
+                    min: 0, // Evita valores negativos
+                    max: Math.max(...sesiones.kg) + 5, // Establecer el valor máximo
+                    stepSize: 2, // El tamaño de los pasos en el eje Y (de 2 en 2)
+                    ticks: {
+                        callback: function(value) {
+                            return value.toFixed(1); // Mostrar el valor con un decimal
+                        }
+                    }
                 }
             }
         }
@@ -139,6 +185,7 @@ function actualizarGraficas(sesiones) {
 document.addEventListener('DOMContentLoaded', function () {
     // Llamar a la función para obtener los datos de las sesiones y actualizar las gráficas
     obtenerDatosSesiones();
+    obtenerEstadisticas();
 
     const logoImage = document.getElementById('logotype');
     logoImage.addEventListener('click', function() {

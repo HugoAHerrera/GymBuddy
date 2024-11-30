@@ -134,3 +134,14 @@ app.get('/api/sesiones', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
+app.get('/api/estadisticas/', async (req, res) => {
+    try {
+        const estadisticas = await database.obtenerEstadisticasSesiones();
+        console.log(estadisticas);
+        res.json(estadisticas);
+    } catch (error) {
+        console.error('Error al obtener estadisticas', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});

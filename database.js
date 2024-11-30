@@ -100,6 +100,24 @@ const databaseMethods = {
             });
         });
     },
+
+    obtenerEstadisticasSesiones: async () => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para obtener las estadísticas
+            const sql = 'SELECT COUNT(*) AS sesiones_completadas, SUM(kilometros) AS distancia_recorrida, MAX(fecha) AS ultima_sesion FROM sesion';
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+
+                const estadisticas = {
+                    sesionesCompletadas: results[0].sesiones_completadas || 0,
+                    distanciaRecorrida: parseFloat(results[0].distancia_recorrida || 0),
+                    ultimaSesion: results[0].ultima_sesion || 'Nunca',
+                };
+                resolve(estadisticas);
+                console.log(estadisticas);
+            });
+        });
+    },
 };
 
 module.exports = databaseMethods;

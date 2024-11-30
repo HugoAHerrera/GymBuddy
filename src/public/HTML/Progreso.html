@@ -8,6 +8,7 @@
     <script src="../JS/progreso.js"></script>
     <link rel="icon" href="../Imagenes/logo-inicio.png" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
 </head>
 <body>
     <!-- CABECERA -->
@@ -70,10 +71,9 @@
         <div class="user-info">
             <img src="../Imagenes/avatar.jpg" alt="Avatar del usuario" class="user-avatar">
             <div class="user-stats">
-                <p><strong>Sesiones Completadas:</strong> </p>
-                <p><strong>Distancia recorrida:</strong> 120 km</p>
-                <p><strong>Calorías quemadas:</strong> 3000 kcal</p>
-                <p><strong>Última sesión:</strong> 12/12/2020</p>
+                <p><strong>Sesiones Completadas:</strong> <span id="sesiones-completadas"></span></p>
+                <p><strong>Distancia recorrida:</strong> <span id="distancia-recorrida"></span> km</p>
+                <p><strong>Última sesión:</strong> <span id="ultima-sesion"></span></p>
             </div>
         </div>
     </main>
