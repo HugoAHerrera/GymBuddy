@@ -119,3 +119,17 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
+app.get('/progreso', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
+});
+
+app.get('/api/sesiones', async (req, res) => {
+    try {
+        const sesiones = await database.obtenerSesiones();
+        res.json(sesiones);
+    } catch (error) {
+        console.error('Error al obtener sesiones', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});

@@ -111,49 +111,47 @@ nav .logo img {
 /* CABECERA */
 
 /* Main content area */
-.progress-container {
+/* Main content area */
+main {
     display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    background-color: #f4f4f4; /* Ensure the background matches the body */
+    gap: 20px; /* Espaciado uniforme entre elementos */
+    align-items: flex-start; /* Alinear elementos desde el inicio vertical */
+    padding: 20px; /* Añadir un poco de espacio alrededor del main */
+    box-sizing: border-box; /* Incluir padding y border en el ancho total */
+}
+
+.progress-container {
+    flex: 3; /* Ocupar más espacio relativo que .user-info */
+    max-width: 75%; /* Limitar el ancho máximo al 75% del contenedor */
 }
 
 .chart-section-container {
     display: flex;
     flex-direction: column;
-    width: 75%;
+    gap: 20px; /* Espaciado uniforme entre las gráficas */
 }
 
 .chart-section {
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 10px;
-    width: 100%;
     padding: 15px;
-    margin-bottom: 20px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     cursor: pointer;
-    height: 150px; /* Initial height */
+    height: 150px; /* Altura estándar */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .chart-section:hover {
-    background-color: #f0f0f0;
-}
-
-.chart-placeholder {
-    height: 100px;
-    background-color: #ccc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: #f9f9f9;
 }
 
 .user-info {
-    width: 20%;
+    flex: 1; /* Ocupar menos espacio relativo que .progress-container */
+    max-width: 25%; /* Limitar el ancho máximo al 25% del contenedor */
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 10px;
