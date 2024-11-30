@@ -29,9 +29,6 @@ async function obtenerDatosSesiones() {
         // Transformar la data en arrays para las gráficas
         const sesiones = transformarDatosParaGraficas(data);
 
-        // Ahora puedes usar estos arrays en tu lógica de gráficos
-        console.log(sesiones);
-
         // Aquí podrías invocar una función para actualizar las gráficas con los datos
         actualizarGraficas(sesiones);
 
@@ -44,21 +41,13 @@ async function obtenerEstadisticas() {
     try {
         const response = await fetch(`/api/estadisticas/`);
         const data = await response.json();
-
-        console.log(data); // Verifica lo que estás recibiendo del backend
-
         const sesionesCompletadas = data.sesionesCompletadas || 0;
         const distanciaRecorrida = data.distanciaRecorrida || 0;
         const ultimaSesion = data.ultimaSesion || 'Nunca';
-        console.log('Datos del backend:', data);
         // Actualizar el DOM con los datos
         document.getElementById('sesiones-completadas').innerText = sesionesCompletadas;
         document.getElementById('distancia-recorrida').innerText = distanciaRecorrida.toFixed(1); // Para un decimal
         document.getElementById('ultima-sesion').innerText = dayjs(ultimaSesion).format('DD-MM-YYYY');
-
-        console.log(
-        console.log(distanciaRecorrida)
-        console.log(ultimaSesion)
     } catch (error) {
         console.error('Error al obtener estadísticas del usuario:', error);
     }
@@ -186,10 +175,6 @@ async function filterData(period) {
     try {
         const response = await fetch(`/api/sesiones?periodo=${period}`);
         const data = await response.json();
-
-        // Verifica lo que recibes para asegurarte de que los valores están correctamente formateados
-        console.log(data);
-
         // Si las fechas ya están formateadas y los valores están correctos, no se debe modificar nada
         updateChart(chartDistanciaMaxima, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.kilometros));
         updateChart(chartPesoMaximo, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.kg));

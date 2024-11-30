@@ -144,7 +144,6 @@ const databaseMethods = {
                     ultimaSesion: results[0].ultima_sesion || 'Nunca',
                 };
                 resolve(estadisticas);
-                console.log(estadisticas);
             });
         });
     },
