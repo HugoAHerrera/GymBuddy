@@ -125,13 +125,23 @@ app.get('/progreso', (req, res) => {
 });
 
 app.get('/api/sesiones', async (req, res) => {
+    const { periodo } = req.query; // Obtener el parámetro 'periodo' del query string
+
     try {
-        const sesiones = await database.obtenerSesiones();
-        console.log(sesiones);
+        // Pasar el periodo como argumento a la función obtenerSesiones
+        const sesiones = await database.obtenerSesiones(periodo);
+
+        console.log(sesiones); // Log para verificar las sesiones obtenidas
         res.json(sesiones);
     } catch (error) {
-        console.error('Error al obtener sesiones', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('Error al obtener sesiones:', error);
+
+        // Devolver un mensaje de error más específico según el caso
+        if (error.message === 'Periodo no válido') {
+            res.status(400).json({ error: 'El periodo especificado no es válido' });
+        } else {
+            res.status(500).json({ error: 'Error interno del servidor' });
+        }
     }
 });
 

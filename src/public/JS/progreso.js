@@ -1,3 +1,6 @@
+let chartDistanciaMaxima;
+let chartPesoMaximo;
+let chartDuracionSesion;
 
 function expandChart(chartId) {
     const charts = document.querySelectorAll('.chart-section');
@@ -101,8 +104,8 @@ function actualizarGraficas(sesiones) {
     const ctxPesoMaximo = document.getElementById('chart-peso-maximo').getContext('2d');
     const ctxDuracionSesion = document.getElementById('chart-duracion-sesion').getContext('2d');
 
-    // Inicialización de gráficos vacíos por defecto
-    new Chart(ctxDistanciaMaxima, {
+    // Inicializa los gráficos y guárdalos en las variables globales
+    chartDistanciaMaxima = new Chart(ctxDistanciaMaxima, {
         type: 'line',
         data: {
             labels: sesiones.fechas,
@@ -117,13 +120,13 @@ function actualizarGraficas(sesiones) {
         options: {
             scales: {
                 y: {
-                    beginAtZero: true, // Asegura que el gráfico empiece desde cero
-                    min: 0, // Evita valores negativos
-                    max: Math.max(...sesiones.kilometros) + 5, // Establecer el valor máximo
-                    stepSize: 2, // El tamaño de los pasos en el eje Y (de 2 en 2)
+                    beginAtZero: true,
+                    min: 0,
+                    max: Math.max(...sesiones.kilometros) + 5,
+                    stepSize: 2,
                     ticks: {
-                        callback: function(value) {
-                            return value.toFixed(1); // Mostrar el valor con un decimal
+                        callback: function (value) {
+                            return value.toFixed(1);
                         }
                     }
                 }
@@ -131,7 +134,7 @@ function actualizarGraficas(sesiones) {
         }
     });
 
-    new Chart(ctxPesoMaximo, {
+    chartPesoMaximo = new Chart(ctxPesoMaximo, {
         type: 'line',
         data: {
             labels: sesiones.fechas,
@@ -146,13 +149,13 @@ function actualizarGraficas(sesiones) {
         options: {
             scales: {
                 y: {
-                    beginAtZero: true, // Asegura que el gráfico empiece desde cero
-                    min: 0, // Evita valores negativos
-                    max: Math.max(...sesiones.kg) + 5, // Establecer el valor máximo
-                    stepSize: 2, // El tamaño de los pasos en el eje Y (de 2 en 2)
+                    beginAtZero: true,
+                    min: 0,
+                    max: Math.max(...sesiones.kg) + 5,
+                    stepSize: 2,
                     ticks: {
-                        callback: function(value) {
-                            return value.toFixed(1); // Mostrar el valor con un decimal
+                        callback: function (value) {
+                            return value.toFixed(1);
                         }
                     }
                 }
@@ -160,7 +163,7 @@ function actualizarGraficas(sesiones) {
         }
     });
 
-    new Chart(ctxDuracionSesion, {
+    chartDuracionSesion = new Chart(ctxDuracionSesion, {
         type: 'line',
         data: {
             labels: sesiones.fechas,
@@ -182,6 +185,7 @@ function actualizarGraficas(sesiones) {
     });
 }
 
+
 document.addEventListener('DOMContentLoaded', function () {
     // Llamar a la función para obtener los datos de las sesiones y actualizar las gráficas
     obtenerDatosSesiones();
@@ -193,41 +197,25 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
-
-/*
-function filterData(period) {
-    let labels, dataDistanciaMaxima, dataPesoMaximo, dataDuracionSesion;
-
-    switch (period) {
-        case 'semana':
-            labels = ['07/10/24', '08/10/24', '09/10/24', '10/10/24', '11/10/24', '12/10/24', '13/10/24'];
-            dataDistanciaMaxima = [5, 10, 7, 8, 6, 9, 11];
-            dataPesoMaximo = [50, 55, 60, 65, 70, 75, 80];
-            dataDuracionSesion = [30, 45, 40, 50, 60, 55, 70];
-            break;
-        case 'mes':
-            labels = ['01/10/24', '08/10/24', '15/10/24', '22/10/24', '29/10/24'];
-            dataDistanciaMaxima = [50, 60, 55, 65, 70];
-            dataPesoMaximo = [100, 110, 105, 115, 120];
-            dataDuracionSesion = [300, 350, 320, 370, 400];
-            break;
-        case 'año':
-            labels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-            dataDistanciaMaxima = [200, 220, 210, 230, 240, 250, 260, 270, 280, 290, 300, 310];
-            dataPesoMaximo = [200, 220, 210, 230, 240, 250, 260, 270, 280, 290, 300, 310];
-            dataDuracionSesion = [600, 650, 620, 670, 700, 750, 720, 770, 800, 850, 820, 870];
-            break;
-        case 'total':
-            labels = ['2020', '2021', '2022', '2023', '2024'];
-            dataDistanciaMaxima = [1000, 1100, 1050, 1150, 1200];
-            dataPesoMaximo = [500, 550, 525, 575, 600];
-            dataDuracionSesion = [3000, 3500, 3200, 3700, 4000];
-            break;
-    }
-
-    updateChart(chartDistanciaMaxima, labels, dataDistanciaMaxima);
-    updateChart(chartPesoMaximo, labels, dataPesoMaximo);
-    updateChart(chartDuracionSesion, labels, dataDuracionSesion);
+function updateChart(chart, labels, data) {
+    chart.data.labels = labels; // Actualiza las etiquetas del gráfico
+    chart.data.datasets[0].data = data; // Actualiza los datos del primer dataset
+    chart.update(); // Refresca el gráfico para mostrar los cambios
 }
-*/
+
+async function filterData(period) {
+    try {
+        const response = await fetch(`/api/sesiones?periodo=${period}`);
+        const data = await response.json();
+
+        // Verifica lo que recibes para asegurarte de que los valores están correctamente formateados
+        console.log(data);
+
+        // Si las fechas ya están formateadas y los valores están correctos, no se debe modificar nada
+        updateChart(chartDistanciaMaxima, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.kilometros));
+        updateChart(chartPesoMaximo, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.kg));
+        updateChart(chartDuracionSesion, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.tiempo));
+    } catch (error) {
+        console.error('Error al filtrar datos:', error);
+    }
+}
