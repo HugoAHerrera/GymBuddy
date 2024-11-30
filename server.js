@@ -127,6 +127,7 @@ app.get('/progreso', (req, res) => {
 app.get('/api/sesiones', async (req, res) => {
     try {
         const sesiones = await database.obtenerSesiones();
+        console.log(sesiones);
         res.json(sesiones);
     } catch (error) {
         console.error('Error al obtener sesiones', error);

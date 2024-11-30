@@ -1,4 +1,26 @@
-import Chart from 'chart.js/auto';
+
+function expandChart(chartId) {
+    const charts = document.querySelectorAll('.chart-section');
+    charts.forEach(chart => {
+        if (chart.id !== chartId) {
+            chart.style.height = "150px";
+        }
+    });
+
+    const selectedChart = document.getElementById(chartId);
+    if (selectedChart.style.height === "300px") {
+        selectedChart.style.height = "150px";
+    } else {
+        selectedChart.style.height = "300px";
+    }
+
+    // Redibujar el gráfico después de cambiar el tamaño
+    const chartCanvas = selectedChart.querySelector('canvas');
+    const chartInstance = Chart.getChart(chartCanvas);
+    if (chartInstance) {
+        chartInstance.resize();
+    }
+}
 
 // Función para obtener los datos desde el backend
 async function obtenerDatosSesiones() {
@@ -29,9 +51,8 @@ function transformarDatosParaGraficas(data) {
     const kg = [];
     const fechas = [];
 
-    // Iterar sobre los datos y extraer las propiedades necesarias para las gráficas
     data.forEach(sesion => {
-        tiempoEjecucion.push(sesion.tiempo);
+        tiempoEjecucion.push(sesion.tiempo); // Guardar en minutos
         repeticiones.push(sesion.repeticiones);
         sets.push(sesion.sets);
         kilometros.push(sesion.kilometros);
@@ -129,29 +150,6 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = 'perfil.html';
     });
 });
-
-function expandChart(chartId) {
-    const charts = document.querySelectorAll('.chart-section');
-    charts.forEach(chart => {
-        if (chart.id !== chartId) {
-            chart.style.height = "150px";
-        }
-    });
-
-    const selectedChart = document.getElementById(chartId);
-    if (selectedChart.style.height === "300px") {
-        selectedChart.style.height = "150px";
-    } else {
-        selectedChart.style.height = "300px";
-    }
-
-    // Redibujar el gráfico después de cambiar el tamaño
-    const chartCanvas = selectedChart.querySelector('canvas');
-    const chartInstance = Chart.getChart(chartCanvas);
-    if (chartInstance) {
-        chartInstance.resize();
-    }
-}
 
 
 
