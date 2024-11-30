@@ -14,12 +14,7 @@ function expandChart(chartId) {
         selectedChart.style.height = "300px";
     }
 
-    // Redibujar el gráfico después de cambiar el tamaño
-    const chartCanvas = selectedChart.querySelector('canvas');
-    const chartInstance = Chart.getChart(chartCanvas);
-    if (chartInstance) {
-        chartInstance.resize();
-    }
+
 }
 
 // Función para obtener los datos desde el backend

@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Progreso Fitness</title>
     <link rel="stylesheet" href="../CSS/progreso.css">
-
+    <script src="../JS/progreso.js"></script>
     <link rel="icon" href="../Imagenes/logo-inicio.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- CABECERA -->
@@ -53,15 +54,15 @@
             <div class="chart-section-container">
                 <div class="chart-section" id="distancia-maxima" onclick="expandChart('distancia-maxima')">
                     <h3>Distancia Maxima</h3>
-                    <canvas id="chart-distancia-maxima" width="400" height="200"></canvas>
+                    <canvas id="chart-distancia-maxima"></canvas>
                 </div>
                 <div class="chart-section" id="peso-maximo" onclick="expandChart('peso-maximo')">
                     <h3>Peso Maximo</h3>
-                    <canvas id="chart-peso-maximo" width="400" height="200"></canvas>
+                    <canvas id="chart-peso-maximo"></canvas>
                 </div>
                 <div class="chart-section" id="duracion-sesion" onclick="expandChart('duracion-sesion')">
                     <h3>Duración de Sesión</h3>
-                    <canvas id="chart-duracion-sesion" width="400" height="200"></canvas>
+                    <canvas id="chart-duracion-sesion"></canvas>
                 </div>
             </div>
         </div>
@@ -85,6 +86,5 @@
             <a>GymBuddy &copy; 2024</a>
         </p>
     </footer>
-    <script src="../JS/progreso.js"></script>
 </body>
 </html>
