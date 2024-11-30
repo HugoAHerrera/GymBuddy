@@ -56,7 +56,7 @@ async function obtenerEstadisticas() {
         document.getElementById('distancia-recorrida').innerText = distanciaRecorrida.toFixed(1); // Para un decimal
         document.getElementById('ultima-sesion').innerText = dayjs(ultimaSesion).format('DD-MM-YYYY');
 
-        console.log(sesionesCompletadas)
+        console.log(
         console.log(distanciaRecorrida)
         console.log(ultimaSesion)
     } catch (error) {
@@ -102,7 +102,6 @@ function transformarDatosParaGraficas(data) {
 function actualizarGraficas(sesiones) {
     const ctxDistanciaMaxima = document.getElementById('chart-distancia-maxima').getContext('2d');
     const ctxPesoMaximo = document.getElementById('chart-peso-maximo').getContext('2d');
-    const ctxDuracionSesion = document.getElementById('chart-duracion-sesion').getContext('2d');
 
     // Inicializa los gráficos y guárdalos en las variables globales
     chartDistanciaMaxima = new Chart(ctxDistanciaMaxima, {
@@ -163,26 +162,6 @@ function actualizarGraficas(sesiones) {
         }
     });
 
-    chartDuracionSesion = new Chart(ctxDuracionSesion, {
-        type: 'line',
-        data: {
-            labels: sesiones.fechas,
-            datasets: [{
-                label: 'Duración de Sesión (min)',
-                data: sesiones.tiempoEjecucion,
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1,
-                fill: false
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
 }
 
 
@@ -214,7 +193,6 @@ async function filterData(period) {
         // Si las fechas ya están formateadas y los valores están correctos, no se debe modificar nada
         updateChart(chartDistanciaMaxima, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.kilometros));
         updateChart(chartPesoMaximo, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.kg));
-        updateChart(chartDuracionSesion, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.tiempo));
     } catch (error) {
         console.error('Error al filtrar datos:', error);
     }
