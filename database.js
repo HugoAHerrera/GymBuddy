@@ -83,7 +83,7 @@ const databaseMethods = {
 
     obtenerSesiones: async () => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kilogramos, fecha FROM sesion';
+            const sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kg, fecha FROM sesion';
             connection.query(sql, (err, results) => {
                 if (err) return reject(err);
 
@@ -92,7 +92,7 @@ const databaseMethods = {
                     repeticiones: row.repeticiones,
                     sets: row.sets,
                     kilometros: row.kilometros,
-                    kilogramos: row.kilogramos,
+                    kg: row.kg,
                     fecha: row.fecha,
                 }));
 
