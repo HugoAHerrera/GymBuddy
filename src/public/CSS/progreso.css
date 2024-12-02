@@ -111,49 +111,44 @@ nav .logo img {
 /* CABECERA */
 
 /* Main content area */
-.progress-container {
+main {
     display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    background-color: #f4f4f4; /* Ensure the background matches the body */
+    gap: 20px;
+    align-items: flex-start;
+    box-sizing: border-box;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan cuando el espacio es limitado */
+}
+
+.progress-container {
+    flex: 3;
+    max-width: 75%;
+    min-width: 300px; /* Establecer un ancho mínimo para que no se haga demasiado pequeño en pantallas muy pequeñas */
 }
 
 .chart-section-container {
     display: flex;
     flex-direction: column;
-    width: 75%;
+    gap: 20px;
 }
 
 .chart-section {
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 10px;
-    width: 100%;
     padding: 15px;
-    margin-bottom: 20px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in;
     cursor: pointer;
-    height: 150px; /* Initial height */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.chart-section:hover {
-    background-color: #f0f0f0;
-}
-
-.chart-placeholder {
-    height: 100px;
-    background-color: #ccc;
+    height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .user-info {
-    width: 20%;
+    flex: 1;
+    max-width: 25%;
+    min-width: 200px; /* Añadir un ancho mínimo para asegurar que se vea bien */
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -180,31 +175,32 @@ nav .logo img {
     font-size: 1rem;
 }
 
-/* Botones de semana, mes, año */
+/* Contenedor de botones de semana, mes, año */
 .filter-buttons {
-    position: fixed;
-    top: 50%; /* Adjust as needed */
-    left: 20px; /* Adjust as needed */
     display: flex;
-    flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent background */
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Ensure the buttons are above other content */
+    justify-content: center; /* Centra los botones horizontalmente */
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente */
+    padding: 10px; /* Espacio alrededor de los botones */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    width: 100%; /* Los botones ocuparán todo el ancho disponible */
+    position: relative; /* Posición normal en el flujo del documento */
 }
 
+/* Estilo de los botones */
 .filter-buttons button {
     background-color: rgb(2, 126, 243);
     color: white;
     border: none;
-    padding: 10px 20px;
-    margin: 5px 0; /* Space between buttons */
-    border-radius: 5px;
+    padding: 10px 20px; /* Espaciado de los botones */
+    margin: 0 10px; /* Espacio entre botones */
+    border-radius: 8px;
+    font-size: 1.2rem; /* Tamaño de la fuente */
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
+/* Efecto al pasar el ratón */
 .filter-buttons button:hover {
     background-color: rgb(0, 104, 202);
 }

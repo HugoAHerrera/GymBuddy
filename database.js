@@ -80,6 +80,75 @@ const databaseMethods = {
             });
         });
     },
+
+    obtenerSesiones: async (periodo = null) => {
+        return new Promise((resolve, reject) => {
+            let sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kg, fecha FROM sesion';
+            let params = [];
+
+            // Filtrar por periodo si se especifica
+            if (periodo) {
+                switch (periodo) {
+                    case 'semana':
+                        // Filtrar por la semana actual (de lunes a domingo)
+                        sql += ' WHERE fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE())) DAY AND fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY';
+                        break;
+                    case 'mes':
+                        // Filtrar por el mes actual (del primer día al último día del mes)
+                        sql += ' WHERE MONTH(fecha) = MONTH(CURDATE()) AND YEAR(fecha) = YEAR(CURDATE())';
+                        break;
+                    case 'año':
+                        // Filtrar por el año actual
+                        sql += ' WHERE YEAR(fecha) = YEAR(CURDATE())';
+                        break;
+                    case 'total':
+                        // Seleccionar todos los registros sin filtro
+                        sql += ' WHERE fecha IS NOT NULL';
+                        break;
+                    default:
+                        return reject(new Error('Periodo no válido'));
+                }
+            }
+
+            // Agregar orden por fecha
+            sql += ' ORDER BY fecha';
+
+            // Ejecutar la consulta
+            connection.query(sql, params, (err, results) => {
+                if (err) return reject(err);
+
+                const sesiones = results.map(row => ({
+                    tiempo: row.tiempo_ejecucion,
+                    repeticiones: row.repeticiones,
+                    sets: row.sets,
+                    kilometros: row.kilometros,
+                    kg: row.kg,
+                    fecha: row.fecha,
+                }));
+
+                resolve(sesiones);
+            });
+        });
+    },
+
+    obtenerEstadisticasSesiones: async () => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para obtener las estadísticas
+            const sql = 'SELECT COUNT(*) AS sesiones_completadas, SUM(kilometros) AS distancia_recorrida, MAX(fecha) AS ultima_sesion FROM sesion';
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+
+                const estadisticas = {
+                    sesionesCompletadas: results[0].sesiones_completadas || 0,
+                    distanciaRecorrida: parseFloat(results[0].distancia_recorrida || 0),
+                    ultimaSesion: results[0].ultima_sesion || 'Nunca',
+                };
+                resolve(estadisticas);
+            });
+        });
+    },
+
+
 };
 
 module.exports = databaseMethods;
