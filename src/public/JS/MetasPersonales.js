@@ -1,147 +1,141 @@
 var block = 0;
+var block_2 = 1;
+var cerrojo = 1;
 document.addEventListener("DOMContentLoaded", function () {
     // Añadir una meta
-    const addMetaButton = document.querySelector(".boton-annadir-meta");
-    addMetaButton.addEventListener("click", () => {
+    document.querySelector(".boton-annadir-meta").addEventListener("click", () => {
         crearNuevaMeta();
         aumentarProgresoConTiempo();
     });
     // Botón para borrar metas
-    const deleteMetaButton = document.querySelector(".boton-borrar-meta");
-    deleteMetaButton.addEventListener("click", borrarMetas);
+    document.querySelector(".boton-borrar-meta").addEventListener("click", OpcionBorrarMetas);
+    document.querySelector(".oculto").addEventListener("click", CancelarBorrarMetas);
 });
 
 // funcion para crear el el objeto de la meta
 function crearNuevaMeta() {
-    const metasContainer = document.querySelector(".div-metas");
+    if (block_2 === 1) {
+        const metasContainer = document.querySelector(".div-metas");
 
-    // Crear contenedor de la meta
-    const nuevaMeta = document.createElement("div");
-    nuevaMeta.classList.add("task");
-    nuevaMeta.id = `Meta ${metasContainer.children.length + 1}`;
+        // Crear contenedor de la meta
+        const nuevaMeta = document.createElement("div");
+        nuevaMeta.classList.add("task");
+        nuevaMeta.id = `Meta ${metasContainer.children.length + 1}`;
 
-    // Crear imagen de la meta
-    const imagenMeta = document.createElement("img");
-    imagenMeta.src = "../Imagenes/logo.png";
-    imagenMeta.alt = "Logo GymBuddy";
-    imagenMeta.classList.add("imagen_meta");
+        // Crear botón de borrar
+        const botonBorrar = document.createElement("span");
+        botonBorrar.classList.add("borrar-meta-indiv");
+        const borrar = document.createElement("div");
+        borrar.classList.add("borrar-X");
 
-    // Crear contenedor de título y progreso
-    const goalContainer = document.createElement("div");
-    goalContainer.classList.add("goal-container");
+        botonBorrar.appendChild(borrar);
+        botonBorrar.addEventListener("click", () => {
+            metasContainer.removeChild(nuevaMeta);
+        });
 
-    // Crear título de la meta
-    const tituloMeta = document.createElement("h1");
-    tituloMeta.classList.add("goal-title");
-    tituloMeta.textContent = `Meta ${metasContainer.children.length + 1}`;
+        // Crear imagen de la meta
+        const imagenMeta = document.createElement("img");
+        imagenMeta.src = "../Imagenes/logo.png";
+        imagenMeta.alt = "Logo GymBuddy";
+        imagenMeta.classList.add("imagen_meta");
 
-    // Crear contenedor de progreso
-    const progressContainer = document.createElement("div");
-    progressContainer.classList.add("progress-container");
+        // Crear contenedor de título y progreso
+        const goalContainer = document.createElement("div");
+        goalContainer.classList.add("goal-container");
 
-    // Creamos la descripcion de la meta
-    const result = GoalDescription(progressContainer);
+        // Crear título de la meta
+        const tituloMeta = document.createElement("h1");
+        tituloMeta.classList.add("goal-title");
+        tituloMeta.textContent = `Meta ${metasContainer.children.length + 1}`;
 
-    if(result !== 0) {
-        // Crear progreso de la meta
-        const barContainer = document.createElement("span");
-        const textoProgresoMeta = document.createTextNode(" Progreso:");
-        const progresoMeta = document.createElement("progress");
-        progresoMeta.id = `Barra ${metasContainer.children.length + 1}`;
-        progresoMeta.max = 100;
-        progresoMeta.value = 98; //Math.floor(Math.random() * 101); // 0
-        progresoMeta.style.marginBottom = "15px";
+        // Crear contenedor de progreso
+        const progressContainer = document.createElement("div");
+        progressContainer.classList.add("progress-container");
 
-        barContainer.appendChild(textoProgresoMeta);
-        barContainer.appendChild(document.createElement("br"));
-        barContainer.appendChild(progresoMeta);
+        // Creamos la descripcion de la meta
+        const result = GoalDescription(progressContainer);
 
-        // Crear recompensa de la meta
-        const recompensaContainer = document.createElement("span");
-        var KC = KCAmount();
-        const recom = document.createTextNode(` Recompensa: ${KC} KC`); // KCAmount()
-        const imagenKC = document.createElement("img");
-        imagenKC.src = "../Imagenes/moneda_dorada.png";
-        imagenKC.title = "KC";
-        imagenKC.style.marginLeft = "5px";
-        imagenKC.style.width = "20px";
-        imagenKC.style.height = "20px";
-        imagenKC.style.filter = "drop-shadow(1px 1px 1px rgba(0, 0, 0, 1))";
-        recompensaContainer.style.display = "flex";
-        recompensaContainer.style.justifyContent = "center";
+        if (result !== 0) {
+            // Crear progreso de la meta
+            const barContainer = document.createElement("span");
+            const textoProgresoMeta = document.createTextNode(" Progreso:");
+            const progresoMeta = document.createElement("progress");
+            progresoMeta.id = `Barra ${metasContainer.children.length + 1}`;
+            progresoMeta.classList.add("BarraDeProgreso");
+            progresoMeta.max = 100;
+            progresoMeta.value = Math.floor(Math.random() * 101); // 0
+            progresoMeta.style.marginBottom = "15px";
 
-        recompensaContainer.appendChild(recom);
-        recompensaContainer.appendChild(imagenKC);
+            barContainer.appendChild(textoProgresoMeta);
+            barContainer.appendChild(document.createElement("br"));
+            barContainer.appendChild(progresoMeta);
 
-        // Añadir los elementos al contenedor de progreso;
-        progressContainer.appendChild(barContainer);
-        progressContainer.appendChild(recompensaContainer);
+            // Crear recompensa de la meta
+            const recompensaContainer = document.createElement("span");
+            var KC = KCAmount();
+            const recom = document.createTextNode(` Recompensa: ${KC} KC`); // KCAmount()
+            const imagenKC = document.createElement("img");
+            imagenKC.src = "../Imagenes/moneda_dorada.png";
+            imagenKC.title = "KC";
+            imagenKC.style.marginLeft = "5px";
+            imagenKC.style.width = "20px";
+            imagenKC.style.height = "20px";
+            imagenKC.style.filter = "drop-shadow(1px 1px 1px rgba(0, 0, 0, 1))";
+            recompensaContainer.style.display = "flex";
+            recompensaContainer.style.justifyContent = "center";
+            recompensaContainer.classList.add("Recompensas");
 
-        // Añadir título y progreso al contenedor de la meta
-        goalContainer.appendChild(tituloMeta);
-        goalContainer.appendChild(progressContainer);
+            recompensaContainer.appendChild(recom);
+            recompensaContainer.appendChild(imagenKC);
 
-        // Añadir imagen y contenedor al div principal de la meta
-        nuevaMeta.appendChild(imagenMeta);
-        nuevaMeta.appendChild(goalContainer);
+            // Añadir los elementos al contenedor de progreso;
+            progressContainer.appendChild(barContainer);
+            progressContainer.appendChild(recompensaContainer);
 
-        // Añadir la nueva meta al contenedor de metas
-        metasContainer.appendChild(nuevaMeta);
-        RequestReward(KC);
+            // Añadir título y progreso al contenedor de la meta
+            goalContainer.appendChild(tituloMeta);
+            goalContainer.appendChild(progressContainer);
+
+            // Añadir imagen y contenedor al div principal de la meta
+            nuevaMeta.appendChild(botonBorrar);
+            nuevaMeta.appendChild(imagenMeta);
+            nuevaMeta.appendChild(goalContainer);
+
+            // Añadir la nueva meta al contenedor de metas
+            metasContainer.appendChild(nuevaMeta);
+            RequestReward(KC);
+        }
     }
 }
 
 // Función para borrar metas
-function borrarMetas() {
-    const metasContainer = document.querySelector(".div-metas");
-    const metas = document.querySelectorAll(".task");
-
-    if (metas.length === 0) {
-        alert("No hay metas para borrar.");
-        return;
-    }
-
-    const opcion = prompt(
-        "¿Qué deseas hacer?\n1. Borrar todas las metas.\n2. Seleccionar metas específicas para borrar.\n\nEscribe el número de tu elección:"
-    );
-
-    if (opcion === "1") {
-        // Borrar todas las metas
-        if (confirm("¿Estás seguro de que deseas borrar todas las metas?")) {
-            metasContainer.innerHTML = ""; // Elimina todas las metas
-            alert("Todas las metas han sido eliminadas.");
+function OpcionBorrarMetas() {
+    cerrojo = 0;
+    block_2 = 0;
+    const cancel = document.querySelector(".oculto");
+    cancel.classList.remove("oculto");
+    cancel.classList.add("boton-cancelar-borrar");
+    document.querySelectorAll('.task').forEach((container) => {
+        // Obtener el ID de la barra de progreso
+        const progressBar = container.querySelector(".BarraDeProgreso");
+        const borrar = container.querySelector(".borrar-X");
+        if (progressBar.value !== 100) {
+            borrar.style.display = "block";
         }
-    } else if (opcion === "2") {
-        // Seleccionar metas específicas para borrar
-        let metasIds = Array.from(metas).map((meta) => meta.id).join(", ");
-        let idsParaBorrar = prompt(
-            `Escribe los IDs de las metas que deseas borrar, separados por comas.\nMetas disponibles: ${metasIds}`
-        );
+    });
+}
 
-        if (idsParaBorrar) {
-            idsParaBorrar = idsParaBorrar
-                .split(",")
-                .map((id) => id.trim().toLowerCase()); // Convertir a minúsculas
-
-            let metasBorradas = 0;
-            metas.forEach((meta) => {
-                if (idsParaBorrar.includes(meta.id.toLowerCase())) { // Comparar en minúsculas
-                    meta.remove();
-                    metasBorradas++;
-                }
-            });
-
-            if (metasBorradas > 0) {
-                alert(`${metasBorradas} meta(s) han sido eliminadas.`);
-            } else {
-                alert("No se encontraron metas con los IDs proporcionados.");
-            }
-        } else {
-            alert("No se ha seleccionado ninguna meta para borrar.");
-        }
-    } else {
-        alert("Opción no válida. Intenta nuevamente.");
-    }
+function CancelarBorrarMetas() {
+    cerrojo = 1;
+    block_2 = 1;
+    const cancel = document.querySelector(".boton-cancelar-borrar");
+    cancel.classList.remove("boton-cancelar-borrar");
+    cancel.classList.add("oculto");
+    document.querySelectorAll('.task').forEach((container) => {
+        // Obtener el ID de la barra de progreso
+        const borrar = container.querySelector(".borrar-X");
+        borrar.style.display = "none";
+    });
 }
 
 // Crea la descripcion de la meta - puesta por el user
@@ -182,14 +176,16 @@ function RequestReward(KC) {
         if (!container.dataset.eventAdded) {
             container.addEventListener('click', () => {
                 // Obtener el ID de la barra de progreso
-                const progressBar = container.querySelector(".progress-container span progress");
+                const progressBar = container.querySelector(".BarraDeProgreso");
                 if (progressBar.value === 100) {
                     if(block === 0) {
                         AnimacionMonedas(container);
-                        QuitarMeta(container);
+                        EfectoFadeMeta(container);
                     }
                 } else {
-                    alert(`El progreso actual de la meta está en: ${progressBar.value}%`)
+                    if(cerrojo === 1) {
+                        alert(`El progreso actual de la meta está en: ${progressBar.value}%`)
+                    }
                 }
             });
             // Marca este contenedor como procesado para evitar duplicados
@@ -198,10 +194,10 @@ function RequestReward(KC) {
     });
 }
 
-// funcion de prueba
+// funcion de prueba para evaluar el progreso de una meta
 function aumentarProgresoConTiempo() {
     // Seleccionamos todas las barras de progreso
-    const barrasProgreso = document.querySelectorAll(".progress-container progress");
+    const barrasProgreso = document.querySelectorAll(".BarraDeProgreso");
 
     // Iteramos sobre cada barra de progreso
     barrasProgreso.forEach((barra) => {
@@ -220,10 +216,9 @@ function aumentarProgresoConTiempo() {
     comprobarEstadoProgreso();
 }
 
+// funcion para comprobar el estado de la barra de progreso
 function comprobarEstadoProgreso() {
-    const barrasProgreso = document.querySelectorAll(".progress-container progress");
-
-    barrasProgreso.forEach((barra) => {
+    document.querySelectorAll(".BarraDeProgreso").forEach((barra) => {
         // Observar cambios en el progreso de cada barra
         const intervalo = setInterval(() => {
             const metaContainer = barra.closest(".task");
@@ -254,12 +249,14 @@ function comprobarEstadoProgreso() {
     });
 }
 
+// funcion para establecer una recompensa acorde con la dificultad de la meta
 function KCAmount() {
     // calcular la cantidad de KC propicia segun la dificultad de la meta
     return  Math.floor(Math.random() * 15) + 1; //0;
 }
 
-function QuitarMeta(meta) {
+// EFECTO FADE AL QUITAR LA META
+function EfectoFadeMeta(meta) {
     // Añadir clase para el efecto de fade-out
     meta.style.transition = "opacity 1s ease, visibility 1s ease";
     meta.style.opacity = "0";
