@@ -183,8 +183,32 @@ const databaseMethods = {
                 resolve(results[0]);
             });*/
         });
-    }
-
+    },
+    
+    // GUÍA DE EJERCICIOS
+    obtenerDescripcionEjercicios: async () => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM ejercicios';
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+    
+                const descripciones = results.map(row => ({
+                    id: row.id_ejercicio,
+                    nombre_ejercicio: row.nombre_ejercicio,
+                    dificultad: row.dificultad,
+                    imagen: row.imagen,
+                    equipo_necesario: row.equipo_necesario,
+                    objetivo: row.objetivo,
+                    preparacion: row.preparacion,
+                    ejecucion: row.ejecucion,
+                    consejos_clave: row.consejos_clave,
+                    zona_principal: row.zona_principal
+                }));
+                resolve(descripciones);
+            });
+        });
+    },
+    
 };
 
 module.exports = databaseMethods;
