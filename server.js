@@ -123,3 +123,43 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
+app.get('/progreso', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
+});
+
+app.get('/api/sesiones', async (req, res) => {
+    const { periodo } = req.query; // Obtener el parámetro 'periodo' del query string
+
+    try {
+        // Pasar el periodo como argumento a la función obtenerSesiones
+        const sesiones = await database.obtenerSesiones(periodo);
+
+        console.log(sesiones); // Log para verificar las sesiones obtenidas
+        res.json(sesiones);
+    } catch (error) {
+        console.error('Error al obtener sesiones:', error);
+
+        // Devolver un mensaje de error más específico según el caso
+        if (error.message === 'Periodo no válido') {
+            res.status(400).json({ error: 'El periodo especificado no es válido' });
+        } else {
+            res.status(500).json({ error: 'Error interno del servidor' });
+        }
+    }
+});
+
+app.get('/api/estadisticas/', async (req, res) => {
+    try {
+        const estadisticas = await database.obtenerEstadisticasSesiones();
+        console.log(estadisticas);
+        res.json(estadisticas);
+    } catch (error) {
+        console.error('Error al obtener estadisticas', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+app.get('/Objetivos', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
+});

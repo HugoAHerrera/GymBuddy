@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página de Progreso Fitness</title>
     <link rel="stylesheet" href="../CSS/progreso.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../JS/progreso.js"></script>
     <link rel="icon" href="../Imagenes/logo-inicio.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
 </head>
 <body>
     <!-- CABECERA -->
@@ -36,18 +38,14 @@
     </header>
 
     <main>
+        <!-- Botones de filtro debajo de la información del usuario -->
         <div class="filter-buttons">
             <button onclick="filterData('semana')">Semana</button>
             <button onclick="filterData('mes')">Mes</button>
             <button onclick="filterData('año')">Año</button>
             <button onclick="filterData('total')">Total</button>
         </div>
-        <div class="progress-container">
-            <!-- Existing chart sections -->
-        </div>
-    </main>
 
-    <main>
         <div class="progress-container">
             <!-- Contenedor de las gráficas en formato vertical -->
             <div class="chart-section-container">
@@ -55,40 +53,25 @@
                     <h3>Distancia Maxima</h3>
                     <canvas id="chart-distancia-maxima"></canvas>
                 </div>
-                <div class="chart-section" id="pr" onclick="expandChart('pr')">
-                    <h3>Record Personal (PR)</h3>
-                    <canvas id="chart-pr"></canvas>
-                </div>
-                <div class="chart-section" id="calorias-quemadas" onclick="expandChart('calorias-quemadas')">
-                    <h3>Calorias Quemadas</h3>
-                    <canvas id="chart-calorias-quemadas"></canvas>
-                </div>
-                <div class="chart-section" id="duracion-sesion" onclick="expandChart('duracion-sesion')">
-                    <h3>Duración de Sesión</h3>
-                    <canvas id="chart-duracion-sesion"></canvas>
-                </div>
-                <div class="chart-section" id="peso-corporal" onclick="expandChart('peso-corporal')">
-                    <h3>Peso Corporal</h3>
-                    <canvas id="chart-peso-corporal"></canvas>
-                </div>
-                <div class="chart-section" id="frecuencia-cardiaca" onclick="expandChart('frecuencia-cardiaca')">
-                    <h3>Frecuencia Cardiaca</h3>
-                    <canvas id="chart-frecuencia-cardiaca"></canvas>
-                </div>
-            </div>
-
-            <!-- Información del usuario en la parte derecha -->
-            <div class="user-info">
-                <img src="../Imagenes/avatar.jpg" alt="Avatar del usuario" class="user-avatar">
-                <div class="user-stats">
-                    <p><strong>Sesiones Completadas:</strong> 45</p>
-                    <p><strong>Distancia recorrida:</strong> 120 km</p>
-                    <p><strong>Calorías quemadas:</strong> 3000 kcal</p>
-                    <p><strong>Última sesión:</strong> 12/12/2020</p>
+                <div class="chart-section" id="peso-maximo" onclick="expandChart('peso-maximo')">
+                    <h3>Peso Maximo</h3>
+                    <canvas id="chart-peso-maximo"></canvas>
                 </div>
             </div>
         </div>
+
+        <!-- Información del usuario en la parte derecha -->
+        <div class="user-info">
+            <img src="../Imagenes/avatar.jpg" alt="Avatar del usuario" class="user-avatar">
+            <div class="user-stats">
+                <p><strong>Sesiones Completadas:</strong> <span id="sesiones-completadas"></span></p>
+                <p><strong>Distancia recorrida:</strong> <span id="distancia-recorrida"></span> km</p>
+                <p><strong>Última sesión:</strong> <span id="ultima-sesion"></span></p>
+            </div>
+        </div>
+
     </main>
+
 
     <footer>
         <p>
@@ -98,7 +81,5 @@
             <a>GymBuddy &copy; 2024</a>
         </p>
     </footer>
-
-    <script src="../JS/progreso.js"></script>
 </body>
 </html>
