@@ -148,6 +148,42 @@ const databaseMethods = {
         });
     },
 
+    // Metodos para la pagina de Objetivos -- meta al completo (progreso, descripcion, recompensa...)
+    
+    /*
+        FALTA:
+            - AÑADIR TABLAS EN LA BBDD
+     */
+
+    guardarObjetivos: async () => {
+        return new Promise((resolve, reject) => {
+            /*const sql = 'SELECT * FROM usuario WHERE correo = ?';
+            connection.query(sql, [email], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]);
+            });*/
+        });
+    },
+
+    obtenerObjetivos: async () => {
+        return new Promise((resolve, reject) => {
+            /*const sql = 'SELECT * FROM usuario WHERE correo = ?';
+            connection.query(sql, [email], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]);
+            });*/
+        });
+    },
+
+    borrarObjetivos: async () => {
+        return new Promise((resolve, reject) => {
+            /*const sql = 'SELECT * FROM usuario WHERE correo = ?';
+            connection.query(sql, [email], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]);
+            });*/
+        });
+    }
 
 };
 
