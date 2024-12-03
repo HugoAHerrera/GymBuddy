@@ -209,6 +209,22 @@ const databaseMethods = {
         });
     },
     
+    // Función para añadir o actualizar la imagen de un ejercicio dado un id_ejercicio manual
+    añadirFotoEjercicio: async (idEjercicio, urlImagen) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
+            const sql = 'UPDATE ejercicios SET imagen = ? WHERE id_ejercicio = ?';
+
+            // Ejecutar la consulta SQL con los parámetros
+            connection.query(sql, [urlImagen, idEjercicio], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, lo rechazamos
+                }
+                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
+            });
+        });
+    }
+    
 };
 
 module.exports = databaseMethods;

@@ -156,6 +156,17 @@ app.get('/api/estadisticas/', async (req, res) => {
     }
 });
 
+app.get('/api/guiaejercicios/', async(req, res => {
+    try{
+        const descripcionEjercicios = database.obtenerDescripcionEjercicios();
+        console.log(descripcionEjercicios)
+        res.json(descripcionEjercicios);
+    }catch (error) {
+        console.error('Error al obtener la descripcion de los ejercicios', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}))
+
 app.get('/Desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
 });

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleccionar Imagen y Convertir a Blob</title>
+</head>
+<body>
+    <h1>Selecciona una imagen desde tu dispositivo</h1>
+    <!-- Input para seleccionar archivo de imagen -->
+    <input type="file" id="inputImagen" accept="image/*">
+    <br>
+    <!-- Vista previa de la imagen seleccionada -->
+    <img id="imagenVistaPrevia" src="" alt="Vista previa de la imagen" style="max-width: 300px; margin-top: 20px;">
+    <br>
+    <!-- Botón para convertir la imagen seleccionada a Blob -->
+    <button id="convertirBlob">Convertir a Blob</button>
+    
+    <script>
+        // Obtener los elementos del DOM
+        const inputImagen = document.getElementById('inputImagen');
+        const imagenVistaPrevia = document.getElementById('imagenVistaPrevia');
+        const convertirBlobButton = document.getElementById('convertirBlob');
+
+        // Función para mostrar la vista previa de la imagen seleccionada
+        inputImagen.addEventListener('change', (e) => {
+            const archivo = e.target.files[0];
+            if (archivo) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    imagenVistaPrevia.src = event.target.result; // Vista previa de la imagen
+                };
+                reader.readAsDataURL(archivo); // Cargar la imagen como Data URL para la vista previa
+            }
+        });
+
+        // Función para convertir la imagen seleccionada a un Blob
+        convertirBlobButton.addEventListener('click', () => {
+            const archivo = inputImagen.files[0];
+            if (archivo) {
+                // Crear un Blob a partir del archivo
+                const imagenBlob = new Blob([archivo], { type: archivo.type });
+                console.log('imagen',imagenBlob); // Imprimir el Blob en consola
+            } else {
+                alert('Por favor, selecciona una imagen primero.');
+            }
+        });
+    </script>
+</body>
+</html>
