@@ -101,6 +101,10 @@ app.get('/inicio', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
 });
 
+app.get('/perfil', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'))
+})
+
 app.get('/rutina', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
 });
@@ -156,7 +160,7 @@ app.get('/api/estadisticas/', async (req, res) => {
     }
 });
 
-app.get('/api/guiaejercicios/', async(req, res => {
+/*app.get('/api/guiaejercicios/', async(req, res => {
     try{
         const descripcionEjercicios = database.obtenerDescripcionEjercicios();
         console.log(descripcionEjercicios)
@@ -165,7 +169,8 @@ app.get('/api/guiaejercicios/', async(req, res => {
         console.error('Error al obtener la descripcion de los ejercicios', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
-}))
+}))*/
+
 
 app.get('/Desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
