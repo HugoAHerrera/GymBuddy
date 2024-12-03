@@ -211,7 +211,6 @@ nav .logo img {
     width: 100%;
     margin-bottom: 10px;
     position: relative;
-    border: 2px solid black;
 }
 
 .borrar-X {
@@ -220,7 +219,7 @@ nav .logo img {
     top: -130%;
     left: 110%;
     transform: translateX(-50%) scale(1.1);
-    width: 15%;
+    width: 20%;
     height: 100%;
     border-radius: 50%;
     background-image: url("https://ayudawp.com/wp-content/uploads/2018/04/borrar-plugins-wordpress.png");

@@ -156,6 +156,6 @@ app.get('/api/estadisticas/', async (req, res) => {
     }
 });
 
-app.get('/Objetivos', (req, res) => {
+app.get('/Desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
 });
