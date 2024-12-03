@@ -155,3 +155,7 @@ app.get('/api/estadisticas/', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
+app.get('/Objetivos', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
+});
