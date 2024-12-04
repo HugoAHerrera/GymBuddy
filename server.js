@@ -5,8 +5,7 @@ require('dotenv').config();
 const database = require('./database');
 const { encriptarContraseña, compararContraseña } = require('./encryptor');
 /* PARA SUBIR IMAGEN A BBDD. 
-SI LO QUITAS = MUERES
-npm install multer
+SI LO = MORIR
 const multer = require('multer');
 const upload = multer(); // Configuración básica para manejar multipart/form-data
 */
@@ -106,17 +105,12 @@ app.get('/inicio', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
 });
 
-app.get('/perfil', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'))
-})
-
-/* PARA SUBIR IMAGEN A BBDD. 
-SI LO QUITAS = MUERES
-app.get('/', (req, res) => {
+/*
+app.get('/rutina', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/blob.html'));
 });
 
-app.post('/api/', upload.single('imagen'), async (req, res) => {
+app.post('/api/rutinas', upload.single('imagen'), async (req, res) => {
     const { idEjercicio } = req.body; // Recibe el ID del ejercicio del formulario
     const imagen = req.file.buffer; // Obtiene el archivo como Buffer
 
@@ -157,6 +151,11 @@ app.listen(PORT, async () => {
 app.get('/progreso', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
 });
+
+
+app.get('/perfil', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'))
+})
 
 app.get('/api/sesiones', async (req, res) => {
     const { periodo } = req.query; // Obtener el parámetro 'periodo' del query string

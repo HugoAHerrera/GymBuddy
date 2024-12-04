@@ -223,6 +223,22 @@ const databaseMethods = {
                 resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
             });
         });
+    },
+
+    // PERFIL
+    añadirFotoPerfil: async (idEjercicio, blob) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
+            const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
+            
+            // Ejecutar la consulta SQL con los parámetros
+            connection.query(sql, [blob, idEjercicio], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, lo rechazamos
+                }
+                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
+            });
+        });
     }
 };
 
