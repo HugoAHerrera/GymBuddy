@@ -196,7 +196,6 @@ app.post('/api/perfil', async (req, res) => {
 });
 
 app.get('/progreso', (req, res) => {
-    print('id:',)
     res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
 });
 
