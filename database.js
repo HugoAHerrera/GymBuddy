@@ -226,6 +226,21 @@ const databaseMethods = {
     },
 
     // PERFIL
+    cambiarNombreUsuario: async (idUsuario, nuevoNombre) => {
+        return new Promise((resolve, reject) => {
+            // Asegúrate de que la columna a actualizar sea 'nombre_usuario' y que el valor 'nuevoNombre' se pase correctamente.
+            const sql = 'UPDATE usuario SET nombre_usuario = ? WHERE id_usuario = ?';
+            
+            connection.query(sql, [nuevoNombre, idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err); // Rechaza la promesa si ocurre un error.
+                }
+                resolve(results); // Resuelve la promesa con los resultados si no hay error.
+            });
+        });
+    },
+    
+
     obtenerDescripcionUsuario: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = 'SELECT * FROM usuario WHERE id = ?';

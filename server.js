@@ -175,13 +175,38 @@ app.get('/perfil', (req, res) => {
     if (!req.session.id_usuario) {
         return res.status(400).send('ID de usuario no proporcionado');
     }
-    
     console.log('Perfil:',req.session.id_usuario)
-    // Sirve el archivo HTML y pasa el id_usuario a través de una etiqueta <script>
     res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
 });
 
-app.post('/api/perfil', async (req, res) => {
+
+app.post('/api/cambiarNombreUsuario', async (req, res) => {
+    try {
+        // Obtenemos el nuevo nombre de usuario del cuerpo de la solicitud
+        const { nombre_usuario } = req.body;
+        console.log("nombre:",nombre_usuario)
+
+        // Verificamos si se recibió el nuevo nombre de usuario
+        if (!nombre_usuario) {
+            return res.status(400).json({ error: 'El nombre de usuario es obligatorio.' });
+        }
+
+        // Aquí llamamos a una función ficticia que actualizaría el nombre en la base de datos
+        // La función `cambiarNombreUsuario` debe retornar el nuevo nombre actualizado
+        const nuevoNombreUsuario = await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
+
+        // Respondemos con el nuevo nombre de usuario
+        res.json({
+            message: 'Perfil: El nombre se ha cambiado a ',
+            nuevoNombreUsuario: nuevoNombreUsuario
+        });
+    } catch (error) {
+        console.error('Error al cambiar el nombre de usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+app.post('/api/descripcion', async (req, res) => {
     const { idUsuario } = req.body; // Recibe el ID del usuario del formulario
     
     try {
