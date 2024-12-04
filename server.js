@@ -4,7 +4,12 @@ const path = require('path');
 require('dotenv').config();
 const database = require('./database');
 const { encriptarContraseña, compararContraseña } = require('./encryptor');
-
+/* PARA SUBIR IMAGEN A BBDD. 
+SI LO QUITAS = MUERES
+npm install multer
+const multer = require('multer');
+const upload = multer(); // Configuración básica para manejar multipart/form-data
+*/
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'src/public')));
@@ -105,6 +110,28 @@ app.get('/perfil', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'))
 })
 
+/* PARA SUBIR IMAGEN A BBDD. 
+SI LO QUITAS = MUERES
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/blob.html'));
+});
+
+app.post('/api/', upload.single('imagen'), async (req, res) => {
+    const { idEjercicio } = req.body; // Recibe el ID del ejercicio del formulario
+    const imagen = req.file.buffer; // Obtiene el archivo como Buffer
+
+    try {
+        // Llama a la función para guardar la imagen
+        const imagen_añadida = await database.añadirFotoEjercicio(idEjercicio, imagen);
+        console.log('Imagen añadida correctamente');
+        res.json({ message: 'Imagen añadida correctamente', imagen_añadida });
+    } catch (error) {
+        console.error('Error al añadir imagen:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+*/
+
 app.get('/rutina', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
 });
@@ -118,6 +145,9 @@ app.get('/api/rutinas', async (req, res) => {
       res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
