@@ -1,11 +1,16 @@
 document.getElementById("guardar-cambios").addEventListener("click", function () {
     const nuevoNombreUsuario = document.getElementById("nombre-usuario").value;
     const nuevoCorreoUsuario = document.getElementById("email-usuario").value;
+    const imagen = document.getElementById("inputImagen").files[0]; // Obtener el archivo de imagen
+
+    const formData = new FormData();
+    formData.append("nombre_usuario", nuevoNombreUsuario);
+    formData.append("correo_usuario", nuevoCorreoUsuario);
+    formData.append("imagen", imagen); // Agregar la imagen al FormData
 
     fetch('/api/cambiarNombreUsuario', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre_usuario: nuevoNombreUsuario, correo_usuario: nuevoCorreoUsuario }),
+        body: formData, // Usar formData en lugar de JSON.stringify
     })
         .then(response => {
             if (!response.ok) {
@@ -33,7 +38,6 @@ document.getElementById("guardar-cambios").addEventListener("click", function ()
         });
 });
 
-
 document.addEventListener('DOMContentLoaded', function () {
     // Hacemos una solicitud al servidor para obtener los datos del usuario
     fetch('/api/obtenerDatosUsuario')
@@ -47,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error al cargar los datos del usuario:', error);
         });
 });
+
 
 
 // Cargar el header y el footer con fetch

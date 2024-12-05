@@ -26,29 +26,28 @@
                 <div class="perfil-info">
                     <img src="../Imagenes/avatar.jpg" alt="Foto" class="perfil-foto" id="imagen-mostrada">
                     <div class="perfil-detalles">
-                        
+            
                         <div class="perfil-campo">
                             <p><strong>Nombre de usuario:</strong> <span id="nombre-usuario-mostrado"></span></p>
                             <input type="text" id="nombre-usuario" placeholder="Nombre de usuario">
                         </div>
-                                               
-                        
+            
                         <div class="perfil-campo">
                             <p><strong>Mail asociado:</strong> <span id="email-usuario-mostrado"></span></p>
                             <input type="email" id="email-usuario" placeholder="Mail">
                         </div>
-                        
+            
                         <div class="perfil-campo">
-                            <p><strong>Cambiar imagen:</strong></p>
-                            <input type="file" id="imagen-usuario">
+                            <label for="inputImagen">Cambiar imagen:</label>
+                            <input type="file" id="inputImagen" name="imagen" accept="image/*">
                         </div>
-                         
+            
                         <button id="guardar-cambios" class="guardar-btn">Guardar Cambios</button>
-                         
+            
                         <p id="mensaje-confirmacion" class="mensaje-confirmacion"></p>
                     </div>
                 </div>
-                
+            </div>
                 
                 <div class="actividad-section">
                     <h2>Tu Actividad:</h2>
@@ -75,41 +74,14 @@
                 
                         <div class="actividad-item">
                             <h3>Progreso semanal:</h3>
-                            <p>Has aumentado tu tiempo de uso un 20% en comparación a la semana pasada.</p>
-                        </div>
-                        <div class="actividad-item">
-                            <h3>Objetivos de actividad alcanzados:</h3>
-                            <p>80% de tus objetivos semanales completados.</p>
+                            <div class="actividad-progreso">
+                                <div class="actividad-barra" style="width: 70%;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="amigos-section">
-                    <h2>Amigos:</h2>
-                    <div class="amigos-info">
-                        7 amigos, 0 conectados
-                    </div>
-                </div>
-            </div>
-
-            <div id="estadísticasDeportivas" class="section">
-                <h2>Estadísticas Deportivas:</h2>
-                <div class="estadisticas-info">
-                    <p>Aún no hay configuraciones disponibles para las estadísticas deportivas.</p>
-                </div>
-            </div>
         </section>
     </main>
-
-    <footer>
-        <p>
-            <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> | 
-            <a href="terminosCondiciones.html" class="footer-enlace">Cookies</a> | 
-            <a href="Contacto.html" class="footer-enlace">Soporte técnico</a> | 
-            <a>GymBuddy &copy; 2024</a>
-        </p>
-    </footer>
-
-    <script src="../JS/perfil.js"></script>
+    <script src="../js/perfil.js"></script>
 </body>
 </html>

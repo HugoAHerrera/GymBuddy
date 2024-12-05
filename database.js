@@ -324,11 +324,10 @@ const databaseMethods = {
         });
     },
     
-
     añadirFotoPerfil: async (idEjercicio, blob) => {
         return new Promise((resolve, reject) => {
             // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
-            const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
+            const sql = 'UPDATE usuario SET imagenes = ? WHERE id_usuario = ?';
             
             // Ejecutar la consulta SQL con los parámetros
             connection.query(sql, [blob, idEjercicio], (err, results) => {

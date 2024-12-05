@@ -194,29 +194,34 @@ app.get('/perfil', (req, res) => {
     console.log('Perfil:',req.session.id_usuario)
     res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
 });
-
-app.post('/api/cambiarNombreUsuario', async (req, res) => {
+app.post('/api/cambiarNombreUsuario', upload.single('imagen'), async (req, res) => {
     try {
         const { nombre_usuario, correo_usuario } = req.body;
+        const imagen = req.file; // Acceder al archivo de imagen
+        console.log("imagen:", imagen.buffer);
 
-        // Verificar si el nombre de usuario ya existe
+        // Verificar si el nombre de usuario o el correo ya existen
         const usuarioExistente = await database.comprobarUsuarioExistente(nombre_usuario);
         const correoExistente = await database.comprobarCorreoExistente(correo_usuario);
 
         if (usuarioExistente && usuarioExistente.id !== req.session.id_usuario) {
             if (correoExistente && correoExistente.id !== req.session.id_usuario) {
+                await database.añadirFotoPerfil(req.session.id_usuario, imagen.buffer); // Guardar la imagen
                 return res.status(400).json({ error: 'El correo o/y el nombre de usuario están asociados a una cuenta.' });
-            } else{
+            } else {
                 await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
                 return res.status(400).json({ error: 'El nombre de usuario ya existe. Correo cambiado' });
             }
-        } else{
+        } else {
             if (correoExistente && correoExistente.id !== req.session.id_usuario) {
-                await database.cambiarNombreUsuario(req.session.id_usuario,nombre_usuario)
+                await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
                 return res.status(400).json({ error: 'Nombre usuario asociado a una cuenta. Nombre Usuario cambiado' });
             } else {
-                await database.cambiarNombreUsuario(req.session.id_usuario,nombre_usuario);
+                await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
                 await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+                if (imagen) {
+                    await database.añadirFotoPerfil(req.session.id_usuario, imagen.buffer); // Guardar la imagen
+                }
                 return res.json({ message: 'El perfil se ha actualizado correctamente.' });
             }
         }
@@ -226,14 +231,13 @@ app.post('/api/cambiarNombreUsuario', async (req, res) => {
     }
 });
 
-
 app.get('/api/obtenerDatosUsuario', async (req, res) => {
     try {
         // Simulamos que estamos obteniendo datos de la base de datos usando el ID del usuario en la sesión
         const datosUsuario = await database.obtenerDatosUsuario(req.session.id_usuario);
 
         // Devuelve los datos del usuario al cliente
-        console.log("[Nombre,Correo]:", datosUsuario.nombre_usuario, datosUsuario.correo)
+        console.log("[Nombre,Correo,Imagen]:", datosUsuario.nombre_usuario, datosUsuario.correo)
         res.json({
             nombre_usuario: datosUsuario.nombre_usuario,
             correo: datosUsuario.correo
@@ -243,22 +247,6 @@ app.get('/api/obtenerDatosUsuario', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
-
-app.post('/api/imagenBBDD', upload.single('imagen'), async (req, res) => {
-    const { idEjercicio } = req.body; // Recibe el ID del ejercicio del formulario
-    const imagen = req.file.buffer; // Obtiene el archivo como Buffer
-
-    try {
-        // Llama a la función para guardar la imagen
-        const imagen_añadida = await database.añadirFotoPerfil(idEjercicio, imagen);
-        console.log('Imagen añadida correctamente');
-        res.json({ message: 'Imagen añadida correctamente', imagen_añadida });
-    } catch (error) {
-        console.error('Error al añadir imagen:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
-
 
 app.post('/api/descripcion', async (req, res) => {
     const { idUsuario } = req.body; // Recibe el ID del usuario del formulario
