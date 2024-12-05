@@ -194,35 +194,61 @@ app.get('/perfil', (req, res) => {
     console.log('Perfil:',req.session.id_usuario)
     res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
 });
+
 app.post('/api/cambiarNombreUsuario', upload.single('imagen'), async (req, res) => {
     try {
         const { nombre_usuario, correo_usuario } = req.body;
         const imagen = req.file; // Acceder al archivo de imagen
-        console.log("imagen:", imagen.buffer);
 
-        // Verificar si el nombre de usuario o el correo ya existen
+        //console.log("imagen:", imagen ? imagen.buffer : "No se proporcionó imagen.");
+
+        // Comprobamos la existencia del usuario y del correo
         const usuarioExistente = await database.comprobarUsuarioExistente(nombre_usuario);
         const correoExistente = await database.comprobarCorreoExistente(correo_usuario);
-
+        console.log("a:",usuarioExistente,"b:",correoExistente)
+        // Validar si el nombre de usuario ya está en uso
+        if (usuarioExistente == false || correoExistente == false ){
+            return res.status(400).json({ error: 'Los campos Nombre Usuario y Mail Asociado son obligatorios' });
+        }
         if (usuarioExistente && usuarioExistente.id !== req.session.id_usuario) {
             if (correoExistente && correoExistente.id !== req.session.id_usuario) {
-                await database.añadirFotoPerfil(req.session.id_usuario, imagen.buffer); // Guardar la imagen
-                return res.status(400).json({ error: 'El correo o/y el nombre de usuario están asociados a una cuenta.' });
-            } else {
-                await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
-                return res.status(400).json({ error: 'El nombre de usuario ya existe. Correo cambiado' });
-            }
-        } else {
-            if (correoExistente && correoExistente.id !== req.session.id_usuario) {
-                await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
-                return res.status(400).json({ error: 'Nombre usuario asociado a una cuenta. Nombre Usuario cambiado' });
-            } else {
-                await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
-                await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
-                if (imagen) {
-                    await database.añadirFotoPerfil(req.session.id_usuario, imagen.buffer); // Guardar la imagen
+                if(imagen){
+                    await database.añadirFotoPerfil(req.session.id_usuario, imagen.buffer);
+                    return res.status(400).json({ error: 'Usuario o/y Correo asociados a una cuenta. Foto Cambiada.' });
+                } else {
+                    return res.status(400).json({ error: 'Usuario o/y Correo asociados a una cuenta. Foto no Cambiada."'});
                 }
-                return res.json({ message: 'El perfil se ha actualizado correctamente.' });
+            } else {
+                if(imagen){
+                    await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+                    await database.añadirFotoPerfil(req.session.id_usuario, imagen.buffer);
+                    return res.status(400).json({ error: 'Usuario asociado a una cuenta. Correo y Foto Cambiados.' });
+                } else{
+                    await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+                    return res.status(400).json({ error: 'Usuario está asociado a una cuenta. Correo Cambiado. Foto no Cambiada' });
+                }
+            }
+        } else{
+            if (correoExistente && correoExistente.id !== req.session.id_usuario) {
+                if(imagen){
+                    await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
+                    await database.añadirFotoPerfil(req.session.id_usuario, imagen.buffer);
+                    return res.status(400).json({ error: 'Correo está asociado a una cuenta. Foto Cambiada. Correo cambiado.' });
+                } else {
+                    await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
+                    return res.status(400).json({ error: 'Correo está asociado a una cuenta. Usuario Cambiado. Foto no Cambiada' });
+                }
+            } else {
+                if(imagen){
+                    await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
+                    await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+                    return res.status(400).json({ error: 'El nombre de usuario ya existe. Correo cambiado' });
+                } else{
+                    await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+                    await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+                    await database.añadirFotoPerfil(req.session.id_usuario, imagen.buffer);
+                    return res.json({ message: 'El perfil se ha actualizado correctamente.' });
+                }
             }
         }
     } catch (error) {
@@ -231,16 +257,36 @@ app.post('/api/cambiarNombreUsuario', upload.single('imagen'), async (req, res) 
     }
 });
 
+
+app.post('/api/blobAImagen', upload.single('imagen'), async (req, res) => {
+    try {
+        const imagenBase64 = await database.convertirBlobImagen(req.session.id_usuario);
+
+        if (!imagenBase64) {
+            return res.status(404).json({ error: 'No se encontró una imagen para este usuario.' });
+        }
+
+        res.status(200).json({ imagen: imagenBase64 });
+    } catch (error) {
+        console.error("Error al convertir el blob a imagen:", error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+
 app.get('/api/obtenerDatosUsuario', async (req, res) => {
     try {
         // Simulamos que estamos obteniendo datos de la base de datos usando el ID del usuario en la sesión
         const datosUsuario = await database.obtenerDatosUsuario(req.session.id_usuario);
 
         // Devuelve los datos del usuario al cliente
-        console.log("[Nombre,Correo,Imagen]:", datosUsuario.nombre_usuario, datosUsuario.correo)
+        //console.log("[Nombre,Correo,Imagen]:", datosUsuario.nombre_usuario, datosUsuario.correo, datosUsuario.imagenes)
+        //const imagenes = await database.convertirBlobImagen(req.session.id_usuario)
+        //console.log("[Nombre,Correo,Imagen]:", datosUsuario.nombre_usuario, datosUsuario.correo, imagenes)
         res.json({
             nombre_usuario: datosUsuario.nombre_usuario,
-            correo: datosUsuario.correo
+            correo: datosUsuario.correo,
+            imagenes: datosUsuario.imagenes
         });
     } catch (error) {
         console.error('Error al obtener los datos del usuario:', error);
