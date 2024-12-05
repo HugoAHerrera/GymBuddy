@@ -38,7 +38,7 @@ $(document).ready(function () {
             
             <div class="terms-container">
                 <input type="checkbox" id="terms" name="terms" required>
-                <label> Aceptar términos y condiciones</label>
+                <label for="terms" class="terms-label"> Aceptar términos y condiciones</label>
             </div>
 
             <button type="submit" id="submit-btn">Enviar</button>
@@ -62,6 +62,17 @@ $(document).ready(function () {
         $("#formulario").html(crearCuentaHTML);
         $('#div-crear-cuenta').addClass('boton-pulsado');
         $('#div-iniciar-sesion').removeClass('boton-pulsado');
+    });
+
+    $("#formulario").on("click", ".bx", function () {
+        const pass = $(this).siblings(".pass")[0];
+        if (pass.type === "password") {
+            pass.type = "text";
+            $(this).removeClass('bx-show-alt').addClass('bx-hide');
+        } else {
+            pass.type = "password";
+            $(this).removeClass('bx-hide').addClass('bx-show-alt');
+        }
     });
 
     $("#formulario").on("click", "#submit-btn-inicio-sesion", function(event) {
@@ -140,7 +151,7 @@ $(document).ready(function () {
             return;
         }
 
-        let regexContraseña = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        let regexContraseña = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;
         if (contraseñaUsuario.length === 0 || contaseñaRepeticion.length === 0 || !regexContraseña.test(contraseñaUsuario)) {
             $("#contraseñas-vacias").show();
             return;
@@ -196,16 +207,20 @@ $(document).ready(function () {
         });
     });
 
-    $("#formulario").on("click", ".bx", function() {
-        const pass = $(this).siblings(".pass")[0];
-        if (pass.type === "password") {
-            pass.type = "text";
-            $(this).removeClass('bx-show-alt').addClass('bx-hide');
-        } else {
-            pass.type = "password";
-            $(this).removeClass('bx-hide').addClass('bx-show-alt');
-        }
-    });
+    function cargarIniciarSesion() {
+        $("#formulario").html(iniciarSesionHTML);
+        $('#div-iniciar-sesion').addClass('boton-pulsado');
+        $('#div-crear-cuenta').removeClass('boton-pulsado');
+    }
+
+    function cargarCrearCuenta() {
+        $("#formulario").html(crearCuentaHTML);
+        $('#div-crear-cuenta').addClass('boton-pulsado');
+        $('#div-iniciar-sesion').removeClass('boton-pulsado');
+    }
+
+    cargarIniciarSesion();
+    cargarCrearCuenta();
 });
 
 const passwordContainers = document.querySelectorAll(".contraseña");
@@ -260,4 +275,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     setTimeout(borrarTexto, 2000);
+});
+
+$(document).on('click', '.terms-label', function (event) {
+    event.preventDefault();
+    window.open('/previewTerminosCondiciones', '_blank');
 });

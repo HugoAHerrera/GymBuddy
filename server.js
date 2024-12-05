@@ -122,8 +122,6 @@ app.post('/api/login', async (req, res) => {
 
 
 
-
-
 /*
 app.get('/rutina', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/blob.html'));
@@ -145,8 +143,50 @@ app.post('/api/rutinas', upload.single('imagen'), async (req, res) => {
 });
 */
 
+//Redirecciones del header
+app.get('/inicio', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
+});
+
+app.get('/tienda', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/tienda.html'));
+});
+
+app.get('/comunidad', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/comunidad.html'));
+});
+
+app.get('/progreso', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
+});
+
 app.get('/rutina', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
+});
+
+app.get('/desafios', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
+});
+
+
+app.get('/rutina-concreta', async (req, res) => {
+    const rutinaNombre = req.query.id;
+    console.log(rutinaNombre);
+    const rutina = await database.obtenerEjercicios(rutinaNombre);
+    console.log(rutina);
+    if (rutina) {
+        res.send(`
+            <html>
+                <head><title>${rutinaNombre}</title></head>
+                <body>
+                    <h1>${rutina[0].nombre}</h1>
+                    <p>Detalles de la rutina...</p>
+                </body>
+            </html>
+        `);
+    } else {
+        res.status(404).send('Rutina no encontrada');
+    }
 });
 
 app.get('/api/rutinas', async (req, res) => {
@@ -159,8 +199,11 @@ app.get('/api/rutinas', async (req, res) => {
   }
 });
 
+app.get('/previewTerminosCondiciones', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/noUserTerminosCondiciones.html'));
+  });
 
-
+  
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
@@ -220,11 +263,6 @@ app.post('/api/descripcion', async (req, res) => {
     }
 });
 
-app.get('/progreso', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
-});
-
-
 app.get('/api/sesiones', async (req, res) => {
     const { periodo } = req.query; // Obtener el parámetro 'periodo' del query string
 
@@ -269,9 +307,62 @@ app.get('/api/estadisticas/', async (req, res) => {
     }
 }))*/
 
-app.get('/Desafios', (req, res) => {
-    res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
+app.post('/api/mensajes', async (req, res) => {
+    const { id_emisor, receptor, contenido } = req.body;
+
+    if (!id_emisor || !receptor || !contenido) {
+        return res.status(400).json({ message: 'Faltan datos requeridos' });
+    }
+
+    const mensaje = {
+        id_emisor,
+        receptor,
+        contenido,
+        hora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        fecha: new Date().toISOString().split('T')[0],
+    };
+
+    try {
+        await database.agregarMensaje(mensaje);
+        res.status(201).json({ message: 'Mensaje enviado con éxito' });
+    } catch (error) {
+        console.error('Error al enviar mensaje:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
 });
+
+app.get('/api/mensajes', async (req, res) => {
+    const { receptor } = req.query;
+
+    if (!receptor) {
+        return res.status(400).json({ message: 'El receptor es requerido' });
+    }
+
+    try {
+        const mensajes = await database.obtenerMensajes(receptor);
+        res.status(200).json(mensajes);
+    } catch (error) {
+        console.error('Error al obtener mensajes:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+
+app.get('/api/usuarios', async (req, res) => {
+    const { query } = req.query; // El término de búsqueda
+
+    if (!query) {
+        return res.status(400).json({ message: 'El término de búsqueda es requerido' });
+    }
+
+    try {
+        const usuarios = await database.buscarUsuarios(query);
+        res.status(200).json(usuarios);
+    } catch (error) {
+        console.error('Error al buscar usuarios:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+
 
 app.post('/api/guardarMeta', async (req, res) => {
     console.log("Datos recibidos:", req.body);
