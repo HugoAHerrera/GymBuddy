@@ -1,5 +1,5 @@
-let tiempoInicial = 2;
-let tiempoRestante = tiempoInicial;
+let tiempoEjercicio;
+let tiempoDescanso;
 let ejercicioEnCurso = true;
 let tiempoIntervalo;
 let pausado = false;
@@ -48,6 +48,7 @@ function cargarRutina() {
                 imagenes_ejercicios_restantes.push('../Imagenes/curl_pesas.png');
             });
             document.querySelector('.Cabecera-rutina').style.visibility = 'visible';
+            document.querySelector('.tiempos-container').style.visibility = 'visible';
             divEjercicios.classList.add('show');
             document.getElementById('loading').style.display = 'none';
         })
@@ -86,24 +87,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function actualizarContador() {
     if (ejercicioEnCurso) {
-        if (tiempoRestante > 0) {
-            tiempoRestante--;
-            const porcentaje = ((tiempoInicial - tiempoRestante) / tiempoInicial) * 100;
+        if (tiempoEjercicio > 0) {
+            tiempoEjercicio--;
+            const porcentaje = ((tiempoDescanso - tiempoEjercicio) / tiempoDescanso) * 100;
             barraProgreso.style.width = `${porcentaje}%`;
-            contadorDisplay.textContent = `Tiempo restante: ${tiempoRestante} segundos`;
+            contadorDisplay.textContent = `Tiempo restante de ejercicio: ${tiempoEjercicio} segundos`;
         } else {
             ejercicioEnCurso = false;
-            tiempoRestante = tiempoInicial;
+            tiempoEjercicio = tiempoDescanso;
         }
     } else {
-        if (tiempoRestante) {
-            tiempoRestante--;
-            const porcentaje = ((tiempoInicial - tiempoRestante) / tiempoInicial) * 100;
+        if (tiempoEjercicio) {
+            tiempoEjercicio--;
+            const porcentaje = ((tiempoDescanso - tiempoEjercicio) / tiempoDescanso) * 100;
             barraProgreso.style.width = `${porcentaje}%`;
-            contadorDisplay.textContent = `Tiempo descanso: ${tiempoRestante} segundos`;
-            if (tiempoRestante <= 0) {
+            contadorDisplay.textContent = `Tiempo de descanso: ${tiempoEjercicio} segundos`;
+            if (tiempoEjercicio <= 0) {
                 ejercicioEnCurso = true;
-                tiempoRestante = tiempoInicial;
+                tiempoEjercicio = tiempoDescanso;
                 actualizarEjercicio();
                 setTimeout(cambiarEjercicio, 1000);
             }
@@ -137,9 +138,9 @@ function actualizarEjercicio() {
 
 function cambiarEjercicio() {
     if (ejercicioEnCurso) {
-        tiempoRestante = tiempoInicial;
+        tiempoEjercicio = tiempoDescanso;
     } else {
-        tiempoRestante = tiempoInicial;
+        tiempoEjercicio = tiempoDescanso;
         ejercicioEnCurso = true;
         actualizarEjercicio();
     }
@@ -147,12 +148,15 @@ function cambiarEjercicio() {
 
 function iniciarRutina() {
     if (primeraEjecucion) {
+        tiempoEjercicio = document.getElementById("tiempo-ejercicio").value;
+        tiempoDescanso = document.getElementById("tiempo-descanso").value;
         document.querySelector('.boton-empezar-rutina').disabled = true;
         document.querySelector('.boton-empezar-rutina').removeEventListener('click', iniciarRutina);
         document.querySelector('.boton-crear-rutina').style.display = 'none';
         document.querySelector('.boton-pausar-rutina').style.display = 'flex';
         document.querySelector('.boton-empezar-rutina').textContent = 'Reanudar rutina';
         document.querySelector('.barra-progreso-container').style.display = 'block';
+        document.querySelector('.tiempos-container').style.display = 'none';
         primeraEjecucion = false;
     }
 
