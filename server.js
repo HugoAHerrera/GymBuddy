@@ -5,13 +5,9 @@ require('dotenv').config();
 const database = require('./database');
 const { encriptarContraseña, compararContraseña } = require('./encryptor');
 const session = require('express-session');
-/* PARA SUBIR IMAGEN A BBDD. 
-SI LO = MORIR
+ 
 const multer = require('multer');
 const upload = multer(); // Configuración básica para manejar multipart/form-data
-*/
-
-
 
 const app = express();
 
@@ -121,28 +117,6 @@ app.post('/api/login', async (req, res) => {
 
 
 
-
-/*
-app.get('/rutina', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/blob.html'));
-});
-
-app.post('/api/rutinas', upload.single('imagen'), async (req, res) => {
-    const { idEjercicio } = req.body; // Recibe el ID del ejercicio del formulario
-    const imagen = req.file.buffer; // Obtiene el archivo como Buffer
-
-    try {
-        // Llama a la función para guardar la imagen
-        const imagen_añadida = await database.añadirFotoEjercicio(idEjercicio, imagen);
-        console.log('Imagen añadida correctamente');
-        res.json({ message: 'Imagen añadida correctamente', imagen_añadida });
-    } catch (error) {
-        console.error('Error al añadir imagen:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
-*/
-
 //Redirecciones del header
 app.get('/inicio', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
@@ -221,31 +195,37 @@ app.get('/perfil', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
 });
 
-
 app.post('/api/cambiarNombreUsuario', async (req, res) => {
     try {
-        const { nombre_usuario, correo } = req.body; // Desestructuramos los valores del cuerpo de la solicitud
+        const { nombre_usuario, correo_usuario } = req.body;
 
-        // Validamos los datos recibidos
-        if (!nombre_usuario || !correo) {
-            return res.status(400).json({ error: 'El nombre de usuario y el correo son obligatorios.' });
+        // Verificar si el nombre de usuario ya existe
+        const usuarioExistente = await database.comprobarUsuarioExistente(nombre_usuario);
+        const correoExistente = await database.comprobarCorreoExistente(correo_usuario);
+
+        if (usuarioExistente && usuarioExistente.id !== req.session.id_usuario) {
+            if (correoExistente && correoExistente.id !== req.session.id_usuario) {
+                return res.status(400).json({ error: 'El correo o/y el nombre de usuario están asociados a una cuenta.' });
+            } else{
+                await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+                return res.status(400).json({ error: 'El nombre de usuario ya existe. Correo cambiado' });
+            }
+        } else{
+            if (correoExistente && correoExistente.id !== req.session.id_usuario) {
+                await database.cambiarNombreUsuario(req.session.id_usuario,nombre_usuario)
+                return res.status(400).json({ error: 'Nombre usuario asociado a una cuenta. Nombre Usuario cambiado' });
+            } else {
+                await database.cambiarNombreUsuario(req.session.id_usuario,nombre_usuario);
+                await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+                return res.json({ message: 'El perfil se ha actualizado correctamente.' });
+            }
         }
-
-        // Llamamos a las funciones para actualizar los valores en la base de datos
-        const nuevoNombreUsuario = await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
-        const nuevoCorreoUsuario = await database.cambiarCorreoUsuario(req.session.id_usuario, correo);
-
-        // Enviamos la respuesta con los datos actualizados
-        res.json({
-            message: 'Perfil: Cambios realizados correctamente.',
-            nuevoNombreUsuario,
-            nuevoCorreoUsuario
-        });
     } catch (error) {
-        console.error('Error al actualizar el perfil:', error);
+        console.error('Error al cambiar el nombre o correo:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
+
 
 app.get('/api/obtenerDatosUsuario', async (req, res) => {
     try {
@@ -261,6 +241,21 @@ app.get('/api/obtenerDatosUsuario', async (req, res) => {
     } catch (error) {
         console.error('Error al obtener los datos del usuario:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+app.post('/api/imagenBBDD', upload.single('imagen'), async (req, res) => {
+    const { idEjercicio } = req.body; // Recibe el ID del ejercicio del formulario
+    const imagen = req.file.buffer; // Obtiene el archivo como Buffer
+
+    try {
+        // Llama a la función para guardar la imagen
+        const imagen_añadida = await database.añadirFotoPerfil(idEjercicio, imagen);
+        console.log('Imagen añadida correctamente');
+        res.json({ message: 'Imagen añadida correctamente', imagen_añadida });
+    } catch (error) {
+        console.error('Error al añadir imagen:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 

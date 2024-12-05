@@ -2,58 +2,37 @@ document.getElementById("guardar-cambios").addEventListener("click", function ()
     const nuevoNombreUsuario = document.getElementById("nombre-usuario").value;
     const nuevoCorreoUsuario = document.getElementById("email-usuario").value;
 
-    // Validamos que ambos campos tengan datos (opcional, dependiendo de tus requerimientos)
-    if (!nuevoNombreUsuario || !nuevoCorreoUsuario) {
-        alert("Por favor, completa todos los campos antes de guardar.");
-        return;
-    }
-
-    // Actualizamos el nombre y correo visibles en la página
-    if (nuevoNombreUsuario) {
-        document.getElementById("nombre-usuario-mostrado").textContent = nuevoNombreUsuario;
-    }
-
-    if (nuevoCorreoUsuario) {
-        document.getElementById("email-usuario-mostrado").textContent = nuevoCorreoUsuario;
-    }
-
-    // Mostrar mensaje de confirmación
-    const mensajeConfirmacion = document.getElementById("mensaje-confirmacion");
-    mensajeConfirmacion.textContent = "Se han guardado los cambios correctamente.";
-
-    // Crear un objeto JSON con el nombre y correo
-    const data = {
-        nombre_usuario: nuevoNombreUsuario,
-        correo_usuario: nuevoCorreoUsuario
-    };
-
-    // Realizar la solicitud POST al servidor para actualizar los datos
     fetch('/api/cambiarNombreUsuario', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // Enviamos los datos como JSON
-        },
-        body: JSON.stringify(data) // Convertimos el objeto `data` a JSON
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre_usuario: nuevoNombreUsuario, correo_usuario: nuevoCorreoUsuario }),
     })
-    .then(response => response.json()) // Parseamos la respuesta como JSON
-    .then(data => {
-        // Manejo de la respuesta del servidor
-        if (data.nuevoNombreUsuario) {
-            console.log('Nuevo nombre de usuario:', data.nuevoNombreUsuario);
-        }
-        if (data.nuevoCorreoUsuario) {
-            console.log('Nuevo correo del usuario:', data.nuevoCorreoUsuario);
-        }
-    })
-    .catch(error => {
-        console.error('Error al guardar los cambios:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(error => { throw new Error(error.error); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            const mensajeConfirmacion = document.getElementById("mensaje-confirmacion");
+            mensajeConfirmacion.textContent = "Perfil actualizado correctamente.";
+            mensajeConfirmacion.style.color = "green";
 
-    // Limpiar el mensaje de confirmación después de 3 segundos
-    setTimeout(() => {
-        mensajeConfirmacion.textContent = "";
-    }, 3000);
+            setTimeout(() => {
+                mensajeConfirmacion.textContent = "";
+            }, 3000);
+        })
+        .catch(error => {
+            const mensajeConfirmacion = document.getElementById("mensaje-confirmacion");
+            mensajeConfirmacion.textContent = error.message;
+            mensajeConfirmacion.style.color = "red";
+
+            setTimeout(() => {
+                mensajeConfirmacion.textContent = "";
+            }, 3000);
+        });
 });
+
 
 document.addEventListener('DOMContentLoaded', function () {
     // Hacemos una solicitud al servidor para obtener los datos del usuario
