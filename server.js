@@ -156,6 +156,80 @@ app.get('/api/estadisticas/', async (req, res) => {
     }
 });
 
+// COSAS PARA LA PAGINA DESAFIOS
 app.get('/Desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
 });
+
+app.post('/api/guardarMeta', async (req, res) => {
+    console.log("Datos recibidos:", req.body);
+    const { titulo, desc, recompensa } = req.body;
+
+    if (!titulo || !desc || !recompensa) {
+        console.error("Datos incompletos:", req.body);
+        return res.status(400).json({ message: 'Faltan datos para guardar el desafío.' });
+    }
+    try {
+        const result = await database.guardarMeta({
+            titulo,
+            desc,
+            recompensa
+        });
+        res.status(201).json({ message: 'Desafio guardado con éxito', id: result.insertId });
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+        }
+    });
+
+app.post('/api/borrarMeta', async (req, res) => {
+    const titulo = req.body;
+    try {
+        await database.borrarMeta(titulo);
+        res.status(201).json({ message: 'Desafio borrado con éxito' });
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+        }
+    });
+
+app.post('/api/actualizarNumeroMetas', async (req, res) => {
+    const titulos = req.body;
+    try {
+        for(let i = 0; i < titulos.length; i++){
+            await database.actualizarNumerosMetas(titulos[i]);
+            res.status(201).json({ message: 'Desafio borrado con éxito' });
+        }
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+        }
+    });
+
+// falta por poner en front?
+app.get('/api/recuperarMetas', async (req, res) => {
+    try {
+        const infoDesafios = await database.obtenerDesafios();
+        console.log(infoDesafios);
+        res.json(infoDesafios);
+    }
+    catch (error) {
+        console.error('Error al recuperar los desafios', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+app.post('/api/actualizarProgreso', async (req, res) => {
+    const porcentage = req.body;
+    try {
+        const result = await database.actualizarProgreso(porcentage);
+        res.status(201).json({ message: 'Progreso actualizado con éxito' });
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+        }
+    });

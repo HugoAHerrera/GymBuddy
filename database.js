@@ -149,42 +149,54 @@ const databaseMethods = {
     },
 
     // Metodos para la pagina de Objetivos -- meta al completo (progreso, descripcion, recompensa...)
-    
-    /*
-        FALTA:
-            - AÑADIR TABLAS EN LA BBDD
-     */
-
-    guardarObjetivos: async () => {
+    // se ejecuta cada vez que cambia de pagina el usuario? -> ver cuando
+    guardarMeta: async (desafio) => {
         return new Promise((resolve, reject) => {
-            /*const sql = 'SELECT * FROM usuario WHERE correo = ?';
-            connection.query(sql, [email], (err, results) => {
+            const sql = 'INSERT INTO desafios (descripcion, recompensa, titulo_desafio) VALUES (?, ?, ?)';
+            connection.query(sql, [desafio.desc, desafio.recompensa, desafio.titulo], (err, results) => {
                 if (err) return reject(err);
-                resolve(results[0]);
-            });*/
+                resolve(results);
+            });
         });
     },
-
-    obtenerObjetivos: async () => {
+    borrarMeta: async (desafio) => {
         return new Promise((resolve, reject) => {
-            /*const sql = 'SELECT * FROM usuario WHERE correo = ?';
-            connection.query(sql, [email], (err, results) => {
+            const sql = 'DELETE * FROM desafios WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.titulo], (err, results) => {
                 if (err) return reject(err);
-                resolve(results[0]);
-            });*/
+                resolve(results);
+            });
         });
     },
-
-    borrarObjetivos: async () => {
+    actualizarNumerosMetas: async (desafio) => {
         return new Promise((resolve, reject) => {
-            /*const sql = 'SELECT * FROM usuario WHERE correo = ?';
-            connection.query(sql, [email], (err, results) => {
+            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.titulo], (err, results) => {
                 if (err) return reject(err);
-                resolve(results[0]);
-            });*/
+                resolve(results);
+            });
         });
-    }
-
+    },
+    /* Para cargar la pagina de cada user con sus desafios ya existentes */
+    obtenerDesafios: async () => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM desafios';
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+    // actualizar el progreso del desafio
+    actualizarProgreso: async (desafio) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.titulo], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
 };
 
 module.exports = databaseMethods;
