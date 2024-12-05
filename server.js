@@ -122,8 +122,6 @@ app.post('/api/login', async (req, res) => {
 
 
 
-
-
 /*
 app.get('/rutina', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/blob.html'));
@@ -145,9 +143,31 @@ app.post('/api/rutinas', upload.single('imagen'), async (req, res) => {
 });
 */
 
+//Redirecciones del header
+app.get('/inicio', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
+});
+
+app.get('/tienda', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/tienda.html'));
+});
+
+app.get('/comunidad', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/comunidad.html'));
+});
+
+app.get('/progreso', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
+});
+
 app.get('/rutina', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
 });
+
+app.get('/desafios', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
+});
+
 
 app.get('/api/rutinas', async (req, res) => {
   try {
@@ -158,8 +178,6 @@ app.get('/api/rutinas', async (req, res) => {
       res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
-
-
 
 
 const PORT = process.env.PORT || 3000;
@@ -220,11 +238,6 @@ app.post('/api/descripcion', async (req, res) => {
     }
 });
 
-app.get('/progreso', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
-});
-
-
 app.get('/api/sesiones', async (req, res) => {
     const { periodo } = req.query; // Obtener el parámetro 'periodo' del query string
 
@@ -268,10 +281,6 @@ app.get('/api/estadisticas/', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 }))*/
-
-app.get('/Desafios', (req, res) => {
-    res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
-});
 
 app.post('/api/guardarMeta', async (req, res) => {
     console.log("Datos recibidos:", req.body);
