@@ -293,6 +293,54 @@ const databaseMethods = {
         });
     },
 
+    añadirFotoPerfil: async (idUsuario, blob) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
+            const sql = 'UPDATE usuario SET imagenes = ? WHERE id_usuario = ?';
+            
+            // Ejecutar la consulta SQL con los parámetros
+            connection.query(sql, [blob, idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, lo rechazamos
+                }
+                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
+            });
+        });
+    },
+
+    convertirBlobImagen: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para obtener la imagen del usuario desde la base de datos
+            const sql = 'SELECT imagenes FROM usuario WHERE id_usuario = ?';
+    
+            // Ejecutar la consulta SQL con el idUsuario como parámetro
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, rechazamos la promesa
+                }
+    
+                if (results.length === 0 || !results[0].imagenes) {
+                    return reject(new Error('No se encontró ninguna imagen para este usuario.'));
+                }
+    
+                try {
+                    // Obtenemos el blob (almacenado como un Buffer en Node.js) de la consulta
+                    const blob = results[0].imagenes;
+    
+                    // Convertir el Buffer a Base64
+                    const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
+    
+                    // Resolvemos con la imagen en formato Base64
+                    resolve(base64Image);
+                } catch (error) {
+                    reject(error); // Rechazamos si ocurre un error durante la conversión
+                }
+            });
+        });
+    },
+    
+    
+
     obtenerDatosUsuario: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = 'SELECT * FROM usuario WHERE id_usuario = ?';
@@ -320,21 +368,6 @@ const databaseMethods = {
                 };
     
                 resolve(descripcion);
-            });
-        });
-    },
-    
-    añadirFotoPerfil: async (idEjercicio, blob) => {
-        return new Promise((resolve, reject) => {
-            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
-            const sql = 'UPDATE usuario SET imagenes = ? WHERE id_usuario = ?';
-            
-            // Ejecutar la consulta SQL con los parámetros
-            connection.query(sql, [blob, idEjercicio], (err, results) => {
-                if (err) {
-                    return reject(err); // Si hay error, lo rechazamos
-                }
-                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
             });
         });
     },
