@@ -146,6 +146,10 @@ app.get('/desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
 });
 
+app.get('/carro', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/carro.html'));
+});
+
 app.get('/api/rutina-concreta', async (req, res) => {
     const rutinaNombre = req.query.id;
     try {
@@ -182,10 +186,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
-
-app.get('/inicio', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
-  });
   
 app.get('/perfil', (req, res) => {
     if (!req.session.id_usuario) {
@@ -462,5 +462,37 @@ app.delete('/api/cesta/', async (req, res) => {
     } catch (error) {
         console.error('Error al vaciar la cesta', error);
         res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+app.post('/api/agregarAlCarro', async (req, res) => {
+    const { idArticulo, id_usuario } = req.body;
+    try {
+        const result = await database.agregarAlCarro({ idArticulo, id_usuario });
+        res.status(201).json({ message: 'Producto añadido al carro', result });
+    } catch (error) {
+        console.error('Error al añadir producto:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+    }
+});
+
+app.delete('/api/eliminarDelCarro', async (req, res) => {
+    const { idArticulo, id_usuario } = req.body;
+    try {
+        const result = await database.eliminarDelCarro({ idArticulo, id_usuario });
+        res.status(200).json({ message: 'Producto eliminado del carro', result });
+    } catch (error) {
+        console.error('Error al eliminar producto:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+    }
+});
+
+app.get('/api/productos', async (req, res) => {
+    try {
+        const productos = await database.obtenerProductos();
+        res.status(200).json(productos);
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).json({ message: 'Error al obtener productos' });
     }
 });

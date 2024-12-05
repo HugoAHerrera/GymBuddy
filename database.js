@@ -393,13 +393,33 @@ const databaseMethods = {
         });
     },
 
-    obtenerProductosCesta: async (idUsuario) => {
+    agregarAlCarro: async ({ idArticulo, id_usuario }) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'INSERT INTO carro (idArticulo, id_usuario) VALUES (?, ?)';
+            connection.query(sql, [idArticulo, id_usuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+    
+    eliminarDelCarro: async ({ idArticulo, id_usuario }) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'DELETE FROM carro WHERE idArticulo = ? AND id_usuario = ?';
+            connection.query(sql, [idArticulo, id_usuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+    
+    obtenerProductosCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
                 SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo
-                FROM cesta
-                JOIN tienda ON cesta.idArticulo = tienda.idArticulo
-                WHERE cesta.id_usuario = ?;
+                FROM carro
+                JOIN tienda ON carro.idArticulo = tienda.idArticulo
+                WHERE carro.id_usuario = ?;
             `;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
@@ -408,15 +428,25 @@ const databaseMethods = {
         });
     },
 
-    vaciarCesta: async (idUsuario) => {
+    vaciarCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            const sql = `DELETE FROM cesta WHERE id_usuario = ?;`;
+            const sql = `DELETE FROM carro WHERE id_usuario = ?;`;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
                 resolve(results.affectedRows > 0);
             });
         });
     },
+
+    obtenerProductos: async () => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM tienda';
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    }
 };
 
 module.exports = databaseMethods;
