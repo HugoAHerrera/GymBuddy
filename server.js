@@ -485,7 +485,7 @@ app.post('/api/actualizarProgreso', async (req, res) => {
         }
     });
 
-app.get('/api/carro', async (req, res) => {
+app.get('/api/obtenerCarro', async (req, res) => {
     const { idUsuario } = req.params;
     try {
         const productos = await database.obtenerProductosCarro(idUsuario);
@@ -496,7 +496,7 @@ app.get('/api/carro', async (req, res) => {
     }
 });
 
-app.delete('/api/carro', async (req, res) => {
+app.delete('/api/vacioCarro', async (req, res) => {
     const { idUsuario } = req.params;
     try {
         const exito = await database.vaciarCarro(idUsuario);
