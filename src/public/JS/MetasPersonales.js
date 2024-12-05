@@ -1,6 +1,8 @@
 var block = 0;
 var block_2 = 1;
+var block_3 = 0;
 var cerrojo = 1;
+
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".boton-annadir-meta").addEventListener("click", () => {
         crearNuevaMeta();
@@ -52,17 +54,25 @@ function crearNuevaMeta() {
         if (goalDescription !== '') {
             // Crear progreso de la meta
             const barContainer = document.createElement("span");
+            barContainer.classList.add("progContainer");
             const textoProgresoMeta = document.createTextNode(" Progreso:");
+            const aumentarProgreso = document.createElement("button");
             const progresoMeta = document.createElement("progress");
             progresoMeta.id = `Barra ${metasContainer.children.length + 1}`;
             progresoMeta.classList.add("BarraDeProgreso");
             progresoMeta.max = 100;
             progresoMeta.value = 0; //Math.floor(Math.random() * 101); // 0
-            progresoMeta.style.marginBottom = "15px";
+            //progresoMeta.style.marginBottom = "15px";
+            aumentarProgreso.classList.add("aumentoProg");
+
+            aumentarProgreso.addEventListener("click", () => {
+                alert("GG");
+            });
 
             barContainer.appendChild(textoProgresoMeta);
             barContainer.appendChild(document.createElement("br"));
             barContainer.appendChild(progresoMeta);
+            barContainer.appendChild(aumentarProgreso);
 
             // Crear recompensa de la meta
             const recompensaContainer = document.createElement("span");
@@ -99,17 +109,20 @@ function crearNuevaMeta() {
             metasContainer.appendChild(nuevaMeta);
 
             guardarMetaBBDD(tituloMeta.textContent, KC, goalDescription);
-            RequestReward(KC);
+            nuevaMeta.addEventListener("click", () => {
+                RequestReward(KC);
+            });
 
+            // solo si has dado a opciones borrar
             botonBorrar.addEventListener("click", () => {
-                metasContainer.removeChild(nuevaMeta);
-                alert(`titulo: ${tituloMeta.textContent} de ${titulosMetas}`);
-                titulosMetas.splice(titulosMetas.indexOf(tituloMeta.textContent), 1);
-                console.log("titulo:", tituloMeta.textContent, "de", titulosMetas);
-                borrarMetaBBDD(tituloMeta.textContent);
-                setTimeout(() => {
-                    actualizarMetasBBDD();
-                }, 1000);
+                if(block_3 === 1) {
+                    metasContainer.removeChild(nuevaMeta);
+                    titulosMetas.splice(titulosMetas.indexOf(tituloMeta.textContent), 1);
+                    borrarMetaBBDD(tituloMeta.textContent);
+                    setTimeout(() => {
+                        actualizarMetasBBDD();
+                    }, 1000);
+                }
             });
         }
     }
@@ -121,6 +134,7 @@ function crearNuevaMeta() {
 function OpcionBorrarMetas() {
         cerrojo = 0;
         block_2 = 0;
+        block_3 = 1;
         const cancel = document.querySelector(".oculto");
         cancel.classList.remove("oculto");
         cancel.classList.add("boton-cancelar-borrar");
@@ -137,6 +151,7 @@ function OpcionBorrarMetas() {
 function CancelarBorrarMetas() {
     cerrojo = 1;
     block_2 = 1;
+    block_3 = 0;
     const cancel = document.querySelector(".boton-cancelar-borrar");
     cancel.classList.remove("boton-cancelar-borrar");
     cancel.classList.add("oculto");
@@ -180,6 +195,7 @@ function GoalDescription(progressContainer) {
 }
 
 // METODO INCOMPLETO
+// - falta añadir la recompensa a los KC totales del user
 function RequestReward(KC) {
     document.querySelectorAll('.task').forEach((container) => {
         if (!container.dataset.eventAdded) {
@@ -337,17 +353,9 @@ function borrarMetaBBDD(title) {
 
 function actualizarMetasBBDD() {
     const metasRestantes = document.querySelectorAll(".goal-title");
-    /*for (let i = 0; i < titulosMetas.length; i++) {
-        var cambioTitulos = {
-            antiguoTitulo: titulosMetas[i],
-            nuevoTitulo: `Meta ${i + 1}`,
-        }
-        console.log(cambioTitulos.antiguoTitulo, " actualizado con éxito a", cambioTitulos.nuevoTitulo);
-*/
         const titulosBase = ["Meta 1", "Meta 2", "Meta 3", "Meta 4", "Meta 5", "Meta 6", "Meta 7", "Meta 8", "Meta 9", "Meta 10"];
         var rangoTitulos = [];
         rangoTitulos = titulosBase.slice(0, titulosMetas.length);
-        console.log(rangoTitulos);
 
         var cambioTitulos = {
             antiguoTitulo: titulosMetas,
@@ -366,7 +374,6 @@ function actualizarMetasBBDD() {
                 console.log(`pues ninguno`, error)
             }
         });
-    //}
     for (let i = 0; i < metasRestantes.length; i++) {
         metasRestantes[i].textContent = `Meta ${i + 1}`;
         titulosMetas[i] = `Meta ${i + 1}`;
