@@ -13,15 +13,80 @@ const ejercicioImagen = document.getElementById('ejercicio-imagen');
 const ejercicios_restantes = [];
 const imagenes_ejercicios_restantes = [];
 
-const ejercicios = document.querySelectorAll('.ejercicio');
+const divEjercicios = document.getElementById('div-ejercicios');
 
-document.addEventListener("DOMContentLoaded", function() {
-    ejercicios.forEach(function(ejercicio) {
-        const titulo = ejercicio.querySelector('h1').textContent;
-        ejercicios_restantes.push(titulo);
+// Llamada para obtener los ejercicios desde la API
+function cargarRutina() {
+    const rutinaId = new URLSearchParams(window.location.search).get('id');
+    const apiUrl = `/api/rutina-concreta?id=${rutinaId}`;
 
-        const imagenSrc = ejercicio.querySelector('img') ? ejercicio.querySelector('img').src : null;
-        imagenes_ejercicios_restantes.push(imagenSrc);
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Error al cargar la rutina');
+            return response.json();
+        })
+        .then(data => {
+            const { rutinaNombre, ejercicios } = data;
+
+            // Actualizar el título de la rutina
+            const rutinaTitulo = document.getElementById('rutina-titulo');
+            if (rutinaTitulo) {
+                rutinaTitulo.textContent = `Rutina de ${rutinaNombre}`;
+            }
+
+            // Generar dinámicamente los ejercicios
+            ejercicios.forEach((ejercicio, index) => {
+                const ejercicioDiv = document.createElement('div');
+                ejercicioDiv.classList.add('ejercicio');
+                ejercicioDiv.innerHTML = `
+                    <img src="../Imagenes/curl_pesas.png" alt="Ejercicio ${index + 1}" class="imagen_ejercicio">
+                    <h1>Ejercicio ${index + 1}: ${ejercicio}</h1>
+                    <button class="btn-guia">Ver Guía</button>
+                `;
+                divEjercicios.appendChild(ejercicioDiv);
+
+                // Almacenamos los ejercicios y las imágenes para su uso posterior
+                ejercicios_restantes.push(ejercicio);
+                imagenes_ejercicios_restantes.push('../Imagenes/curl_pesas.png');  // Usa la imagen correspondiente
+            });
+
+            // Mostrar los ejercicios y hacer que la rutina sea visible
+            divEjercicios.classList.add('show');
+        })
+        .catch(error => {
+            console.error(error);
+            const rutinaTitulo = document.getElementById('rutina-titulo');
+            if (rutinaTitulo) {
+                rutinaTitulo.textContent = 'Error al cargar la rutina';
+            }
+        });
+}
+
+// Inicializar la rutina cuando la página haya cargado completamente
+document.addEventListener("DOMContentLoaded", function () {
+    cargarRutina();  // Cargar los ejercicios al cargar la página
+
+    // Configurar los botones de empezar y pausar
+    document.querySelector('.boton-empezar-rutina').addEventListener('click', iniciarRutina);
+    document.querySelector('.boton-pausar-rutina').addEventListener('click', pausarRutina);
+
+    // Configurar la guía y la creación de una nueva rutina
+    document.querySelectorAll('.btn-guia').forEach(button => {
+        button.addEventListener('click', () => {
+            window.open('guia_ejercicios.html', '_blank');
+        });
+    });
+
+    document.querySelectorAll('.boton-crear-rutina').forEach(button => {
+        button.addEventListener('click', () => {
+            window.location.href = "rutina_personalizada_nueva.html";
+        });
+    });
+
+    // Agregar la funcionalidad al logo
+    const logoImage = document.getElementById('logotype');
+    logoImage.addEventListener('click', function () {
+        window.location.href = 'perfil.html';
     });
 });
 
@@ -45,7 +110,7 @@ function actualizarContador() {
             if (tiempoRestante <= 0) {
                 ejercicioEnCurso = true;
                 tiempoRestante = tiempoInicial;
-                actualizarEjercicio(); 
+                actualizarEjercicio();
                 setTimeout(cambiarEjercicio, 1000);
             }
         }
@@ -95,7 +160,7 @@ function iniciarRutina() {
     }
 
     actualizarEjercicio();
-    
+
     if (!pausado) {
         tiempoIntervalo = setInterval(actualizarContador, 1000);
     } else {
@@ -120,30 +185,3 @@ function reanudarRutina() {
     document.querySelector('.boton-pausar-rutina').style.display = 'flex';
     document.querySelector('.barra-progreso-container').style.display = 'block';
 }
-
-document.querySelector('.boton-empezar-rutina').addEventListener('click', iniciarRutina);
-document.querySelector('.boton-pausar-rutina').addEventListener('click', pausarRutina);
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.btn-guia').forEach(button => {
-        button.addEventListener('click', () => {
-            window.open('guia_ejercicios.html', '_blank');
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.boton-crear-rutina').forEach(button => {
-        button.addEventListener('click', () => {
-            window.location.href = "rutina_personalizada_nueva.html";
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const logoImage = document.getElementById('logotype');
-    
-    logoImage.addEventListener('click', function() {
-        window.location.href = 'perfil.html';
-    });
-  });

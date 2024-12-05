@@ -84,65 +84,6 @@
         </p>
     </footer>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const rutinaId = new URLSearchParams(window.location.search).get('id'); 
-            const apiUrl = `/api/rutina-concreta?id=${rutinaId}`;
-
-            fetch(apiUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error('Error al cargar la rutina');
-                    return response.json();
-                })
-                .then(data => {
-                    const { rutinaNombre, ejercicios } = data;
-
-                    // Actualizar el título de la rutina
-                    const rutinaTitulo = document.getElementById('rutina-titulo');
-                    if (rutinaTitulo) {
-                        rutinaTitulo.textContent = `Rutina de ${rutinaNombre}`;
-                    }
-
-                    // Generar dinámicamente los ejercicios
-                    const divEjercicios = document.getElementById('div-ejercicios');
-                    if (divEjercicios) {
-                        ejercicios.forEach((ejercicio, index) => {
-                            const ejercicioDiv = document.createElement('div');
-                            ejercicioDiv.classList.add('ejercicio');
-
-                            ejercicioDiv.innerHTML = `
-                                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio ${index + 1}" class="imagen_ejercicio">
-                                <h1>Ejercicio ${index + 1}: ${ejercicio}</h1>
-                                <button class="btn-guia">Ver Guía</button>
-                            `;
-
-                            divEjercicios.appendChild(ejercicioDiv);
-                        });
-
-                        // Mostrar los ejercicios y ocultar el indicador de carga
-                        divEjercicios.classList.add('show');  // Agregar la clase .show para hacer visible el contenedor
-                        const loading = document.getElementById('loading');
-                        if (loading) {
-                            loading.style.display = 'none';
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                    const rutinaTitulo = document.getElementById('rutina-titulo');
-                    if (rutinaTitulo) {
-                        rutinaTitulo.textContent = 'Error al cargar la rutina';
-                    }
-
-                    // Ocultar el indicador de carga en caso de error
-                    const loading = document.getElementById('loading');
-                    if (loading) {
-                        loading.style.display = 'none';
-                    }
-                });
-        });
-
-    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../js/rutina_concreta.js" defer></script>
 
