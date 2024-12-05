@@ -2,6 +2,10 @@ var block = 0;
 var block_2 = 1;
 var cerrojo = 1;
 document.addEventListener("DOMContentLoaded", function () {
+    $.ajax({
+        url: '/api/recuperarMetas',
+        method: 'POST'
+    });
     // Añadir una meta
     document.querySelector(".boton-annadir-meta").addEventListener("click", () => {
         crearNuevaMeta();
@@ -12,10 +16,13 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".oculto").addEventListener("click", CancelarBorrarMetas);
 });
 
+var titulosMetas = [];
+const metasContainer = document.querySelector(".div-metas");
+
 // funcion para crear el el objeto de la meta
 function crearNuevaMeta() {
     if (block_2 === 1) {
-        const metasContainer = document.querySelector(".div-metas");
+        //const metasContainer = document.querySelector(".div-metas");
 
         // Crear contenedor de la meta
         const nuevaMeta = document.createElement("div");
@@ -31,6 +38,10 @@ function crearNuevaMeta() {
         botonBorrar.appendChild(borrar);
         botonBorrar.addEventListener("click", () => {
             metasContainer.removeChild(nuevaMeta);
+            titulosMetas.splice(titulosMetas.indexOf(nuevaMeta.querySelector(".goal-title").textContent), 1);
+            // hacer llamada a BBDD
+            //borrarMetaBBDD();
+            //actualizarMetasBBDD();
         });
 
         // Crear imagen de la meta
@@ -47,15 +58,16 @@ function crearNuevaMeta() {
         const tituloMeta = document.createElement("h1");
         tituloMeta.classList.add("goal-title");
         tituloMeta.textContent = `Meta ${metasContainer.children.length + 1}`;
+        titulosMetas.push(tituloMeta.textContent);
 
         // Crear contenedor de progreso
         const progressContainer = document.createElement("div");
         progressContainer.classList.add("progress-container");
 
         // Creamos la descripcion de la meta
-        const result = GoalDescription(progressContainer);
+        const goalDescription = GoalDescription(progressContainer);
 
-        if (result !== 0) {
+        if (goalDescription !== 0) {
             // Crear progreso de la meta
             const barContainer = document.createElement("span");
             const textoProgresoMeta = document.createTextNode(" Progreso:");
@@ -72,7 +84,7 @@ function crearNuevaMeta() {
 
             // Crear recompensa de la meta
             const recompensaContainer = document.createElement("span");
-            var KC = KCAmount();
+            const KC = KCAmount();
             const recom = document.createTextNode(` Recompensa: ${KC} KC`); // KCAmount()
             const imagenKC = document.createElement("img");
             imagenKC.src = "../Imagenes/moneda_dorada.png";
@@ -103,6 +115,9 @@ function crearNuevaMeta() {
 
             // Añadir la nueva meta al contenedor de metas
             metasContainer.appendChild(nuevaMeta);
+
+            // guardar meta en BBDD
+            guardarMetaBBDD(tituloMeta.textContent, KC);
             RequestReward(KC);
         }
     }
@@ -110,19 +125,19 @@ function crearNuevaMeta() {
 
 // Función para borrar metas
 function OpcionBorrarMetas() {
-    cerrojo = 0;
-    block_2 = 0;
-    const cancel = document.querySelector(".oculto");
-    cancel.classList.remove("oculto");
-    cancel.classList.add("boton-cancelar-borrar");
-    document.querySelectorAll('.task').forEach((container) => {
-        // Obtener el ID de la barra de progreso
-        const progressBar = container.querySelector(".BarraDeProgreso");
-        const borrar = container.querySelector(".borrar-X");
-        if (progressBar.value !== 100) {
-            borrar.style.display = "block";
-        }
-    });
+        cerrojo = 0;
+        block_2 = 0;
+        const cancel = document.querySelector(".oculto");
+        cancel.classList.remove("oculto");
+        cancel.classList.add("boton-cancelar-borrar");
+        document.querySelectorAll('.task').forEach((container) => {
+            // Obtener el ID de la barra de progreso
+            const progressBar = container.querySelector(".BarraDeProgreso");
+            const borrar = container.querySelector(".borrar-X");
+            if (progressBar.value !== 100) {
+                borrar.style.display = "block";
+            }
+        });
 }
 
 function CancelarBorrarMetas() {
@@ -144,7 +159,7 @@ function GoalDescription(progressContainer) {
     if (desc !== '') {
         const words = desc.trim().split(/\s+/); // Divide el texto en palabras
         if (words.length > 35) {
-            alert(`Tu descripción tiene ${words.length} palabras. Por favor, reduce el texto a 35 palabras o menos.`);
+            alert(`Tu descripción tiene ${words.length} palabras. Por favor, reduce el texto a 35 palabras o menos.`);  // CAMBIAR EL ALERT A OTRA COSA
             return 0; // Fallo: descripción demasiado larga
         }
         const spanContainer = document.createElement("span");
@@ -156,6 +171,7 @@ function GoalDescription(progressContainer) {
         spanContainer.style.wordBreak = "break-word";
         spanContainer.style.maxWidth = "100%"
         spanContainer.style.marginBottom = "10px";
+        spanContainer.classList.add("GoalDescription");
 
         spanContainer.appendChild(objetivoText);
         spanContainer.appendChild(nextLine);
@@ -170,7 +186,7 @@ function GoalDescription(progressContainer) {
     }
 }
 
-// reclama la recompensa
+// reclama la recompensa METODO INCOMPLETO
 function RequestReward(KC) {
     document.querySelectorAll('.task').forEach((container) => {
         if (!container.dataset.eventAdded) {
@@ -223,7 +239,6 @@ function comprobarEstadoProgreso() {
         const intervalo = setInterval(() => {
             const metaContainer = barra.closest(".task");
             const logo = metaContainer.querySelector(".imagen_meta");
-            const tituloMeta = metaContainer.querySelector(".goal-title");
 
             if (barra.value > 49) {
                 // Cambiar el color del fondo si el progreso supera el 49%
@@ -237,13 +252,13 @@ function comprobarEstadoProgreso() {
                 // Cambiar el fondo de la meta completada
                 metaContainer.style.backgroundColor = "#6be524";
                 metaContainer.style.transition = "all 0.5s ease";
-                tituloMeta.textContent = "Reclamar";
 
                 // Cambiar la imagen del logo
                 if (logo) {
                     logo.src = "https://cdn-icons-png.flaticon.com/512/1006/1006656.png"; // Ruta de la nueva imagen
                     logo.style.filter = "drop-shadow(1px 1px 1px rgba(0, 0, 0, 1))";
                 }
+                //actualizarProgreso(barra.value);
             }
         }, 500); // Verificar cada medio segundo
     });
@@ -307,4 +322,63 @@ function AnimacionMonedas(container) {
             setTimeout(() => coin.remove(), 2000);
         }
     }
+}
+
+// FUNCIONES PARA BBDD
+function guardarMetaBBDD(title, KC) {
+    const description = document.querySelector(".GoalDescription").textContent.replace("Objetivo:", '');
+    const challenge = {
+        titulo: title,
+        desc: description,
+        recompensa: KC
+    };
+
+    console.log("esta guardando?, Challenge");
+
+    $.ajax({
+        url: '/api/guardarMeta',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(challenge)
+    });
+}
+
+function borrarMetaBBDD(title) {
+    $.ajax({
+        url: '/api/borrarMeta',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(title)
+    });
+}
+
+function actualizarMetasBBDD() {
+    const metasRestantes = document.querySelectorAll(".goal-title");
+    for(let i = 0; i < metasRestantes.length; i++) {
+        metasRestantes[i].textContent = `Meta ${i + 1}`;
+    }
+
+    const nuevostitulos = {
+        titulos: metasRestantes
+    }
+
+    $.ajax({
+        url: '/api/actualizarNumeroMetas',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ titulos: nuevostitulos })
+    });
+}
+
+function actualizarProgreso(progreso) {
+    const goalProgress = {
+        porcentage: progreso
+    };
+
+    $.ajax({
+        url: '/api/actualizarProgreso',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(goalProgress)
+    });
 }
