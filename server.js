@@ -280,7 +280,6 @@ app.get('/Desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
 });
 
-<<<<<<< HEAD
 app.post('/api/mensajes', async (req, res) => {
     const { id_emisor, receptor, contenido } = req.body;
 
@@ -337,7 +336,7 @@ app.get('/api/usuarios', async (req, res) => {
     }
 });
 
-=======
+
 app.post('/api/guardarMeta', async (req, res) => {
     console.log("Datos recibidos:", req.body);
     const { titulo, desc, recompensa } = req.body;
@@ -410,4 +409,3 @@ app.post('/api/actualizarProgreso', async (req, res) => {
         res.status(500).json({ message: 'Error', error: error.message });
         }
     });
->>>>>>> 236c20bcfda75141a0e7361317d2049613d7db5e
