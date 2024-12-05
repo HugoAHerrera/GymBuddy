@@ -164,28 +164,27 @@ app.get('/rutina', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
 });
 
+app.get('/rutina-concreta', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_concreta.html'));
+});
+
 app.get('/desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
 });
 
-
-app.get('/rutina-concreta', async (req, res) => {
+app.get('/api/rutina-concreta', async (req, res) => {
     const rutinaNombre = req.query.id;
-    console.log(rutinaNombre);
-    const rutina = await database.obtenerEjercicios(rutinaNombre);
-    console.log(rutina);
-    if (rutina) {
-        res.send(`
-            <html>
-                <head><title>${rutinaNombre}</title></head>
-                <body>
-                    <h1>${rutina[0].nombre}</h1>
-                    <p>Detalles de la rutina...</p>
-                </body>
-            </html>
-        `);
-    } else {
-        res.status(404).send('Rutina no encontrada');
+    try {
+        const ejercicios = await database.obtenerEjercicios(rutinaNombre);
+
+        if (ejercicios.length > 0) {
+            res.json({ rutinaNombre, ejercicios }); 
+        } else {
+            res.status(404).json({ error: 'Rutina no encontrada' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener los ejercicios' });
     }
 });
 

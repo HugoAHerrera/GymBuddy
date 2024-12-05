@@ -194,13 +194,21 @@ nav .logo img {
 .div-ejercicios {
     display: flex;
     flex-direction: column; 
-    align-items: center; 
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s, visibility 0s linear 0.5s;
+}
+
+.div-ejercicios.show {
+    visibility: visible;
+    opacity: 1;
 }
 
 .ejercicio h1 {
     margin: 0;
-    margin-left: auto; 
-    text-align: center; 
+    margin-left: auto;
+    text-align: center;
     flex: 1;
 }
 
@@ -210,6 +218,7 @@ nav .logo img {
     align-items: center;
     margin-top: 30px;
 }
+
 
 #contador {
     font-size: 1.5rem;

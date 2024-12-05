@@ -83,15 +83,29 @@ const databaseMethods = {
 
     obtenerEjercicios: async (rutinaNombre) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT nombre_rutina FROM rutina WHERE nombre_rutina = ?';
-            connection.query(sql, [rutinaNombre], (err, results) => {
+            const sql = 'SELECT lista_ejercicios FROM rutina WHERE nombre_rutina = ?';
+            connection.query(sql, [rutinaNombre], async (err, results) => {
                 if (err) return reject(err);
-
-                const rutinas = results.map(row => ({
-                    nombre: row.nombre_rutina
-                }));
-
-                resolve(rutinas);
+    
+                if (results.length === 0) return resolve([]); // Si no se encuentra la rutina
+    
+                const listaEjercicios = results[0].lista_ejercicios.split(',');
+                try {
+                    const ejercicios = [];
+                    for (const id of listaEjercicios) {
+                        const ejercicioSql = 'SELECT nombre_ejercicio FROM ejercicio WHERE id_ejercicio = ?';
+                        const [ejercicioResult] = await new Promise((resolve, reject) => {
+                            connection.query(ejercicioSql, [id], (err, result) => {
+                                if (err) return reject(err);
+                                resolve(result);
+                            });
+                        });
+                        ejercicios.push(ejercicioResult.nombre_ejercicio);
+                    }
+                    resolve(ejercicios);
+                } catch (error) {
+                    reject(error);
+                }
             });
         });
     },
@@ -105,7 +119,7 @@ const databaseMethods = {
             if (periodo) {
                 switch (periodo) {
                     case 'semana':
-                        // Filtrar por la semana actual (de lunes a domingo)
+                        // Filtrar por la semana' actual (de lunes a domingo)
                         sql += ' WHERE fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE())) DAY AND fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY';
                         break;
                     case 'mes':
