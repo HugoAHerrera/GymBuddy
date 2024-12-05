@@ -176,6 +176,11 @@ app.get('/api/rutinas', async (req, res) => {
   }
 });
 
+app.get('/api/guia_ejercicios',async(req,res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/guia_ejercicios.html'));
+});
+
+
 app.get('/previewTerminosCondiciones', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/noUserTerminosCondiciones.html'));
   });

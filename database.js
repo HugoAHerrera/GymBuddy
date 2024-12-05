@@ -226,26 +226,36 @@ const databaseMethods = {
             });
         });
     },
+
     // GUÍA DE EJERCICIOS
-    obtenerDescripcionEjercicios: async () => {
+    obtenerDescripcionEjercicios: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM ejercicios';
-            connection.query(sql, (err, results) => {
+            const sql = 'SELECT * FROM ejercicio WHERE id_ejercicio = ?';
+            connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
     
-                const descripciones = results.map(row => ({
-                    id: row.id_ejercicio,
-                    nombre_ejercicio: row.nombre_ejercicio,
-                    dificultad: row.dificultad,
-                    imagen: row.imagen,
-                    equipo_necesario: row.equipo_necesario,
-                    objetivo: row.objetivo,
-                    preparacion: row.preparacion,
-                    ejecucion: row.ejecucion,
-                    consejos_clave: row.consejos_clave,
-                    zona_principal: row.zona_principal
-                }));
-                resolve(descripciones);
+                // Si no hay resultados para ese usuario, retornar un error o un valor vacío.
+                if (results.length === 0) {
+                    return reject('Usuario no encontrado');
+                }
+    
+                // Aquí asignas las columnas de la tabla 'usuario' a un objeto, por ejemplo:
+                const usuario = results[0];
+                const descripcion = {
+                    id_ejercicio: usuario.id_ejercicio,
+                    nombre_ejercicio: usuario.nombre_ejercicio,
+                    dificultad: usuario.dificultad,
+                    imagen: usuario.imagen,
+                    equipo_necesario: usuario.equipo_necesario,
+                    objetivo: usuario.objetivo,
+                    preparacion: usuario.preparacion,
+                    ejecucion: usuario.ejecucion,
+                    consejos_clave: usuario.consejos_clave,
+                    zona_principal: usuario.zona_principal
+                    // Puedes agregar más campos que tengas en la tabla de usuario
+                };
+    
+                resolve(descripcion);
             });
         });
     },
