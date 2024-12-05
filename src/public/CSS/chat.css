@@ -131,3 +131,45 @@ body {
 .hidden {
     display: none;
 }
+
+.chat-search {
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ccc;
+}
+
+.chat-search input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#search-results {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    background-color: white;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#search-results.hidden {
+    display: none;
+}
+
+#search-results li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#search-results li:hover {
+    background-color: #ddd;
+}
+
+.search-result {
+    color: #333;
+}
+

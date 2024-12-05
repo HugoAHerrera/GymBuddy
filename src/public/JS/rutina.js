@@ -35,7 +35,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.body.addEventListener('click', (event) => {
         if (event.target.matches('.recomendacion, .rutina')) {
-            window.open('rutina_concreta.html', '_blank');
+            const rutinaNombre = event.target.textContent;
+            window.open(`/rutina-concreta?id=${rutinaNombre}`, '_blank');
         }
     });
 
