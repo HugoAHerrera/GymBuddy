@@ -317,7 +317,8 @@ const databaseMethods = {
             });
         });
     },
-
+    
+    // Usuario
     convertirBlobImagen: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             // Consulta SQL para obtener la imagen del usuario desde la base de datos
@@ -336,6 +337,38 @@ const databaseMethods = {
                 try {
                     // Obtenemos el blob (almacenado como un Buffer en Node.js) de la consulta
                     const blob = results[0].imagenes;
+    
+                    // Convertir el Buffer a Base64
+                    const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
+    
+                    // Resolvemos con la imagen en formato Base64
+                    resolve(base64Image);
+                } catch (error) {
+                    reject(error); // Rechazamos si ocurre un error durante la conversión
+                }
+            });
+        });
+    },
+
+    //Ejercicio
+    convertirBlobImagenEj: async (id_ejercicio) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para obtener la imagen del ejercicio desde la base de datos
+            const sql = 'SELECT imagen FROM ejercicio WHERE id_ejercicio = ?';
+    
+            // Ejecutar la consulta SQL con el id_ejercicio como parámetro
+            connection.query(sql, [id_ejercicio], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, rechazamos la promesa
+                }
+    
+                if (results.length === 0) {
+                    return reject(new Error('No se encontró ninguna imagen para este ejercicio.'));
+                }
+    
+                try {
+                    // Obtenemos el blob (almacenado como un Buffer en Node.js) de la consulta
+                    const blob = results[0].imagen; // Asegúrate de que 'imagen' es el nombre correcto de la columna
     
                     // Convertir el Buffer a Base64
                     const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;

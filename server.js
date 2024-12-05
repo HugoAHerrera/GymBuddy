@@ -180,6 +180,32 @@ app.get('/api/guia_ejercicios',async(req,res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/guia_ejercicios.html'));
 });
 
+app.post('/api/guia-ejercicios', async (req, res) => {
+    try {
+        const guia = await database.obtenerDescripcionEjercicios(58);
+        console.log(guia); // Asumiendo que quieres imprimir la respuesta en la consola.
+        res.status(200).json(guia); // Enviar la respuesta al cliente
+    } catch (error) {
+        console.error('Error al obtener la guía de ejercicios:', error); // Se añadió el parámetro `error`
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) => {
+    try {
+        const imagenBase64 = await database.convertirBlobImagenEj(58);
+
+        if (!imagenBase64) {
+            return res.status(404).json({ error: 'No se encontró una imagen para este usuario.' });
+        }
+
+        res.status(200).json({ imagen: imagenBase64 });
+    } catch (error) {
+        console.error("Error al convertir el blob a imagen ejercoco:", error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
 
 app.get('/previewTerminosCondiciones', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/noUserTerminosCondiciones.html'));
@@ -197,7 +223,7 @@ app.get('/perfil', (req, res) => {
         return res.status(400).send('ID de usuario no proporcionado');
     }
     console.log('Perfil:',req.session.id_usuario)
-    res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
+    res.sendFile(path.join(__dirname, 'src/public/HTML/guia_ejercicios.html'));
 });
 
 app.post('/api/cambiarNombreUsuario', upload.single('imagen'), async (req, res) => {
@@ -277,6 +303,7 @@ app.post('/api/blobAImagen', upload.single('imagen'), async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
+
 
 
 app.get('/api/obtenerDatosUsuario', async (req, res) => {
