@@ -436,6 +436,7 @@ const databaseMethods = {
         });
     },
 
+    //Tienda
     agregarAlCarro: async ({ idArticulo, id_usuario }) => {
         return new Promise((resolve, reject) => {
             const sql = 'INSERT INTO carro (idArticulo, id_usuario) VALUES (?, ?)';
@@ -455,7 +456,8 @@ const databaseMethods = {
             });
         });
     },
-    
+
+    //Carro
     obtenerProductosCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
