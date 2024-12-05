@@ -149,42 +149,54 @@ const databaseMethods = {
     },
 
     // Metodos para la pagina de Objetivos -- meta al completo (progreso, descripcion, recompensa...)
-    
-    /*
-        FALTA:
-            - AÑADIR TABLAS EN LA BBDD
-     */
-
-    guardarObjetivos: async () => {
+    // se ejecuta cada vez que cambia de pagina el usuario? -> ver cuando
+    guardarMeta: async (desafio) => {
         return new Promise((resolve, reject) => {
-            /*const sql = 'SELECT * FROM usuario WHERE correo = ?';
-            connection.query(sql, [email], (err, results) => {
+            const sql = 'INSERT INTO desafios (descripcion, recompensa, titulo_desafio) VALUES (?, ?, ?)';
+            connection.query(sql, [desafio.desc, desafio.recompensa, desafio.titulo], (err, results) => {
                 if (err) return reject(err);
-                resolve(results[0]);
-            });*/
+                resolve(results);
+            });
         });
     },
-
-    obtenerObjetivos: async () => {
+    borrarMeta: async (desafio) => {
         return new Promise((resolve, reject) => {
-            /*const sql = 'SELECT * FROM usuario WHERE correo = ?';
-            connection.query(sql, [email], (err, results) => {
+            const sql = 'DELETE * FROM desafios WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.titulo], (err, results) => {
                 if (err) return reject(err);
-                resolve(results[0]);
-            });*/
+                resolve(results);
+            });
         });
     },
-
-    borrarObjetivos: async () => {
+    actualizarNumerosMetas: async (desafio) => {
         return new Promise((resolve, reject) => {
-            /*const sql = 'SELECT * FROM usuario WHERE correo = ?';
-            connection.query(sql, [email], (err, results) => {
+            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.titulo], (err, results) => {
                 if (err) return reject(err);
-                resolve(results[0]);
-            });*/
+                resolve(results);
+            });
         });
     },
-    
+    /* Para cargar la pagina de cada user con sus desafios ya existentes */
+    obtenerDesafios: async () => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM desafios';
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+    // actualizar el progreso del desafio
+    actualizarProgreso: async (desafio) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.titulo], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
     // GUÍA DE EJERCICIOS
     obtenerDescripcionEjercicios: async () => {
         return new Promise((resolve, reject) => {
@@ -210,13 +222,75 @@ const databaseMethods = {
     },
     
     // Función para añadir o actualizar la imagen de un ejercicio dado un id_ejercicio manual
-    añadirFotoEjercicio: async (idEjercicio, urlImagen) => {
+    añadirFotoEjercicio: async (idEjercicio, blob) => {
         return new Promise((resolve, reject) => {
             // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
-            const sql = 'UPDATE ejercicios SET imagen = ? WHERE id_ejercicio = ?';
-
+            const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
+            
             // Ejecutar la consulta SQL con los parámetros
-            connection.query(sql, [urlImagen, idEjercicio], (err, results) => {
+            connection.query(sql, [blob, idEjercicio], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, lo rechazamos
+                }
+                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
+            });
+        });
+    },
+
+    // PERFIL
+    cambiarNombreUsuario: async (idUsuario, nuevoNombre) => {
+        return new Promise((resolve, reject) => {
+            // Asegúrate de que la columna a actualizar sea 'nombre_usuario' y que el valor 'nuevoNombre' se pase correctamente.
+            const sql = 'UPDATE usuario SET nombre_usuario = ? WHERE id_usuario = ?';
+            
+            connection.query(sql, [nuevoNombre, idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err); // Rechaza la promesa si ocurre un error.
+                }
+                resolve(results); // Resuelve la promesa con los resultados si no hay error.
+            });
+        });
+    },
+    
+
+    obtenerDescripcionUsuario: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM usuario WHERE id = ?';
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) return reject(err);
+    
+                // Si no hay resultados para ese usuario, retornar un error o un valor vacío.
+                if (results.length === 0) {
+                    return reject('Usuario no encontrado');
+                }
+    
+                // Aquí asignas las columnas de la tabla 'usuario' a un objeto, por ejemplo:
+                const usuario = results[0];
+                const descripcion = {
+                    id_usuario: usuario.id_usuario,
+                    imagenes: usuario.imagenes,
+                    nombre_usuario: usuario.nombre_usuario,
+                    contraseña: usuario.contraseña,
+                    KC: usuario.KC,
+                    numero_tarjeta: usuario.numero_tarjeta,
+                    CVV: usuario.CVV,
+                    fecha_caducidad: usuario.fecha_caducidad
+                    // Puedes agregar más campos que tengas en la tabla de usuario
+                };
+    
+                resolve(descripcion);
+            });
+        });
+    },
+    
+
+    añadirFotoPerfil: async (idEjercicio, blob) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
+            const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
+            
+            // Ejecutar la consulta SQL con los parámetros
+            connection.query(sql, [blob, idEjercicio], (err, results) => {
                 if (err) {
                     return reject(err); // Si hay error, lo rechazamos
                 }
@@ -278,7 +352,6 @@ const databaseMethods = {
             });
         });
     }
-    
 };
 
 module.exports = databaseMethods;

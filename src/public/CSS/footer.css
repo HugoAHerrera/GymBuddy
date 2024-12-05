@@ -1,0 +1,30 @@
+/* Evita los scrolls */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* Asegura que el contenido ocupe toda la altura de la pantalla */
+    display: flex;
+    flex-direction: column; /* Organiza el contenido en una columna */
+}
+
+/* Estilos del footer */
+footer {
+    background-color: rgb(2, 126, 243);
+    color: rgb(196, 217, 237);
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+    position: relative; /* Esto asegura que el footer se posicione bien */
+    bottom: 0;
+}
+
+/* Estilos de los enlaces dentro del footer */
+footer a {
+    color: white;
+    text-decoration: none;
+}
+
+footer a.footer-enlace:hover {
+    text-decoration: underline;
+    color: rgb(154, 233, 233);
+}
