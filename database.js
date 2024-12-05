@@ -377,7 +377,32 @@ const databaseMethods = {
                 resolve(results);
             });
         });
-    }
+    },
+
+    obtenerProductosCesta: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo
+                FROM cesta
+                JOIN tienda ON cesta.idArticulo = tienda.idArticulo
+                WHERE cesta.id_usuario = ?;
+            `;
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    vaciarCesta: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM cesta WHERE id_usuario = ?;`;
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results.affectedRows > 0);
+            });
+        });
+    },
 };
 
 module.exports = databaseMethods;
