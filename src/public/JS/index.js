@@ -38,7 +38,7 @@ $(document).ready(function () {
             
             <div class="terms-container">
                 <input type="checkbox" id="terms" name="terms" required>
-                <label> Aceptar términos y condiciones</label>
+                <label for="terms" class="terms-label"> Aceptar términos y condiciones</label>
             </div>
 
             <button type="submit" id="submit-btn">Enviar</button>
@@ -275,4 +275,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     setTimeout(borrarTexto, 2000);
+});
+
+$(document).on('click', '.terms-label', function (event) {
+    event.preventDefault();
+    window.open('/previewTerminosCondiciones', '_blank');
 });

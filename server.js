@@ -163,8 +163,11 @@ app.get('/api/rutinas', async (req, res) => {
   }
 });
 
+app.get('/previewTerminosCondiciones', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/noUserTerminosCondiciones.html'));
+  });
 
-
+  
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {

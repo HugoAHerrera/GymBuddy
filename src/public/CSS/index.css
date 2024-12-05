@@ -183,6 +183,18 @@ body {
     width: auto;
 }
 
+.terms-label {
+    cursor: pointer;
+    text-decoration: none;
+    color: #000;
+}
+
+.terms-label:hover {
+    text-decoration: underline;
+    color: #007BFF;
+}
+
+
 footer {
     background-color: rgb(2, 126, 243);
     color: rgb(196, 217, 237);
