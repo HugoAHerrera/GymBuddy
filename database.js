@@ -81,6 +81,21 @@ const databaseMethods = {
         });
     },
 
+    obtenerEjercicios: async (rutinaNombre) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT nombre_rutina FROM rutina WHERE nombre_rutina = ?';
+            connection.query(sql, [rutinaNombre], (err, results) => {
+                if (err) return reject(err);
+
+                const rutinas = results.map(row => ({
+                    nombre: row.nombre_rutina
+                }));
+
+                resolve(rutinas);
+            });
+        });
+    },
+
     obtenerSesiones: async (periodo = null) => {
         return new Promise((resolve, reject) => {
             let sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kg, fecha FROM sesion';
