@@ -8,6 +8,37 @@ document.getElementById("guardar-cambios").addEventListener("click", function ()
     formData.append("correo_usuario", nuevoCorreoUsuario);
     formData.append("imagen", imagen); // Agregar la imagen al FormData
 
+    async function cargarImagenUsuario() {
+        try {
+            // Hacer una solicitud al endpoint que devuelve la imagen
+            const respuesta = await fetch('/api/blobAImagen', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include' // Para enviar cookies de sesión
+            });
+
+            if (!respuesta.ok) {
+                throw new Error('No se pudo cargar la imagen del usuario');
+            }
+
+            const datos = await respuesta.json();
+
+            if (!datos.imagen) {
+                console.error('No se recibió una imagen válida.');
+                return;
+            }
+
+            // Asignar la imagen al elemento <img> usando el ID
+            const imgElemento = document.getElementById('imagen-mostrada');
+            imgElemento.src = datos.imagen; // datos.imagen es el Base64 devuelto por la API
+        } catch (error) {
+            console.error('Error al cargar la imagen:', error);
+        }
+    }
+    cargarImagenUsuario()
+
     fetch('/api/cambiarNombreUsuario', {
         method: 'POST',
         body: formData, // Usar formData en lugar de JSON.stringify
@@ -21,7 +52,7 @@ document.getElementById("guardar-cambios").addEventListener("click", function ()
         .then(data => {
             const mensajeConfirmacion = document.getElementById("mensaje-confirmacion");
             mensajeConfirmacion.textContent = "Perfil actualizado correctamente.";
-            mensajeConfirmacion.style.color = "green";
+            mensajeConfirmacion.style.color = "blue";
 
             setTimeout(() => {
                 mensajeConfirmacion.textContent = "";
@@ -30,12 +61,9 @@ document.getElementById("guardar-cambios").addEventListener("click", function ()
         .catch(error => {
             const mensajeConfirmacion = document.getElementById("mensaje-confirmacion");
             mensajeConfirmacion.textContent = error.message;
-            mensajeConfirmacion.style.color = "red";
-
-            setTimeout(() => {
-                mensajeConfirmacion.textContent = "";
-            }, 3000);
+            mensajeConfirmacion.style.color = "blue";
         });
+        cargarImagenUsuario()
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -52,6 +80,36 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 });
 
+async function cargarImagenUsuario() {
+    try {
+        // Hacer una solicitud al endpoint que devuelve la imagen
+        const respuesta = await fetch('/api/blobAImagen', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include' // Para enviar cookies de sesión
+        });
+
+        if (!respuesta.ok) {
+            throw new Error('No se pudo cargar la imagen del usuario');
+        }
+
+        const datos = await respuesta.json();
+
+        if (!datos.imagen) {
+            console.error('No se recibió una imagen válida.');
+            return;
+        }
+
+        // Asignar la imagen al elemento <img> usando el ID
+        const imgElemento = document.getElementById('imagen-mostrada');
+        imgElemento.src = datos.imagen; // datos.imagen es el Base64 devuelto por la API
+    } catch (error) {
+        console.error('Error al cargar la imagen:', error);
+    }
+}
+cargarImagenUsuario()
 
 
 // Cargar el header y el footer con fetch

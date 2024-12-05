@@ -29,6 +29,67 @@ function mostrarMasProductos() {
     }
 }
 
+// Función para cargar los productos desde la base de datos
+async function cargarProductos() {
+    try {
+        // Hacer una solicitud GET para obtener los productos
+        const response = await fetch('/api/productos');
+        
+        if (!response.ok) {
+            throw new Error("Error al obtener los productos");
+        }
+        
+        const productos = await response.json();
+        console.log("Productos obtenidos:", productos);  // Verificación de los productos obtenidos
+
+        // Referencia a la sección "Recomendados"
+        const seccionRecomendados = document.getElementById("recomendados");
+
+        // Recorrer los productos y añadirlos a la sección
+        productos.forEach(producto => {
+            const tarjetaProducto = document.createElement("div");
+            tarjetaProducto.classList.add("tarjeta-producto");
+
+            // Imagen del producto (colocamos un texto de "Imagen de Producto" por ahora)
+            const imagenProducto = document.createElement("div");
+            imagenProducto.classList.add("imagen-producto");
+            imagenProducto.textContent = "Imagen de Producto";  // Aquí puedes agregar la imagen si la tienes como URL o Blob
+
+            // Nombre del producto
+            const nombreProducto = document.createElement("div");
+            nombreProducto.classList.add("nombre-producto");
+            nombreProducto.textContent = producto.nombreArticulo;
+
+            // Precio del producto
+            const precioProducto = document.createElement("div");
+            precioProducto.classList.add("precio-producto");
+            precioProducto.textContent = `${producto.precio} €`;
+
+            // Botón de "Comprar"
+            const botonComprar = document.createElement("button");
+            botonComprar.classList.add("boton-comprar");
+            botonComprar.textContent = "Comprar";
+            botonComprar.onclick = () => añadirAlCarrito(producto.idArticulo, producto.nombreArticulo, producto.precio);
+
+            // Añadir los elementos a la tarjeta de producto
+            tarjetaProducto.appendChild(imagenProducto);
+            tarjetaProducto.appendChild(nombreProducto);
+            tarjetaProducto.appendChild(precioProducto);
+            tarjetaProducto.appendChild(botonComprar);
+
+            // Añadir la tarjeta a la sección "Recomendados"
+            seccionRecomendados.appendChild(tarjetaProducto);
+        });
+    } catch (error) {
+        console.error('Error al cargar los productos:', error);
+    }
+}
+
+// Llamar la función cuando la página se cargue
+document.addEventListener('DOMContentLoaded', function() {
+    cargarProductos();  // Cargar los productos al cargar la página
+});
+
 // Función de búsqueda de productos
 function buscarProductos() {
     const input = document.getElementById("buscador-productos").value.toLowerCase();
@@ -45,28 +106,26 @@ function buscarProductos() {
         }
     });
 }
+
 document.getElementById("buscador-productos").addEventListener("input", buscarProductos);
 
 // Función para añadir un producto al carrito
-function añadirAlCarrito(nombreProducto) {
-    alert(`Su artículo "${nombreProducto}" fue añadido a la cesta`);
+function añadirAlCarrito(id, nombreProducto, precio) {
+    // Crear un objeto con la información del producto
+    const producto = {
+        id: id,
+        nombre: nombreProducto,
+        precio: precio
+    };
 
-    // Añadir producto al carrito y actualizar contador
-    carrito.push(nombreProducto);
-    contadorCarrito++;
-    document.getElementById("contador-carrito").textContent = contadorCarrito;
+    // Enviar al header.js para que actualice el carrito
+    if (typeof actualizarCarrito !== 'undefined') {
+        actualizarCarrito(producto);  // Asegúrate de que la función está definida correctamente en header.js
+    }
 
-    // Actualizar la lista de productos en el menú del carrito
-    actualizarListaCarrito();
+    // Mostrar mensaje de éxito
+    alert(`El producto "${nombreProducto}" ha sido añadido al carrito.`);
 }
-
-document.addEventListener('DOMContentLoaded', function() {
-    const logoImage = document.getElementById('logotype');
-    
-    logoImage.addEventListener('click', function() {
-        window.location.href = 'perfil.html';
-    });
-});
 
 // Cargar el header y el footer con fetch
 fetch('../HTML/header.html')

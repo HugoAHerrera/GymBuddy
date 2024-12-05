@@ -226,26 +226,36 @@ const databaseMethods = {
             });
         });
     },
+
     // GUÍA DE EJERCICIOS
-    obtenerDescripcionEjercicios: async () => {
+    obtenerDescripcionEjercicios: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM ejercicios';
-            connection.query(sql, (err, results) => {
+            const sql = 'SELECT * FROM ejercicio WHERE id_ejercicio = ?';
+            connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
     
-                const descripciones = results.map(row => ({
-                    id: row.id_ejercicio,
-                    nombre_ejercicio: row.nombre_ejercicio,
-                    dificultad: row.dificultad,
-                    imagen: row.imagen,
-                    equipo_necesario: row.equipo_necesario,
-                    objetivo: row.objetivo,
-                    preparacion: row.preparacion,
-                    ejecucion: row.ejecucion,
-                    consejos_clave: row.consejos_clave,
-                    zona_principal: row.zona_principal
-                }));
-                resolve(descripciones);
+                // Si no hay resultados para ese usuario, retornar un error o un valor vacío.
+                if (results.length === 0) {
+                    return reject('Usuario no encontrado');
+                }
+    
+                // Aquí asignas las columnas de la tabla 'usuario' a un objeto, por ejemplo:
+                const usuario = results[0];
+                const descripcion = {
+                    id_ejercicio: usuario.id_ejercicio,
+                    nombre_ejercicio: usuario.nombre_ejercicio,
+                    dificultad: usuario.dificultad,
+                    imagen: usuario.imagen,
+                    equipo_necesario: usuario.equipo_necesario,
+                    objetivo: usuario.objetivo,
+                    preparacion: usuario.preparacion,
+                    ejecucion: usuario.ejecucion,
+                    consejos_clave: usuario.consejos_clave,
+                    zona_principal: usuario.zona_principal
+                    // Puedes agregar más campos que tengas en la tabla de usuario
+                };
+    
+                resolve(descripcion);
             });
         });
     },
@@ -293,6 +303,54 @@ const databaseMethods = {
         });
     },
 
+    añadirFotoPerfil: async (idUsuario, blob) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
+            const sql = 'UPDATE usuario SET imagenes = ? WHERE id_usuario = ?';
+            
+            // Ejecutar la consulta SQL con los parámetros
+            connection.query(sql, [blob, idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, lo rechazamos
+                }
+                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
+            });
+        });
+    },
+
+    convertirBlobImagen: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para obtener la imagen del usuario desde la base de datos
+            const sql = 'SELECT imagenes FROM usuario WHERE id_usuario = ?';
+    
+            // Ejecutar la consulta SQL con el idUsuario como parámetro
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, rechazamos la promesa
+                }
+    
+                if (results.length === 0 || !results[0].imagenes) {
+                    return reject(new Error('No se encontró ninguna imagen para este usuario.'));
+                }
+    
+                try {
+                    // Obtenemos el blob (almacenado como un Buffer en Node.js) de la consulta
+                    const blob = results[0].imagenes;
+    
+                    // Convertir el Buffer a Base64
+                    const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
+    
+                    // Resolvemos con la imagen en formato Base64
+                    resolve(base64Image);
+                } catch (error) {
+                    reject(error); // Rechazamos si ocurre un error durante la conversión
+                }
+            });
+        });
+    },
+    
+    
+
     obtenerDatosUsuario: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = 'SELECT * FROM usuario WHERE id_usuario = ?';
@@ -320,21 +378,6 @@ const databaseMethods = {
                 };
     
                 resolve(descripcion);
-            });
-        });
-    },
-    
-    añadirFotoPerfil: async (idEjercicio, blob) => {
-        return new Promise((resolve, reject) => {
-            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
-            const sql = 'UPDATE usuario SET imagenes = ? WHERE id_usuario = ?';
-            
-            // Ejecutar la consulta SQL con los parámetros
-            connection.query(sql, [blob, idEjercicio], (err, results) => {
-                if (err) {
-                    return reject(err); // Si hay error, lo rechazamos
-                }
-                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
             });
         });
     },
@@ -393,13 +436,35 @@ const databaseMethods = {
         });
     },
 
-    obtenerProductosCesta: async (idUsuario) => {
+    //Tienda
+    agregarAlCarro: async ({ idArticulo, id_usuario }) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'INSERT INTO carro (idArticulo, id_usuario) VALUES (?, ?)';
+            connection.query(sql, [idArticulo, id_usuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+    
+    eliminarDelCarro: async ({ idArticulo, id_usuario }) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'DELETE FROM carro WHERE idArticulo = ? AND id_usuario = ?';
+            connection.query(sql, [idArticulo, id_usuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    //Carro
+    obtenerProductosCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
                 SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo
-                FROM cesta
-                JOIN tienda ON cesta.idArticulo = tienda.idArticulo
-                WHERE cesta.id_usuario = ?;
+                FROM carro
+                JOIN tienda ON carro.idArticulo = tienda.idArticulo
+                WHERE carro.id_usuario = ?;
             `;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
@@ -408,15 +473,25 @@ const databaseMethods = {
         });
     },
 
-    vaciarCesta: async (idUsuario) => {
+    vaciarCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            const sql = `DELETE FROM cesta WHERE id_usuario = ?;`;
+            const sql = `DELETE FROM carro WHERE id_usuario = ?;`;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
                 resolve(results.affectedRows > 0);
             });
         });
     },
+
+    obtenerProductos: async () => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM tienda';
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    }
 };
 
 module.exports = databaseMethods;
