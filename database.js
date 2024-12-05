@@ -83,15 +83,29 @@ const databaseMethods = {
 
     obtenerEjercicios: async (rutinaNombre) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT nombre_rutina FROM rutina WHERE nombre_rutina = ?';
-            connection.query(sql, [rutinaNombre], (err, results) => {
+            const sql = 'SELECT lista_ejercicios FROM rutina WHERE nombre_rutina = ?';
+            connection.query(sql, [rutinaNombre], async (err, results) => {
                 if (err) return reject(err);
-
-                const rutinas = results.map(row => ({
-                    nombre: row.nombre_rutina
-                }));
-
-                resolve(rutinas);
+    
+                if (results.length === 0) return resolve([]); // Si no se encuentra la rutina
+    
+                const listaEjercicios = results[0].lista_ejercicios.split(',');
+                try {
+                    const ejercicios = [];
+                    for (const id of listaEjercicios) {
+                        const ejercicioSql = 'SELECT nombre_ejercicio FROM ejercicio WHERE id_ejercicio = ?';
+                        const [ejercicioResult] = await new Promise((resolve, reject) => {
+                            connection.query(ejercicioSql, [id], (err, result) => {
+                                if (err) return reject(err);
+                                resolve(result);
+                            });
+                        });
+                        ejercicios.push(ejercicioResult.nombre_ejercicio);
+                    }
+                    resolve(ejercicios);
+                } catch (error) {
+                    reject(error);
+                }
             });
         });
     },
@@ -105,7 +119,7 @@ const databaseMethods = {
             if (periodo) {
                 switch (periodo) {
                     case 'semana':
-                        // Filtrar por la semana actual (de lunes a domingo)
+                        // Filtrar por la semana' actual (de lunes a domingo)
                         sql += ' WHERE fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE())) DAY AND fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY';
                         break;
                     case 'mes':
@@ -266,11 +280,22 @@ const databaseMethods = {
             });
         });
     },
-    
 
-    obtenerDescripcionUsuario: async (idUsuario) => {
+    cambiarCorreoUsuario: async (idUsuario, nuevoCorreo) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM usuario WHERE id = ?';
+            const sql = 'UPDATE usuario SET correo = ? WHERE id_usuario = ?'
+            connection.query(sql, [nuevoCorreo, idUsuario], (err,results) => {
+                if(err) {
+                    return reject(err);
+                }
+                resolve(results)
+            })
+        });
+    },
+
+    obtenerDatosUsuario: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM usuario WHERE id_usuario = ?';
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
     
@@ -284,6 +309,7 @@ const databaseMethods = {
                 const descripcion = {
                     id_usuario: usuario.id_usuario,
                     imagenes: usuario.imagenes,
+                    correo: usuario.correo,
                     nombre_usuario: usuario.nombre_usuario,
                     contraseña: usuario.contraseña,
                     KC: usuario.KC,
@@ -298,11 +324,10 @@ const databaseMethods = {
         });
     },
     
-
     añadirFotoPerfil: async (idEjercicio, blob) => {
         return new Promise((resolve, reject) => {
             // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
-            const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
+            const sql = 'UPDATE usuario SET imagenes = ? WHERE id_usuario = ?';
             
             // Ejecutar la consulta SQL con los parámetros
             connection.query(sql, [blob, idEjercicio], (err, results) => {
@@ -366,7 +391,32 @@ const databaseMethods = {
                 resolve(results);
             });
         });
-    }
+    },
+
+    obtenerProductosCesta: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo
+                FROM cesta
+                JOIN tienda ON cesta.idArticulo = tienda.idArticulo
+                WHERE cesta.id_usuario = ?;
+            `;
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    vaciarCesta: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM cesta WHERE id_usuario = ?;`;
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results.affectedRows > 0);
+            });
+        });
+    },
 };
 
 module.exports = databaseMethods;

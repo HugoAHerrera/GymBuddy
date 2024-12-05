@@ -5,13 +5,9 @@ require('dotenv').config();
 const database = require('./database');
 const { encriptarContraseña, compararContraseña } = require('./encryptor');
 const session = require('express-session');
-/* PARA SUBIR IMAGEN A BBDD. 
-SI LO = MORIR
+ 
 const multer = require('multer');
 const upload = multer(); // Configuración básica para manejar multipart/form-data
-*/
-
-
 
 const app = express();
 
@@ -121,28 +117,6 @@ app.post('/api/login', async (req, res) => {
 
 
 
-
-/*
-app.get('/rutina', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/blob.html'));
-});
-
-app.post('/api/rutinas', upload.single('imagen'), async (req, res) => {
-    const { idEjercicio } = req.body; // Recibe el ID del ejercicio del formulario
-    const imagen = req.file.buffer; // Obtiene el archivo como Buffer
-
-    try {
-        // Llama a la función para guardar la imagen
-        const imagen_añadida = await database.añadirFotoEjercicio(idEjercicio, imagen);
-        console.log('Imagen añadida correctamente');
-        res.json({ message: 'Imagen añadida correctamente', imagen_añadida });
-    } catch (error) {
-        console.error('Error al añadir imagen:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
-*/
-
 //Redirecciones del header
 app.get('/inicio', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
@@ -164,28 +138,27 @@ app.get('/rutina', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
 });
 
+app.get('/rutina-concreta', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_concreta.html'));
+});
+
 app.get('/desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
 });
 
-
-app.get('/rutina-concreta', async (req, res) => {
+app.get('/api/rutina-concreta', async (req, res) => {
     const rutinaNombre = req.query.id;
-    console.log(rutinaNombre);
-    const rutina = await database.obtenerEjercicios(rutinaNombre);
-    console.log(rutina);
-    if (rutina) {
-        res.send(`
-            <html>
-                <head><title>${rutinaNombre}</title></head>
-                <body>
-                    <h1>${rutina[0].nombre}</h1>
-                    <p>Detalles de la rutina...</p>
-                </body>
-            </html>
-        `);
-    } else {
-        res.status(404).send('Rutina no encontrada');
+    try {
+        const ejercicios = await database.obtenerEjercicios(rutinaNombre);
+
+        if (ejercicios.length > 0) {
+            res.json({ rutinaNombre, ejercicios }); 
+        } else {
+            res.status(404).json({ error: 'Rutina no encontrada' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener los ejercicios' });
     }
 });
 
@@ -221,31 +194,57 @@ app.get('/perfil', (req, res) => {
     console.log('Perfil:',req.session.id_usuario)
     res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
 });
-
-
-app.post('/api/cambiarNombreUsuario', async (req, res) => {
+app.post('/api/cambiarNombreUsuario', upload.single('imagen'), async (req, res) => {
     try {
-        // Obtenemos el nuevo nombre de usuario del cuerpo de la solicitud
-        const { nombre_usuario } = req.body;
-        console.log("nombre:",nombre_usuario)
+        const { nombre_usuario, correo_usuario } = req.body;
+        const imagen = req.file; // Acceder al archivo de imagen
+        console.log("imagen:", imagen.buffer);
 
-        // Verificamos si se recibió el nuevo nombre de usuario
-        if (!nombre_usuario) {
-            return res.status(400).json({ error: 'El nombre de usuario es obligatorio.' });
+        // Verificar si el nombre de usuario o el correo ya existen
+        const usuarioExistente = await database.comprobarUsuarioExistente(nombre_usuario);
+        const correoExistente = await database.comprobarCorreoExistente(correo_usuario);
+
+        if (usuarioExistente && usuarioExistente.id !== req.session.id_usuario) {
+            if (correoExistente && correoExistente.id !== req.session.id_usuario) {
+                await database.añadirFotoPerfil(req.session.id_usuario, imagen.buffer); // Guardar la imagen
+                return res.status(400).json({ error: 'El correo o/y el nombre de usuario están asociados a una cuenta.' });
+            } else {
+                await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+                return res.status(400).json({ error: 'El nombre de usuario ya existe. Correo cambiado' });
+            }
+        } else {
+            if (correoExistente && correoExistente.id !== req.session.id_usuario) {
+                await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
+                return res.status(400).json({ error: 'Nombre usuario asociado a una cuenta. Nombre Usuario cambiado' });
+            } else {
+                await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
+                await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+                if (imagen) {
+                    await database.añadirFotoPerfil(req.session.id_usuario, imagen.buffer); // Guardar la imagen
+                }
+                return res.json({ message: 'El perfil se ha actualizado correctamente.' });
+            }
         }
+    } catch (error) {
+        console.error('Error al cambiar el nombre o correo:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
 
-        // Aquí llamamos a una función ficticia que actualizaría el nombre en la base de datos
-        // La función `cambiarNombreUsuario` debe retornar el nuevo nombre actualizado
-        const nuevoNombreUsuario = await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
+app.get('/api/obtenerDatosUsuario', async (req, res) => {
+    try {
+        // Simulamos que estamos obteniendo datos de la base de datos usando el ID del usuario en la sesión
+        const datosUsuario = await database.obtenerDatosUsuario(req.session.id_usuario);
 
-        // Respondemos con el nuevo nombre de usuario
+        // Devuelve los datos del usuario al cliente
+        console.log("[Nombre,Correo,Imagen]:", datosUsuario.nombre_usuario, datosUsuario.correo)
         res.json({
-            message: 'Perfil: El nombre se ha cambiado a ',
-            nuevoNombreUsuario: nuevoNombreUsuario
+            nombre_usuario: datosUsuario.nombre_usuario,
+            correo: datosUsuario.correo
         });
     } catch (error) {
-        console.error('Error al cambiar el nombre de usuario:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('Error al obtener los datos del usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
 
@@ -446,3 +445,29 @@ app.post('/api/actualizarProgreso', async (req, res) => {
         res.status(500).json({ message: 'Error', error: error.message });
         }
     });
+
+app.get('/api/cesta/', async (req, res) => {
+    const { idUsuario } = req.params;
+    try {
+        const productos = await database.obtenerProductosCesta(idUsuario);
+        res.json(productos);
+    } catch (error) {
+        console.error('Error al obtener productos de la cesta', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+app.delete('/api/cesta/', async (req, res) => {
+    const { idUsuario } = req.params;
+    try {
+        const exito = await database.vaciarCesta(idUsuario);
+        if (exito) {
+            res.json({ mensaje: 'Cesta vaciada correctamente' });
+        } else {
+            res.status(400).json({ mensaje: 'No se pudo vaciar la cesta' });
+        }
+    } catch (error) {
+        console.error('Error al vaciar la cesta', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});

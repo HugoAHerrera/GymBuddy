@@ -108,6 +108,10 @@ nav .logo img {
     width: auto;
 }
 
+.center{
+    flex-grow: 1;
+}
+
 .Cabecera-rutina {
     display: flex;
     width: 100%;
@@ -156,6 +160,45 @@ nav .logo img {
     background-color: #889c30;
 }
 
+.tiempos-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.tiempo-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+input[type="number"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 150px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
 .btn-guia {
     height: 60px;
     width: auto;
@@ -194,13 +237,21 @@ nav .logo img {
 .div-ejercicios {
     display: flex;
     flex-direction: column; 
-    align-items: center; 
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s, visibility 0s linear 0.5s;
+}
+
+.div-ejercicios.show {
+    visibility: visible;
+    opacity: 1;
 }
 
 .ejercicio h1 {
     margin: 0;
-    margin-left: auto; 
-    text-align: center; 
+    margin-left: auto;
+    text-align: center;
     flex: 1;
 }
 
@@ -210,6 +261,7 @@ nav .logo img {
     align-items: center;
     margin-top: 30px;
 }
+
 
 #contador {
     font-size: 1.5rem;

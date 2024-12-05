@@ -5,6 +5,18 @@
     box-sizing: border-box;
 }
 
+.mensaje-confirmacion {
+    font-size: 14px;
+    margin-top: 10px;
+}
+.mensaje-confirmacion.error {
+    color: blue;
+}
+.mensaje-confirmacion.success {
+    color: green;
+}
+
+
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;

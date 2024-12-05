@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../Imagenes/logo-inicio.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/rutina_concreta.css">
-    <title>Rutina concreta</title>
+    <title>Rutina</title>
 </head>
 <body>
     <header>
@@ -34,13 +34,24 @@
     </header>
 
     <div class="center">
-        <div class="Cabecera-rutina">
-            <h1>Rutina de hombro</h1>
+        <div class="Cabecera-rutina" style="visibility: hidden;">
+            <h1 id="rutina-titulo"></h1>
             <div class="boton-empezar-rutina">Empezar Rutina</div>
             <div class="boton-crear-rutina">Crear rutina</div>
             <div class="boton-pausar-rutina" style="display: none;">Pausar Rutina</div>
         </div>
 
+        <div class="tiempos-container" id="tiempos-container" style="visibility: hidden;">
+            <div class="tiempo-input">
+                <label for="tiempo-ejercicio">Tiempo de ejercicio (segundos):</label>
+                <input type="number" id="tiempo-ejercicio" value="60" min="5" />
+            </div>
+            <div class="tiempo-input">
+                <label for="tiempo-descanso">Tiempo de descanso (segundos):</label>
+                <input type="number" id="tiempo-descanso" value="15" min="5" />
+            </div>
+        </div>
+        
         <div id="mensaje-terminado" style="display: none; text-align: center; padding: 20px; background-color: #f2f2f2; border-radius: 10px;">
             <h2 style="color: #4CAF50;">¡Has terminado la rutina!</h2>
             <p style="font-size: 18px; color: #555;">¡Felicidades por completar todos los ejercicios! Ahora puedes descansar o comenzar otra rutina.</p>
@@ -58,33 +69,14 @@
             </div>
         </div>
 
-        <div class="div-ejercicios">
-            <div class="ejercicio">
-                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio 1" class="imagen_ejercicio">
-                <h1>Ejercicio 1: Curl Ancho</h1>
-                <button class="btn-guia">Ver Guía</button>
-            </div>
-            <div class="ejercicio">
-                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio 2" class="imagen_ejercicio">
-                <h1>Ejercicio 2: Curl Ancho</h1>
-                <button class="btn-guia">Ver Guía</button>
-            </div>
-            <div class="ejercicio">
-                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio 3" class="imagen_ejercicio">
-                <h1>Ejercicio 3: Curl Ancho</h1>
-                <button class="btn-guia">Ver Guía</button>
-            </div>
-            <div class="ejercicio">
-                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio 4" class="imagen_ejercicio">
-                <h1>Ejercicio 4: Curl Ancho</h1>
-                <button class="btn-guia">Ver Guía</button>
-            </div>
-            <div class="ejercicio">
-                <img src="../Imagenes/curl_pesas.png" alt="Ejercicio 5" class="imagen_ejercicio">
-                <h1>Ejercicio 5: Curl Ancho</h1>
-                <button class="btn-guia">Ver Guía</button>
-            </div>
+        <div class="div-ejercicios" id="div-ejercicios">
+            <!-- Los ejercicios se agregarán dinámicamente aquí -->
         </div>        
+        <div id="loading" style="text-align: center; padding: 20px;">
+            <p>Cargando ejercicios...</p>
+        </div>
+
+        
     </div>
     
     <footer>
@@ -95,8 +87,9 @@
             <a>GymBuddy &copy; 2024</a>
         </p>
     </footer>
-    
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../js/rutina_concreta.js" defer></script>
+
 </body>
 </html>
