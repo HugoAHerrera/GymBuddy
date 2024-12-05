@@ -2,12 +2,10 @@ var block = 0;
 var block_2 = 1;
 var cerrojo = 1;
 document.addEventListener("DOMContentLoaded", function () {
-    // Añadir una meta
     document.querySelector(".boton-annadir-meta").addEventListener("click", () => {
         crearNuevaMeta();
         //aumentarProgresoConTiempo();
     });
-    // Botón para borrar metas
     document.querySelector(".boton-borrar-meta").addEventListener("click", OpcionBorrarMetas);
     document.querySelector(".oculto").addEventListener("click", CancelarBorrarMetas);
 });
@@ -15,11 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
 var titulosMetas = [];
 const metasContainer = document.querySelector(".div-metas");
 
-// funcion para crear el el objeto de la meta
 function crearNuevaMeta() {
-    if (block_2 === 1) {
-        //const metasContainer = document.querySelector(".div-metas");
-
+    if (block_2 === 1 && titulosMetas.length < 10) {
         // Crear contenedor de la meta
         const nuevaMeta = document.createElement("div");
         nuevaMeta.classList.add("task");
@@ -32,13 +27,6 @@ function crearNuevaMeta() {
         borrar.classList.add("borrar-X");
 
         botonBorrar.appendChild(borrar);
-        botonBorrar.addEventListener("click", () => {
-            metasContainer.removeChild(nuevaMeta);
-            titulosMetas.splice(titulosMetas.indexOf(nuevaMeta.querySelector(".goal-title").textContent), 1);
-            // hacer llamada a BBDD
-            borrarMetaBBDD(tituloMeta.textContent);
-            //actualizarMetasBBDD();
-        });
 
         // Crear imagen de la meta
         const imagenMeta = document.createElement("img");
@@ -60,9 +48,8 @@ function crearNuevaMeta() {
         const progressContainer = document.createElement("div");
         progressContainer.classList.add("progress-container");
 
-        // Creamos la descripcion de la meta
         const goalDescription = GoalDescription(progressContainer);
-        if (goalDescription[0] !== 0) {
+        if (goalDescription !== '') {
             // Crear progreso de la meta
             const barContainer = document.createElement("span");
             const textoProgresoMeta = document.createTextNode(" Progreso:");
@@ -111,14 +98,26 @@ function crearNuevaMeta() {
             // Añadir la nueva meta al contenedor de metas
             metasContainer.appendChild(nuevaMeta);
 
-            // guardar meta en BBDD
-            guardarMetaBBDD(tituloMeta.textContent, KC, goalDescription[1]);
+            guardarMetaBBDD(tituloMeta.textContent, KC, goalDescription);
             RequestReward(KC);
+
+            botonBorrar.addEventListener("click", () => {
+                metasContainer.removeChild(nuevaMeta);
+                alert(`titulo: ${tituloMeta.textContent} de ${titulosMetas}`);
+                titulosMetas.splice(titulosMetas.indexOf(tituloMeta.textContent), 1);
+                console.log("titulo:", tituloMeta.textContent, "de", titulosMetas);
+                borrarMetaBBDD(tituloMeta.textContent);
+                setTimeout(() => {
+                    actualizarMetasBBDD();
+                }, 1000);
+            });
         }
+    }
+    else {
+        alert("No puedes crear metas en este momento");
     }
 }
 
-// Función para borrar metas
 function OpcionBorrarMetas() {
         cerrojo = 0;
         block_2 = 0;
@@ -148,15 +147,13 @@ function CancelarBorrarMetas() {
     });
 }
 
-// Crea la descripcion de la meta - puesta por el user
 function GoalDescription(progressContainer) {
-    var lista = [];
     var desc = prompt("Por favor, escriba una descripción corta de su meta.");
     if (desc !== '') {
-        const words = desc.trim().split(/\s+/); // Divide el texto en palabras
+        const words = desc.trim().split(/\s+/);
         if (words.length > 35) {
             alert(`Tu descripción tiene ${words.length} palabras. Por favor, reduce el texto a 35 palabras o menos.`);  // CAMBIAR EL ALERT A OTRA COSA
-            return 0; // Fallo: descripción demasiado larga
+            return 0;
         }
         const spanContainer = document.createElement("span");
         const objetivoText = document.createTextNode(`Objetivo:`);
@@ -174,16 +171,15 @@ function GoalDescription(progressContainer) {
         spanContainer.appendChild(descripcionText);
 
         progressContainer.appendChild(spanContainer);
-        lista.push(1, desc)
-        return lista;
+        return desc.replace("Objetivo:", '');
     }
     else {
         alert("Es obligatorio poner una descripción.");
-        return 0;
+        return '';
     }
 }
 
-// reclama la recompensa METODO INCOMPLETO
+// METODO INCOMPLETO
 function RequestReward(KC) {
     document.querySelectorAll('.task').forEach((container) => {
         if (!container.dataset.eventAdded) {
@@ -229,7 +225,6 @@ function aumentarProgresoConTiempo() {
     comprobarEstadoProgreso();
 }
 
-// funcion para comprobar el estado de la barra de progreso
 function comprobarEstadoProgreso() {
     document.querySelectorAll(".BarraDeProgreso").forEach((barra) => {
         // Observar cambios en el progreso de cada barra
@@ -238,7 +233,6 @@ function comprobarEstadoProgreso() {
             const logo = metaContainer.querySelector(".imagen_meta");
 
             if (barra.value > 49) {
-                // Cambiar el color del fondo si el progreso supera el 49%
                 metaContainer.style.backgroundColor = "#56e377";
                 metaContainer.style.transition = "all 0.5s ease";
             }
@@ -246,18 +240,16 @@ function comprobarEstadoProgreso() {
             if (barra.value === 100) {
                 clearInterval(intervalo); // Detenemos la comprobación para esta barra
 
-                // Cambiar el fondo de la meta completada
                 metaContainer.style.backgroundColor = "#6be524";
                 metaContainer.style.transition = "all 0.5s ease";
 
-                // Cambiar la imagen del logo
                 if (logo) {
                     logo.src = "https://cdn-icons-png.flaticon.com/512/1006/1006656.png"; // Ruta de la nueva imagen
                     logo.style.filter = "drop-shadow(1px 1px 1px rgba(0, 0, 0, 1))";
                 }
                 //actualizarProgreso(barra.value);
             }
-        }, 500); // Verificar cada medio segundo
+        }, 500);
     });
 }
 
@@ -267,18 +259,15 @@ function KCAmount() {
     return  Math.floor(Math.random() * 15) + 1; //0;
 }
 
-// EFECTO FADE AL QUITAR LA META
 function EfectoFadeMeta(meta) {
-    // Añadir clase para el efecto de fade-out
     meta.style.transition = "opacity 1s ease, visibility 1s ease";
     meta.style.opacity = "0";
     meta.style.visibility = "hidden";
 
-    // Esperar hasta que el efecto de fade-out termine antes de eliminar el elemento
     setTimeout(() => {
         meta.remove();
         block = 0;
-    }, 1000); // El tiempo debe coincidir con la duración del transition
+    }, 1000);
 }
 
 function AnimacionMonedas(container) {
@@ -322,62 +311,54 @@ function AnimacionMonedas(container) {
 }
 
 // FUNCIONES PARA BBDD
-//$(document).ready(function () {
-    function guardarMetaBBDD(title, KC, description) {
-    const goalDescription = description.replace("Objetivo:", '');
-    alert(description);
-        const challenge = {
-            titulo: title,
-            desc: goalDescription,
-            recompensa: KC
-        };
+function guardarMetaBBDD(title, KC, description) {
+    const challenge = {
+        titulo: title,
+        desc: description.replace("Objetivo:", ''),
+        recompensa: KC
+    };
 
-        console.log("esta guardando?", challenge);
+    $.ajax({
+        url: '/api/guardarMeta',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(challenge)
+    });
+}
 
-        $.ajax({
-            url: '/api/guardarMeta',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(challenge),
-            success: function (response) {
-                console.log("se supone", response);
-            },
-            error: function (xhr, status, error) {
-                console.log(`Cagaste, hubo error men`, error)
-            }
-        });
-    }
+function borrarMetaBBDD(title) {
+    $.ajax({
+        url: '/api/borrarMeta',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ titulo: title })
+    });
+}
 
-    function borrarMetaBBDD(title) {
-        $.ajax({
-            url: '/api/borrarMeta',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ titulo: title }),
-            success: function (response) {
-                console.log("me desaparesco", response);
-            },
-            error: function (xhr, status, error) {
-                console.log(`no se borrar`, error)
-            }
-        });
-    }
-
-    function actualizarMetasBBDD() {
-        const metasRestantes = document.querySelectorAll(".goal-title");
-        for (let i = 0; i < metasRestantes.length; i++) {
-            metasRestantes[i].textContent = `Meta ${i + 1}`;
+function actualizarMetasBBDD() {
+    const metasRestantes = document.querySelectorAll(".goal-title");
+    /*for (let i = 0; i < titulosMetas.length; i++) {
+        var cambioTitulos = {
+            antiguoTitulo: titulosMetas[i],
+            nuevoTitulo: `Meta ${i + 1}`,
         }
+        console.log(cambioTitulos.antiguoTitulo, " actualizado con éxito a", cambioTitulos.nuevoTitulo);
+*/
+        const titulosBase = ["Meta 1", "Meta 2", "Meta 3", "Meta 4", "Meta 5", "Meta 6", "Meta 7", "Meta 8", "Meta 9", "Meta 10"];
+        var rangoTitulos = [];
+        rangoTitulos = titulosBase.slice(0, titulosMetas.length);
+        console.log(rangoTitulos);
 
-        const nuevostitulos = {
-            titulos: metasRestantes
+        var cambioTitulos = {
+            antiguoTitulo: titulosMetas,
+            nuevoTitulo: rangoTitulos
         }
 
         $.ajax({
             url: '/api/actualizarNumeroMetas',
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify({titulos: nuevostitulos}),
+            data: JSON.stringify(cambioTitulos),
             success: function (response) {
                 console.log("todos? o uno solo?", response);
             },
@@ -385,24 +366,28 @@ function AnimacionMonedas(container) {
                 console.log(`pues ninguno`, error)
             }
         });
+    //}
+    for (let i = 0; i < metasRestantes.length; i++) {
+        metasRestantes[i].textContent = `Meta ${i + 1}`;
+        titulosMetas[i] = `Meta ${i + 1}`;
     }
+}
 
-    function actualizarProgreso(progreso) {
-        const goalProgress = {
-            porcentage: progreso
-        };
+function actualizarProgreso(progreso) {
+    const goalProgress = {
+        porcentage: progreso
+    };
 
-        $.ajax({
-            url: '/api/actualizarProgreso',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(goalProgress),
-            success: function (response) {
-                console.log("me falta menos para el jack tuah", response);
-            },
-            error: function (xhr, status, error) {
-                console.log(`toy flacido`, error)
-            }
-        });
-    }
-//});
+    $.ajax({
+        url: '/api/actualizarProgreso',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(goalProgress),
+        success: function (response) {
+            console.log("me falta menos para el jack tuah", response);
+        },
+        error: function (xhr, status, error) {
+            console.log(`toy flacido`, error)
+        }
+    });
+}

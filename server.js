@@ -366,7 +366,7 @@ app.get('/api/usuarios', async (req, res) => {
 
 app.post('/api/guardarMeta', async (req, res) => {
     console.log("Datos recibidos:", req.body);
-     id_usuario = req.session.id_usuario;
+    id_usuario = req.session.id_usuario;
 
     const { titulo, desc, recompensa } = req.body;
 
@@ -393,6 +393,7 @@ app.post('/api/borrarMeta', async (req, res) => {
     const titulo = req.body;
     try {
         await database.borrarMeta(titulo);
+        console.log(titulo, "borrado con exito.");
         res.status(201).json({ message: 'Desafio borrado con éxito' });
     }
     catch (error) {
@@ -402,12 +403,18 @@ app.post('/api/borrarMeta', async (req, res) => {
     });
 
 app.post('/api/actualizarNumeroMetas', async (req, res) => {
-    const titulos = req.body;
+    console.log("Titulos con descripcion recibidos:", req.body);
+    var { antiguoTitulo, nuevoTitulo } = req.body;
+
     try {
-        for(let i = 0; i < titulos.length; i++){
-            await database.actualizarNumerosMetas(titulos[i]);
-            res.status(201).json({ message: 'Desafio borrado con éxito' });
+        for(let i = 0; i < antiguoTitulo.length; i++) {
+            await database.actualizarNumerosMetas({
+                antiguoTitulo: antiguoTitulo[i],
+                nuevoTitulo: nuevoTitulo[i]
+            });
+            console.log(antiguoTitulo[i], " actualizado con éxito a", nuevoTitulo[i]);
         }
+        res.status(201).json({message: 'Desafios actualizados con éxito'});
     }
     catch (error) {
         console.error('Error:', error);

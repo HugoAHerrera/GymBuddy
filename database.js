@@ -185,8 +185,8 @@ const databaseMethods = {
     },
     actualizarNumerosMetas: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
-            connection.query(sql, [desafio.titulo], (err, results) => {
+            const sql = 'UPDATE desafios SET titulo_desafio = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.nuevoTitulo, desafio.antiguoTitulo], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
