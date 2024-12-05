@@ -122,8 +122,6 @@ app.post('/api/login', async (req, res) => {
 
 
 
-
-
 /*
 app.get('/rutina', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/blob.html'));
@@ -145,12 +143,33 @@ app.post('/api/rutinas', upload.single('imagen'), async (req, res) => {
 });
 */
 
+//Redirecciones del header
+app.get('/inicio', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
+});
+
+app.get('/tienda', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/tienda.html'));
+});
+
+app.get('/comunidad', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/comunidad.html'));
+});
+
+app.get('/progreso', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
+});
+
 app.get('/rutina', (req, res) => {
   res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
 });
 
 app.get('/rutina-concreta', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_concreta.html'));
+});
+
+app.get('/desafios', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
 });
 
 app.get('/api/rutina-concreta', async (req, res) => {
@@ -168,7 +187,6 @@ app.get('/api/rutina-concreta', async (req, res) => {
         res.status(500).json({ error: 'Error al obtener los ejercicios' });
     }
 });
-
 
 app.get('/api/rutinas', async (req, res) => {
   try {
@@ -244,11 +262,6 @@ app.post('/api/descripcion', async (req, res) => {
     }
 });
 
-app.get('/progreso', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
-});
-
-
 app.get('/api/sesiones', async (req, res) => {
     const { periodo } = req.query; // Obtener el parámetro 'periodo' del query string
 
@@ -292,10 +305,6 @@ app.get('/api/estadisticas/', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 }))*/
-
-app.get('/Desafios', (req, res) => {
-    res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
-});
 
 app.post('/api/mensajes', async (req, res) => {
     const { id_emisor, receptor, contenido } = req.body;
@@ -356,6 +365,8 @@ app.get('/api/usuarios', async (req, res) => {
 
 app.post('/api/guardarMeta', async (req, res) => {
     console.log("Datos recibidos:", req.body);
+     id_usuario = req.session.id_usuario;
+
     const { titulo, desc, recompensa } = req.body;
 
     if (!titulo || !desc || !recompensa) {
@@ -366,7 +377,8 @@ app.post('/api/guardarMeta', async (req, res) => {
         const result = await database.guardarMeta({
             titulo,
             desc,
-            recompensa
+            recompensa,
+            id_usuario
         });
         res.status(201).json({ message: 'Desafio guardado con éxito', id: result.insertId });
     }
@@ -426,3 +438,29 @@ app.post('/api/actualizarProgreso', async (req, res) => {
         res.status(500).json({ message: 'Error', error: error.message });
         }
     });
+
+app.get('/api/cesta/', async (req, res) => {
+    const { idUsuario } = req.params;
+    try {
+        const productos = await database.obtenerProductosCesta(idUsuario);
+        res.json(productos);
+    } catch (error) {
+        console.error('Error al obtener productos de la cesta', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+app.delete('/api/cesta/', async (req, res) => {
+    const { idUsuario } = req.params;
+    try {
+        const exito = await database.vaciarCesta(idUsuario);
+        if (exito) {
+            res.json({ mensaje: 'Cesta vaciada correctamente' });
+        } else {
+            res.status(400).json({ mensaje: 'No se pudo vaciar la cesta' });
+        }
+    } catch (error) {
+        console.error('Error al vaciar la cesta', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});

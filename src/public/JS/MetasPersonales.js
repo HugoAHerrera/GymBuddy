@@ -2,14 +2,10 @@ var block = 0;
 var block_2 = 1;
 var cerrojo = 1;
 document.addEventListener("DOMContentLoaded", function () {
-    $.ajax({
-        url: '/api/recuperarMetas',
-        method: 'POST'
-    });
     // Añadir una meta
     document.querySelector(".boton-annadir-meta").addEventListener("click", () => {
         crearNuevaMeta();
-        aumentarProgresoConTiempo();
+        //aumentarProgresoConTiempo();
     });
     // Botón para borrar metas
     document.querySelector(".boton-borrar-meta").addEventListener("click", OpcionBorrarMetas);
@@ -40,7 +36,7 @@ function crearNuevaMeta() {
             metasContainer.removeChild(nuevaMeta);
             titulosMetas.splice(titulosMetas.indexOf(nuevaMeta.querySelector(".goal-title").textContent), 1);
             // hacer llamada a BBDD
-            //borrarMetaBBDD();
+            borrarMetaBBDD(tituloMeta.textContent);
             //actualizarMetasBBDD();
         });
 
@@ -66,8 +62,7 @@ function crearNuevaMeta() {
 
         // Creamos la descripcion de la meta
         const goalDescription = GoalDescription(progressContainer);
-
-        if (goalDescription !== 0) {
+        if (goalDescription[0] !== 0) {
             // Crear progreso de la meta
             const barContainer = document.createElement("span");
             const textoProgresoMeta = document.createTextNode(" Progreso:");
@@ -75,7 +70,7 @@ function crearNuevaMeta() {
             progresoMeta.id = `Barra ${metasContainer.children.length + 1}`;
             progresoMeta.classList.add("BarraDeProgreso");
             progresoMeta.max = 100;
-            progresoMeta.value = Math.floor(Math.random() * 101); // 0
+            progresoMeta.value = 0; //Math.floor(Math.random() * 101); // 0
             progresoMeta.style.marginBottom = "15px";
 
             barContainer.appendChild(textoProgresoMeta);
@@ -117,7 +112,7 @@ function crearNuevaMeta() {
             metasContainer.appendChild(nuevaMeta);
 
             // guardar meta en BBDD
-            guardarMetaBBDD(tituloMeta.textContent, KC);
+            guardarMetaBBDD(tituloMeta.textContent, KC, goalDescription[1]);
             RequestReward(KC);
         }
     }
@@ -155,7 +150,8 @@ function CancelarBorrarMetas() {
 
 // Crea la descripcion de la meta - puesta por el user
 function GoalDescription(progressContainer) {
-    const desc = prompt("Por favor, escriba una descripción corta de su meta.")
+    var lista = [];
+    var desc = prompt("Por favor, escriba una descripción corta de su meta.");
     if (desc !== '') {
         const words = desc.trim().split(/\s+/); // Divide el texto en palabras
         if (words.length > 35) {
@@ -178,7 +174,8 @@ function GoalDescription(progressContainer) {
         spanContainer.appendChild(descripcionText);
 
         progressContainer.appendChild(spanContainer);
-        return 1;
+        lista.push(1, desc)
+        return lista;
     }
     else {
         alert("Es obligatorio poner una descripción.");
@@ -325,60 +322,87 @@ function AnimacionMonedas(container) {
 }
 
 // FUNCIONES PARA BBDD
-function guardarMetaBBDD(title, KC) {
-    const description = document.querySelector(".GoalDescription").textContent.replace("Objetivo:", '');
-    const challenge = {
-        titulo: title,
-        desc: description,
-        recompensa: KC
-    };
+//$(document).ready(function () {
+    function guardarMetaBBDD(title, KC, description) {
+    const goalDescription = description.replace("Objetivo:", '');
+    alert(description);
+        const challenge = {
+            titulo: title,
+            desc: goalDescription,
+            recompensa: KC
+        };
 
-    console.log("esta guardando?, Challenge");
+        console.log("esta guardando?", challenge);
 
-    $.ajax({
-        url: '/api/guardarMeta',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(challenge)
-    });
-}
-
-function borrarMetaBBDD(title) {
-    $.ajax({
-        url: '/api/borrarMeta',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(title)
-    });
-}
-
-function actualizarMetasBBDD() {
-    const metasRestantes = document.querySelectorAll(".goal-title");
-    for(let i = 0; i < metasRestantes.length; i++) {
-        metasRestantes[i].textContent = `Meta ${i + 1}`;
+        $.ajax({
+            url: '/api/guardarMeta',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(challenge),
+            success: function (response) {
+                console.log("se supone", response);
+            },
+            error: function (xhr, status, error) {
+                console.log(`Cagaste, hubo error men`, error)
+            }
+        });
     }
 
-    const nuevostitulos = {
-        titulos: metasRestantes
+    function borrarMetaBBDD(title) {
+        $.ajax({
+            url: '/api/borrarMeta',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ titulo: title }),
+            success: function (response) {
+                console.log("me desaparesco", response);
+            },
+            error: function (xhr, status, error) {
+                console.log(`no se borrar`, error)
+            }
+        });
     }
 
-    $.ajax({
-        url: '/api/actualizarNumeroMetas',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ titulos: nuevostitulos })
-    });
-}
+    function actualizarMetasBBDD() {
+        const metasRestantes = document.querySelectorAll(".goal-title");
+        for (let i = 0; i < metasRestantes.length; i++) {
+            metasRestantes[i].textContent = `Meta ${i + 1}`;
+        }
 
-function actualizarProgreso(progreso) {
-    const goalProgress = {
-        porcentage: progreso
-    };
+        const nuevostitulos = {
+            titulos: metasRestantes
+        }
 
-    $.ajax({
-        url: '/api/actualizarProgreso',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(goalProgress)
-    });
-}
+        $.ajax({
+            url: '/api/actualizarNumeroMetas',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({titulos: nuevostitulos}),
+            success: function (response) {
+                console.log("todos? o uno solo?", response);
+            },
+            error: function (xhr, status, error) {
+                console.log(`pues ninguno`, error)
+            }
+        });
+    }
+
+    function actualizarProgreso(progreso) {
+        const goalProgress = {
+            porcentage: progreso
+        };
+
+        $.ajax({
+            url: '/api/actualizarProgreso',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(goalProgress),
+            success: function (response) {
+                console.log("me falta menos para el jack tuah", response);
+            },
+            error: function (xhr, status, error) {
+                console.log(`toy flacido`, error)
+            }
+        });
+    }
+//});
