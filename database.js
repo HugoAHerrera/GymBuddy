@@ -152,8 +152,8 @@ const databaseMethods = {
     // se ejecuta cada vez que cambia de pagina el usuario? -> ver cuando
     guardarMeta: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'INSERT INTO desafios (descripcion, recompensa, titulo_desafio) VALUES (?, ?, ?)';
-            connection.query(sql, [desafio.desc, desafio.recompensa, desafio.titulo], (err, results) => {
+            const sql = 'INSERT INTO desafios (descripcion, recompensa, titulo_desafio, id_usuario) VALUES (?, ?, ?, ?)';
+            connection.query(sql, [desafio.desc, desafio.recompensa, desafio.titulo, desafio.id_usuario], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -161,7 +161,7 @@ const databaseMethods = {
     },
     borrarMeta: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'DELETE * FROM desafios WHERE titulo_desafio = ?';
+            const sql = 'DELETE FROM desafios WHERE titulo_desafio = ?';
             connection.query(sql, [desafio.titulo], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);

@@ -275,6 +275,8 @@ app.get('/Desafios', (req, res) => {
 
 app.post('/api/guardarMeta', async (req, res) => {
     console.log("Datos recibidos:", req.body);
+     id_usuario = req.session.id_usuario;
+
     const { titulo, desc, recompensa } = req.body;
 
     if (!titulo || !desc || !recompensa) {
@@ -285,7 +287,8 @@ app.post('/api/guardarMeta', async (req, res) => {
         const result = await database.guardarMeta({
             titulo,
             desc,
-            recompensa
+            recompensa,
+            id_usuario
         });
         res.status(201).json({ message: 'Desafio guardado con éxito', id: result.insertId });
     }
