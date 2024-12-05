@@ -223,6 +223,60 @@ const databaseMethods = {
                 resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
             });
         });
+    },
+
+    buscarUsuarios: async (query) => {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT id_usuario, nombre_usuario 
+            FROM usuario 
+            WHERE nombre_usuario LIKE ? AND id_usuario != ? 
+        `;
+        const searchQuery = `%${query}%`;
+        const userId = 1; // Aquí deberías pasar dinámicamente el ID del usuario actual logueado
+        connection.query(sql, [searchQuery, userId], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+        });
+    });
+},
+
+
+    agregarMensaje: async (mensaje) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                INSERT INTO mensajes (id_emisor, receptor, contenido, hora, fecha)
+                VALUES (?, ?, ?, ?, ?)
+            `;
+            const params = [
+                mensaje.id_emisor,
+                mensaje.receptor,
+                mensaje.contenido,
+                mensaje.hora,
+                mensaje.fecha
+            ];
+            connection.query(sql, params, (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        });
+    },
+
+    // Obtener mensajes de un chat (grupo o persona)
+    obtenerMensajes: async (receptor) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT m.id_mensaje, u.nombre_usuario AS emisor, m.receptor, m.contenido, m.hora, m.fecha
+                FROM mensajes m
+                JOIN usuario u ON m.id_emisor = u.id_usuario
+                WHERE m.receptor = ?
+                ORDER BY m.fecha ASC, m.hora ASC
+            `;
+            connection.query(sql, [receptor], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
     }
     
 };

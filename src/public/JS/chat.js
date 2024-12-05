@@ -1,75 +1,51 @@
-const simulatedDB = [
-    { destinatario: "Grupo GymBuddy", emisor: "Carlos", mensaje: "¡Hola a todos!", fecha: "2024-11-07", hora: "14:00" },
-    { destinatario: "Grupo GymBuddy", emisor: "María", mensaje: "¿Qué tal el entrenamiento?", fecha: "2024-11-07", hora: "14:02" },
-    { destinatario: "Juan Pérez", emisor: "Juan Pérez", mensaje: "¡Hola! ¿Cómo estás?", fecha: "2024-11-07", hora: "14:05" },
-    { destinatario: "Juan Pérez", emisor: "Mi Usuario", mensaje: "Todo bien, gracias. ¿Y tú?", fecha: "2024-11-07", hora: "14:06" },
-];
+const searchInput = document.getElementById("search-users");
+const searchResults = document.getElementById("search-results");
 
-let activeChat = null;
+searchInput.addEventListener("input", async (e) => {
+    const query = e.target.value.trim();
 
-// Referencias
-const chatList = document.getElementById("chat-users");
-const chatTitle = document.getElementById("chat-title");
-const chatMessages = document.getElementById("messages");
-const chatInput = document.getElementById("chat-input");
-const chatControls = document.getElementById("chat-controls");
-const sendButton = document.getElementById("send-button");
+    if (!query) {
+        searchResults.innerHTML = "";
+        searchResults.classList.add("hidden");
+        return;
+    }
 
-// Carga chats
-function loadChats() {
-    const chats = [...new Set(simulatedDB.map(msg => msg.destinatario))];
-    chatList.innerHTML = chats.map(chat => `<li>${chat}</li>`).join("");
-}
+    try {
+        const response = await fetch(`/api/usuarios?query=${query}`);
+        const usuarios = await response.json();
 
-// Carga mensajes
-function loadMessages(chatName) {
-    const messages = simulatedDB.filter(msg => msg.destinatario === chatName);
-    messages.sort((a, b) => `${a.fecha} ${a.hora}`.localeCompare(`${b.fecha} ${b.hora}`));
-
-    chatMessages.innerHTML = messages
-        .map(msg => {
-            const isUser = msg.emisor === "Mi Usuario";
-            return `
-                <div class="message ${isUser ? "sent" : "received"}">
-                    ${!isUser && msg.destinatario === "Grupo GymBuddy" ? `<div class="sender">${msg.emisor}</div>` : ""}
-                    ${msg.mensaje}
-                </div>
-            `;
-        })
-        .join("");
-
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// Selección de chat
-chatList.addEventListener("click", e => {
-    const chatName = e.target.textContent;
-    activeChat = chatName;
-
-    chatTitle.textContent = chatName;
-    chatControls.classList.remove("hidden");
-
-    loadMessages(chatName);
+        if (usuarios.length > 0) {
+            searchResults.classList.remove("hidden");
+            searchResults.innerHTML = usuarios
+                .map(
+                    (user) => `
+                    <li data-user-id="${user.id_usuario}" class="search-result">
+                        ${user.nombre_usuario}
+                    </li>
+                `
+                )
+                .join("");
+        } else {
+            searchResults.innerHTML = "<li>No se encontraron usuarios</li>";
+        }
+    } catch (error) {
+        console.error("Error al buscar usuarios:", error);
+    }
 });
 
-// Enviar mensaje
-sendButton.addEventListener("click", () => {
-    const message = chatInput.value.trim();
-    if (!message || !activeChat) return;
+// Agregar evento para seleccionar un usuario de los resultados
+searchResults.addEventListener("click", (e) => {
+    if (e.target && e.target.matches("li.search-result")) {
+        const userName = e.target.textContent;
+        const userId = e.target.dataset.userId;
 
-    const newMessage = {
-        destinatario: activeChat,
-        emisor: "Mi Usuario",
-        mensaje: message,
-        fecha: new Date().toISOString().split("T")[0],
-        hora: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    };
+        activeChat = userName;
+        chatTitle.textContent = userName;
+        chatControls.classList.remove("hidden");
 
-    simulatedDB.push(newMessage);
-    chatInput.value = "";
+        searchResults.innerHTML = "";
+        searchResults.classList.add("hidden");
 
-    loadMessages(activeChat);
+        loadMessages(userName); // Cargar mensajes con este usuario
+    }
 });
-
-// Inicialización
-loadChats();

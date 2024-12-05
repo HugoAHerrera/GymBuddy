@@ -175,3 +175,60 @@ app.get('/api/estadisticas/', async (req, res) => {
 app.get('/Desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
 });
+
+app.post('/api/mensajes', async (req, res) => {
+    const { id_emisor, receptor, contenido } = req.body;
+
+    if (!id_emisor || !receptor || !contenido) {
+        return res.status(400).json({ message: 'Faltan datos requeridos' });
+    }
+
+    const mensaje = {
+        id_emisor,
+        receptor,
+        contenido,
+        hora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        fecha: new Date().toISOString().split('T')[0],
+    };
+
+    try {
+        await database.agregarMensaje(mensaje);
+        res.status(201).json({ message: 'Mensaje enviado con éxito' });
+    } catch (error) {
+        console.error('Error al enviar mensaje:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+
+app.get('/api/mensajes', async (req, res) => {
+    const { receptor } = req.query;
+
+    if (!receptor) {
+        return res.status(400).json({ message: 'El receptor es requerido' });
+    }
+
+    try {
+        const mensajes = await database.obtenerMensajes(receptor);
+        res.status(200).json(mensajes);
+    } catch (error) {
+        console.error('Error al obtener mensajes:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+
+app.get('/api/usuarios', async (req, res) => {
+    const { query } = req.query; // El término de búsqueda
+
+    if (!query) {
+        return res.status(400).json({ message: 'El término de búsqueda es requerido' });
+    }
+
+    try {
+        const usuarios = await database.buscarUsuarios(query);
+        res.status(200).json(usuarios);
+    } catch (error) {
+        console.error('Error al buscar usuarios:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+
