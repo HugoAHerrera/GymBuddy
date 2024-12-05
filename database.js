@@ -197,6 +197,107 @@ const databaseMethods = {
             });
         });
     },
+    // GUÍA DE EJERCICIOS
+    obtenerDescripcionEjercicios: async () => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM ejercicios';
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+    
+                const descripciones = results.map(row => ({
+                    id: row.id_ejercicio,
+                    nombre_ejercicio: row.nombre_ejercicio,
+                    dificultad: row.dificultad,
+                    imagen: row.imagen,
+                    equipo_necesario: row.equipo_necesario,
+                    objetivo: row.objetivo,
+                    preparacion: row.preparacion,
+                    ejecucion: row.ejecucion,
+                    consejos_clave: row.consejos_clave,
+                    zona_principal: row.zona_principal
+                }));
+                resolve(descripciones);
+            });
+        });
+    },
+    
+    // Función para añadir o actualizar la imagen de un ejercicio dado un id_ejercicio manual
+    añadirFotoEjercicio: async (idEjercicio, blob) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
+            const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
+            
+            // Ejecutar la consulta SQL con los parámetros
+            connection.query(sql, [blob, idEjercicio], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, lo rechazamos
+                }
+                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
+            });
+        });
+    },
+
+    // PERFIL
+    cambiarNombreUsuario: async (idUsuario, nuevoNombre) => {
+        return new Promise((resolve, reject) => {
+            // Asegúrate de que la columna a actualizar sea 'nombre_usuario' y que el valor 'nuevoNombre' se pase correctamente.
+            const sql = 'UPDATE usuario SET nombre_usuario = ? WHERE id_usuario = ?';
+            
+            connection.query(sql, [nuevoNombre, idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err); // Rechaza la promesa si ocurre un error.
+                }
+                resolve(results); // Resuelve la promesa con los resultados si no hay error.
+            });
+        });
+    },
+    
+
+    obtenerDescripcionUsuario: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM usuario WHERE id = ?';
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) return reject(err);
+    
+                // Si no hay resultados para ese usuario, retornar un error o un valor vacío.
+                if (results.length === 0) {
+                    return reject('Usuario no encontrado');
+                }
+    
+                // Aquí asignas las columnas de la tabla 'usuario' a un objeto, por ejemplo:
+                const usuario = results[0];
+                const descripcion = {
+                    id_usuario: usuario.id_usuario,
+                    imagenes: usuario.imagenes,
+                    nombre_usuario: usuario.nombre_usuario,
+                    contraseña: usuario.contraseña,
+                    KC: usuario.KC,
+                    numero_tarjeta: usuario.numero_tarjeta,
+                    CVV: usuario.CVV,
+                    fecha_caducidad: usuario.fecha_caducidad
+                    // Puedes agregar más campos que tengas en la tabla de usuario
+                };
+    
+                resolve(descripcion);
+            });
+        });
+    },
+    
+
+    añadirFotoPerfil: async (idEjercicio, blob) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
+            const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
+            
+            // Ejecutar la consulta SQL con los parámetros
+            connection.query(sql, [blob, idEjercicio], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, lo rechazamos
+                }
+                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
+            });
+        });
+    }
 };
 
 module.exports = databaseMethods;

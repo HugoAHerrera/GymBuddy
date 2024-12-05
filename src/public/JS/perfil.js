@@ -1,37 +1,53 @@
 document.getElementById("guardar-cambios").addEventListener("click", function () {
     const nuevoNombreUsuario = document.getElementById("nombre-usuario").value;
-    const nuevoEmailUsuario = document.getElementById("email-usuario").value;
-    const nuevaImagenUsuario = document.getElementById("imagen-usuario").files[0];
 
+    // Solo si se ha ingresado un nuevo nombre de usuario, actualizamos la vista y enviamos la solicitud.
     if (nuevoNombreUsuario) {
         document.getElementById("nombre-usuario-mostrado").textContent = nuevoNombreUsuario;
-    }
 
-    if (nuevoEmailUsuario) {
-        document.getElementById("email-usuario-mostrado").textContent = nuevoEmailUsuario;
-    }
+        // Mostrar mensaje de confirmación
+        const mensajeConfirmacion = document.getElementById("mensaje-confirmacion");
+        mensajeConfirmacion.textContent = "Se ha guardado correctamente.";
 
-    if (nuevaImagenUsuario) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById("imagen-mostrada").src = e.target.result;
+        // Crear un objeto JSON con el nombre de usuario
+        const data = {
+            nombre_usuario: nuevoNombreUsuario
         };
-        reader.readAsDataURL(nuevaImagenUsuario);
-    }
 
-    const mensajeConfirmacion = document.getElementById("mensaje-confirmacion");
-    mensajeConfirmacion.textContent = "Se ha guardado correctamente.";
-    
-    
-    setTimeout(() => {
-        mensajeConfirmacion.textContent = "";
-    }, 3000);
+        // Realizar la solicitud POST al servidor para actualizar el nombre
+        fetch('/api/cambiarNombreUsuario', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  // Enviamos los datos como JSON
+            },
+            body: JSON.stringify(data)  // Convertimos el objeto data a JSON
+        })
+        .then(response => response.json())  // Parseamos la respuesta como JSON
+        .then(data => {
+            // Manejo de la respuesta del servidor
+            if (data.nuevoNombreUsuario) {
+                console.log('Nuevo nombre de usuario:', data.nuevoNombreUsuario);
+            }
+        })
+        .catch(error => {
+            console.error('Error al guardar los cambios:', error);
+        });
+
+        // Limpiar el mensaje de confirmación después de 3 segundos
+        setTimeout(() => {
+            mensajeConfirmacion.textContent = "";
+        }, 3000);
+    } else {
+        // Si no se ingresa un nombre, se muestra un mensaje de error
+        alert("Por favor, ingresa un nuevo nombre de usuario.");
+    }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const logoImage = document.getElementById('logotype');
-    
-    logoImage.addEventListener('click', function() {
-        window.location.href = 'perfil.html';
-    });
-  });
+// Cargar el header y el footer con fetch
+fetch('../HTML/header.html')
+.then(response => response.text())
+.then(data => document.getElementById('header-container').innerHTML = data);
+
+fetch('../HTML/footer.html')
+.then(response => response.text())
+.then(data => document.getElementById('footer-container').innerHTML = data);
