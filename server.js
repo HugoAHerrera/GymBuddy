@@ -224,27 +224,26 @@ app.get('/perfil', (req, res) => {
 
 app.post('/api/cambiarNombreUsuario', async (req, res) => {
     try {
-        // Obtenemos el nuevo nombre de usuario del cuerpo de la solicitud
-        const { nombre_usuario } = req.body;
-        console.log("nombre:",nombre_usuario)
+        const { nombre_usuario, correo_usuario } = req.body; // Desestructuramos los valores del cuerpo de la solicitud
 
-        // Verificamos si se recibió el nuevo nombre de usuario
-        if (!nombre_usuario) {
-            return res.status(400).json({ error: 'El nombre de usuario es obligatorio.' });
+        // Validamos los datos recibidos
+        if (!nombre_usuario || !correo_usuario) {
+            return res.status(400).json({ error: 'El nombre de usuario y el correo son obligatorios.' });
         }
 
-        // Aquí llamamos a una función ficticia que actualizaría el nombre en la base de datos
-        // La función `cambiarNombreUsuario` debe retornar el nuevo nombre actualizado
+        // Llamamos a las funciones para actualizar los valores en la base de datos
         const nuevoNombreUsuario = await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
+        const nuevoCorreoUsuario = await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
 
-        // Respondemos con el nuevo nombre de usuario
+        // Enviamos la respuesta con los datos actualizados
         res.json({
-            message: 'Perfil: El nombre se ha cambiado a ',
-            nuevoNombreUsuario: nuevoNombreUsuario
+            message: 'Perfil: Cambios realizados correctamente.',
+            nuevoNombreUsuario,
+            nuevoCorreoUsuario
         });
     } catch (error) {
-        console.error('Error al cambiar el nombre de usuario:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('Error al actualizar el perfil:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
 

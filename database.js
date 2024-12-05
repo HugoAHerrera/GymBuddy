@@ -280,7 +280,18 @@ const databaseMethods = {
             });
         });
     },
-    
+
+    cambiarCorreoUsuario: async (idUsuario, nuevoCorreo) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'UPDATE usuario SET correo = ? WHERE id_usuario = ?'
+            connection.query(sql, [nuevoCorreo, idUsuario], (err,results) => {
+                if(err) {
+                    return reject(err);
+                }
+                resolve(results)
+            })
+        });
+    },
 
     obtenerDescripcionUsuario: async (idUsuario) => {
         return new Promise((resolve, reject) => {

@@ -1,47 +1,70 @@
 document.getElementById("guardar-cambios").addEventListener("click", function () {
     const nuevoNombreUsuario = document.getElementById("nombre-usuario").value;
+    const nuevoCorreoUsuario = document.getElementById("email-usuario").value;
 
-    // Solo si se ha ingresado un nuevo nombre de usuario, actualizamos la vista y enviamos la solicitud.
+    // Validamos que ambos campos tengan datos (opcional, dependiendo de tus requerimientos)
+    if (!nuevoNombreUsuario || !nuevoCorreoUsuario) {
+        alert("Por favor, completa todos los campos antes de guardar.");
+        return;
+    }
+
+    // Actualizamos el nombre y correo visibles en la página
     if (nuevoNombreUsuario) {
         document.getElementById("nombre-usuario-mostrado").textContent = nuevoNombreUsuario;
-
-        // Mostrar mensaje de confirmación
-        const mensajeConfirmacion = document.getElementById("mensaje-confirmacion");
-        mensajeConfirmacion.textContent = "Se ha guardado correctamente.";
-
-        // Crear un objeto JSON con el nombre de usuario
-        const data = {
-            nombre_usuario: nuevoNombreUsuario
-        };
-
-        // Realizar la solicitud POST al servidor para actualizar el nombre
-        fetch('/api/cambiarNombreUsuario', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'  // Enviamos los datos como JSON
-            },
-            body: JSON.stringify(data)  // Convertimos el objeto data a JSON
-        })
-        .then(response => response.json())  // Parseamos la respuesta como JSON
-        .then(data => {
-            // Manejo de la respuesta del servidor
-            if (data.nuevoNombreUsuario) {
-                console.log('Nuevo nombre de usuario:', data.nuevoNombreUsuario);
-            }
-        })
-        .catch(error => {
-            console.error('Error al guardar los cambios:', error);
-        });
-
-        // Limpiar el mensaje de confirmación después de 3 segundos
-        setTimeout(() => {
-            mensajeConfirmacion.textContent = "";
-        }, 3000);
-    } else {
-        // Si no se ingresa un nombre, se muestra un mensaje de error
-        alert("Por favor, ingresa un nuevo nombre de usuario.");
     }
+
+    if (nuevoCorreoUsuario) {
+        document.getElementById("email-usuario-mostrado").textContent = nuevoCorreoUsuario;
+    }
+
+    // Mostrar mensaje de confirmación
+    const mensajeConfirmacion = document.getElementById("mensaje-confirmacion");
+    mensajeConfirmacion.textContent = "Se han guardado los cambios correctamente.";
+
+    // Crear un objeto JSON con el nombre y correo
+    const data = {
+        nombre_usuario: nuevoNombreUsuario,
+        correo_usuario: nuevoCorreoUsuario
+    };
+
+    // Realizar la solicitud POST al servidor para actualizar los datos
+    fetch('/api/cambiarNombreUsuario', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json' // Enviamos los datos como JSON
+        },
+        body: JSON.stringify(data) // Convertimos el objeto `data` a JSON
+    })
+    .then(response => response.json()) // Parseamos la respuesta como JSON
+    .then(data => {
+        // Manejo de la respuesta del servidor
+        if (data.nuevoNombreUsuario) {
+            console.log('Nuevo nombre de usuario:', data.nuevoNombreUsuario);
+        }
+        if (data.nuevoCorreoUsuario) {
+            console.log('Nuevo correo del usuario:', data.nuevoCorreoUsuario);
+        }
+    })
+    .catch(error => {
+        console.error('Error al guardar los cambios:', error);
+    });
+
+    // Limpiar el mensaje de confirmación después de 3 segundos
+    setTimeout(() => {
+        mensajeConfirmacion.textContent = "";
+    }, 3000);
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/api/obtenerDatosUsuario')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('nombre-usuario').value = data.nombre_usuario;
+            document.getElementById('email-usuario').value = data.correo_usuario;
+        })
+        .catch(error => console.error('Error al cargar los datos del usuario:', error));
+});
+
 
 // Cargar el header y el footer con fetch
 fetch('../HTML/header.html')
