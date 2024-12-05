@@ -439,3 +439,29 @@ app.post('/api/actualizarProgreso', async (req, res) => {
         res.status(500).json({ message: 'Error', error: error.message });
         }
     });
+
+app.get('/api/cesta/', async (req, res) => {
+    const { idUsuario } = req.params;
+    try {
+        const productos = await database.obtenerProductosCesta(idUsuario);
+        res.json(productos);
+    } catch (error) {
+        console.error('Error al obtener productos de la cesta', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+app.delete('/api/cesta/', async (req, res) => {
+    const { idUsuario } = req.params;
+    try {
+        const exito = await database.vaciarCesta(idUsuario);
+        if (exito) {
+            res.json({ mensaje: 'Cesta vaciada correctamente' });
+        } else {
+            res.status(400).json({ mensaje: 'No se pudo vaciar la cesta' });
+        }
+    } catch (error) {
+        console.error('Error al vaciar la cesta', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
