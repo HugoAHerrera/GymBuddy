@@ -225,16 +225,16 @@ app.get('/perfil', (req, res) => {
 
 app.post('/api/cambiarNombreUsuario', async (req, res) => {
     try {
-        const { nombre_usuario, correo_usuario } = req.body; // Desestructuramos los valores del cuerpo de la solicitud
+        const { nombre_usuario, correo } = req.body; // Desestructuramos los valores del cuerpo de la solicitud
 
         // Validamos los datos recibidos
-        if (!nombre_usuario || !correo_usuario) {
+        if (!nombre_usuario || !correo) {
             return res.status(400).json({ error: 'El nombre de usuario y el correo son obligatorios.' });
         }
 
         // Llamamos a las funciones para actualizar los valores en la base de datos
         const nuevoNombreUsuario = await database.cambiarNombreUsuario(req.session.id_usuario, nombre_usuario);
-        const nuevoCorreoUsuario = await database.cambiarCorreoUsuario(req.session.id_usuario, correo_usuario);
+        const nuevoCorreoUsuario = await database.cambiarCorreoUsuario(req.session.id_usuario, correo);
 
         // Enviamos la respuesta con los datos actualizados
         res.json({
@@ -247,6 +247,24 @@ app.post('/api/cambiarNombreUsuario', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
+
+app.get('/api/obtenerDatosUsuario', async (req, res) => {
+    try {
+        // Simulamos que estamos obteniendo datos de la base de datos usando el ID del usuario en la sesión
+        const datosUsuario = await database.obtenerDatosUsuario(req.session.id_usuario);
+
+        // Devuelve los datos del usuario al cliente
+        console.log("[Nombre,Correo]:", datosUsuario.nombre_usuario, datosUsuario.correo)
+        res.json({
+            nombre_usuario: datosUsuario.nombre_usuario,
+            correo: datosUsuario.correo
+        });
+    } catch (error) {
+        console.error('Error al obtener los datos del usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
 
 app.post('/api/descripcion', async (req, res) => {
     const { idUsuario } = req.body; // Recibe el ID del usuario del formulario

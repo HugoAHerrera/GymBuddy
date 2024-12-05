@@ -56,13 +56,17 @@ document.getElementById("guardar-cambios").addEventListener("click", function ()
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Hacemos una solicitud al servidor para obtener los datos del usuario
     fetch('/api/obtenerDatosUsuario')
         .then(response => response.json())
         .then(data => {
+            // Rellenamos los campos con los datos obtenidos
             document.getElementById('nombre-usuario').value = data.nombre_usuario;
-            document.getElementById('email-usuario').value = data.correo_usuario;
+            document.getElementById('email-usuario').value = data.correo;
         })
-        .catch(error => console.error('Error al cargar los datos del usuario:', error));
+        .catch(error => {
+            console.error('Error al cargar los datos del usuario:', error);
+        });
 });
 
 

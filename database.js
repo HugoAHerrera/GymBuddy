@@ -279,9 +279,9 @@ const databaseMethods = {
         });
     },
 
-    obtenerDescripcionUsuario: async (idUsuario) => {
+    obtenerDatosUsuario: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM usuario WHERE id = ?';
+            const sql = 'SELECT * FROM usuario WHERE id_usuario = ?';
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
     
@@ -295,6 +295,7 @@ const databaseMethods = {
                 const descripcion = {
                     id_usuario: usuario.id_usuario,
                     imagenes: usuario.imagenes,
+                    correo: usuario.correo,
                     nombre_usuario: usuario.nombre_usuario,
                     contraseña: usuario.contraseña,
                     KC: usuario.KC,
