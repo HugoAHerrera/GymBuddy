@@ -110,29 +110,29 @@ const databaseMethods = {
         });
     },
 
-    obtenerSesiones: async (periodo = null) => {
+    obtenerSesiones: async (idUsuario, periodo = null) => {
         return new Promise((resolve, reject) => {
-            let sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kg, fecha FROM sesion';
-            let params = [];
+            let sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kg, fecha FROM sesion WHERE id_usuario = ?';
+            let params = [idUsuario]; // Se pasa idUsuario como parámetro de la consulta
 
             // Filtrar por periodo si se especifica
             if (periodo) {
                 switch (periodo) {
                     case 'semana':
-                        // Filtrar por la semana' actual (de lunes a domingo)
-                        sql += ' WHERE fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE())) DAY AND fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY';
+                        // Filtrar por la semana actual (de lunes a domingo)
+                        sql += ' AND fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE())) DAY AND fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY';
                         break;
                     case 'mes':
                         // Filtrar por el mes actual (del primer día al último día del mes)
-                        sql += ' WHERE MONTH(fecha) = MONTH(CURDATE()) AND YEAR(fecha) = YEAR(CURDATE())';
+                        sql += ' AND MONTH(fecha) = MONTH(CURDATE()) AND YEAR(fecha) = YEAR(CURDATE())';
                         break;
                     case 'año':
                         // Filtrar por el año actual
-                        sql += ' WHERE YEAR(fecha) = YEAR(CURDATE())';
+                        sql += ' AND YEAR(fecha) = YEAR(CURDATE())';
                         break;
                     case 'total':
-                        // Seleccionar todos los registros sin filtro
-                        sql += ' WHERE fecha IS NOT NULL';
+                        // Seleccionar todos los registros sin filtro adicional
+                        sql += ' AND fecha IS NOT NULL';
                         break;
                     default:
                         return reject(new Error('Periodo no válido'));
@@ -160,11 +160,13 @@ const databaseMethods = {
         });
     },
 
-    obtenerEstadisticasSesiones: async () => {
+
+    obtenerEstadisticasSesiones: async (idUsuario) => {
+        console.log('idUsuario:', idUsuario);
         return new Promise((resolve, reject) => {
-            // Consulta SQL para obtener las estadísticas
-            const sql = 'SELECT COUNT(*) AS sesiones_completadas, SUM(kilometros) AS distancia_recorrida, MAX(fecha) AS ultima_sesion FROM sesion';
-            connection.query(sql, (err, results) => {
+            // Consulta SQL para obtener las estadísticas filtrando por id_usuario
+            const sql = 'SELECT COUNT(*) AS sesiones_completadas, SUM(kilometros) AS distancia_recorrida, MAX(fecha) AS ultima_sesion FROM sesion WHERE id_usuario = ?';
+            connection.query(sql, [idUsuario], (err, results) => {  // Se pasa el idUsuario como parámetro
                 if (err) return reject(err);
 
                 const estadisticas = {
@@ -176,6 +178,7 @@ const databaseMethods = {
             });
         });
     },
+
 
     // Metodos para la pagina de Objetivos -- meta al completo (progreso, descripcion, recompensa...)
     // se ejecuta cada vez que cambia de pagina el usuario? -> ver cuando
@@ -460,12 +463,7 @@ const databaseMethods = {
     //Carro
     obtenerProductosCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo
-                FROM carro
-                JOIN tienda ON carro.idArticulo = tienda.idArticulo
-                WHERE carro.id_usuario = ?;
-            `;
+            const sql = `SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo FROM carro JOIN tienda ON carro.idArticulo = tienda.idArticulo WHERE carro.id_usuario = ?`;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
