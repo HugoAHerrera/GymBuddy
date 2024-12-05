@@ -54,24 +54,24 @@ function crearNuevaMeta() {
         if (goalDescription !== '') {
             // Crear progreso de la meta
             const barContainer = document.createElement("span");
-            barContainer.classList.add("progContainer");
-            const textoProgresoMeta = document.createTextNode(" Progreso:");
+            //barContainer.classList.add("progContainer");
+            const textContainer = document.createElement("div");
+            const textContainer_2 = document.createElement("div");
+            textContainer_2.classList.add("textContainer");
+            const textoProgresoMeta = document.createTextNode("Progreso: 0%");
             const aumentarProgreso = document.createElement("button");
             const progresoMeta = document.createElement("progress");
             progresoMeta.id = `Barra ${metasContainer.children.length + 1}`;
             progresoMeta.classList.add("BarraDeProgreso");
             progresoMeta.max = 100;
-            progresoMeta.value = 0; //Math.floor(Math.random() * 101); // 0
-            //progresoMeta.style.marginBottom = "15px";
+            progresoMeta.value = 0;
             aumentarProgreso.classList.add("aumentoProg");
 
-            aumentarProgreso.addEventListener("click", () => {
-                alert("GG");
-            });
-
-            barContainer.appendChild(textoProgresoMeta);
+            textContainer_2.appendChild(textoProgresoMeta);
+            textContainer.appendChild(textContainer_2);
+            textContainer.appendChild(progresoMeta);
+            barContainer.appendChild(textContainer);
             barContainer.appendChild(document.createElement("br"));
-            barContainer.appendChild(progresoMeta);
             barContainer.appendChild(aumentarProgreso);
 
             // Crear recompensa de la meta
@@ -109,9 +109,11 @@ function crearNuevaMeta() {
             metasContainer.appendChild(nuevaMeta);
 
             guardarMetaBBDD(tituloMeta.textContent, KC, goalDescription);
-            nuevaMeta.addEventListener("click", () => {
-                RequestReward(KC);
+
+            aumentarProgreso.addEventListener("click", () => {
+                autoProgreso();
             });
+            //nuevaMeta.addEventListener("click", () => { RequestReward(KC); });
 
             // solo si has dado a opciones borrar
             botonBorrar.addEventListener("click", () => {
@@ -132,20 +134,20 @@ function crearNuevaMeta() {
 }
 
 function OpcionBorrarMetas() {
-        cerrojo = 0;
-        block_2 = 0;
-        block_3 = 1;
-        const cancel = document.querySelector(".oculto");
-        cancel.classList.remove("oculto");
-        cancel.classList.add("boton-cancelar-borrar");
-        document.querySelectorAll('.task').forEach((container) => {
-            // Obtener el ID de la barra de progreso
-            const progressBar = container.querySelector(".BarraDeProgreso");
-            const borrar = container.querySelector(".borrar-X");
-            if (progressBar.value !== 100) {
-                borrar.style.display = "block";
-            }
-        });
+    cerrojo = 0;
+    block_2 = 0;
+    block_3 = 1;
+    const cancel = document.querySelector(".oculto");
+    cancel.classList.remove("oculto");
+    cancel.classList.add("boton-cancelar-borrar");
+    document.querySelectorAll('.task').forEach((container) => {
+        // Obtener el ID de la barra de progreso
+        const progressBar = container.querySelector(".BarraDeProgreso");
+        const borrar = container.querySelector(".borrar-X");
+        if (progressBar.value !== 100) {
+            borrar.style.display = "block";
+        }
+    });
 }
 
 function CancelarBorrarMetas() {
@@ -199,44 +201,41 @@ function GoalDescription(progressContainer) {
 function RequestReward(KC) {
     document.querySelectorAll('.task').forEach((container) => {
         if (!container.dataset.eventAdded) {
-            container.addEventListener('click', () => {
+            //container.addEventListener('click', () => {
                 // Obtener el ID de la barra de progreso
                 const progressBar = container.querySelector(".BarraDeProgreso");
-                if (progressBar.value === 100) {
+                if (progressBar.value >= 100) {
                     if(block === 0) {
                         AnimacionMonedas(container);
                         EfectoFadeMeta(container);
                     }
-                } else {
-                    if(cerrojo === 1) {
-                        alert(`El progreso actual de la meta está en: ${progressBar.value}%`)
-                    }
                 }
-            });
+            //});
             // Marca este contenedor como procesado para evitar duplicados
             container.dataset.eventAdded = "true";
         }
     });
 }
 
-// funcion de prueba para evaluar el progreso de una meta
-function aumentarProgresoConTiempo() {
-    // Seleccionamos todas las barras de progreso
-    const barrasProgreso = document.querySelectorAll(".BarraDeProgreso");
-
-    // Iteramos sobre cada barra de progreso
-    barrasProgreso.forEach((barra) => {
-        const intervalo = setInterval(() => {
-            // Incrementamos el valor de la barra de progreso
-            let valorActual = parseInt(barra.value);
-            if (valorActual < barra.max) {
-                barra.value = valorActual + 1; // Incrementar el progreso
-            } else {
-                clearInterval(intervalo); // Detener el incremento cuando llega al máximo
-                // Opcional: mostrar mensaje o realizar una acción al completarse
-                console.log(`Progreso completado para ${barra.id}`);
-            }
-        }, 1000); // Incrementar cada 1 segundo
+function autoProgreso() {
+    document.querySelectorAll('.task').forEach((container) => {
+        if (!container.dataset.eventAdded) {
+            container.addEventListener('click', () => {
+                // Obtener el ID de la barra de progreso
+                const progressBar = container.querySelector(".BarraDeProgreso");
+                const mensaje = container.querySelector(".textContainer");
+                progressBar.value += 10;
+                mensaje.textContent = `Progreso: ${progressBar.value}%`;
+                if (progressBar.value >= 100) {
+                    if(block === 0) {
+                        AnimacionMonedas(container);
+                        EfectoFadeMeta(container);
+                    }
+                }
+            });
+            // Marca este contenedor como procesado para evitar duplicados
+            container.dataset.eventAdded = "true";
+        }
     });
     comprobarEstadoProgreso();
 }
@@ -247,17 +246,19 @@ function comprobarEstadoProgreso() {
         const intervalo = setInterval(() => {
             const metaContainer = barra.closest(".task");
             const logo = metaContainer.querySelector(".imagen_meta");
+            const autoboton = metaContainer.querySelector(".aumentoProg");
 
             if (barra.value > 49) {
                 metaContainer.style.backgroundColor = "#56e377";
                 metaContainer.style.transition = "all 0.5s ease";
             }
 
-            if (barra.value === 100) {
+            if (barra.value >= 100) {
                 clearInterval(intervalo); // Detenemos la comprobación para esta barra
 
                 metaContainer.style.backgroundColor = "#6be524";
                 metaContainer.style.transition = "all 0.5s ease";
+                autoboton.style.display = "none";
 
                 if (logo) {
                     logo.src = "https://cdn-icons-png.flaticon.com/512/1006/1006656.png"; // Ruta de la nueva imagen
@@ -289,28 +290,39 @@ function EfectoFadeMeta(meta) {
 function AnimacionMonedas(container) {
     block = 1;
     if(block === 1) {
-        // Generar monedas
+        // Obtener las dimensiones y posición del contenedor
+        const { width, height, left, top } = container.getBoundingClientRect();
+
+        // Estilo del contenedor para posicionamiento absoluto
+        const containerStyles = window.getComputedStyle(container);
+        const parentPosition = containerStyles.position;
+
+        if (parentPosition !== "relative" && parentPosition !== "absolute" && parentPosition !== "fixed") {
+            container.style.position = "relative"; // Asegurar posicionamiento relativo para monedas
+        }
+
         for (let i = 0; i < 50; i++) {
             const coin = document.createElement("div");
             coin.classList.add("coin");
 
             // Generar posición inicial aleatoria dentro del contenedor
-            const startX = Math.random() * 100; // 0% a 100% del ancho
-            const startY = Math.random() * 100; // 0% a 100% del alto
+            const startX = Math.random() * width; // Desde 0px al ancho del contenedor
+            const startY = Math.random() * height; // Desde 0px al alto del contenedor
 
             // Generar dirección de movimiento aleatoria
             const endX = Math.random() * 400 - 200; // De -200px a 200px (horizontal)
             const endY = -(Math.random() * 300 + 100); // De -100px a -400px (vertical)
 
-            // Aplicar posición inicial
-            coin.style.left = `${startX}%`;
-            coin.style.top = `${startY}%`;
+            // Estilo inicial de la moneda
+            coin.style.position = "absolute";
+            coin.style.left = `${startX}px`;
+            coin.style.top = `${startY}px`;
 
             // Crear animación personalizada
             coin.animate(
                 [
-                    {transform: `translate(0, 0)`, opacity: 1},
-                    {transform: `translate(${endX}px, ${endY}px) rotate(${Math.random() * 720}deg)`, opacity: 0}
+                    { transform: `translate(0, 0)`, opacity: 1 },
+                    { transform: `translate(${endX}px, ${endY}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
                 ],
                 {
                     duration: 1200,
@@ -320,6 +332,7 @@ function AnimacionMonedas(container) {
             );
 
             container.appendChild(coin);
+
             // Eliminar la moneda después de la animación
             setTimeout(() => coin.remove(), 2000);
         }
