@@ -491,9 +491,10 @@ app.post('/api/actualizarProgreso', async (req, res) => {
 
 // falta por poner en front?
 app.get('/api/recuperarMetas', async (req, res) => {
+    id_usuario = req.session.id_usuario;
     try {
-        const infoDesafios = await database.obtenerDesafios();
-        console.log(infoDesafios);
+        const infoDesafios = await database.obtenerDesafios(id_usuario);
+        console.log("Datos obtenidos de la BBDD", infoDesafios);
         res.json(infoDesafios);
     }
     catch (error) {

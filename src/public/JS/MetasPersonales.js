@@ -3,13 +3,25 @@ var block_2 = 1;
 var block_3 = 0;
 var cerrojo = 1;
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector(".boton-annadir-meta").addEventListener("click", () => {
-        crearNuevaMeta();
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const response = await fetch('/api/recuperarMetas');
+        const desafiosBBDD = await response.json();
+
+        desafiosBBDD.forEach(desafio => {
+            mostrarMetaDesdeBBDD(desafio);
+        });
+
+        document.querySelector(".boton-annadir-meta").addEventListener("click", () => {
+            crearNuevaMeta();
         //aumentarProgresoConTiempo();
-    });
-    document.querySelector(".boton-borrar-meta").addEventListener("click", OpcionBorrarMetas);
-    document.querySelector(".oculto").addEventListener("click", CancelarBorrarMetas);
+        });
+        document.querySelector(".boton-borrar-meta").addEventListener("click", OpcionBorrarMetas);
+        document.querySelector(".oculto").addEventListener("click", CancelarBorrarMetas);
+    }
+    catch (error) {
+        console.error('Error al cargar las metas:', error);
+    }
 });
 
 var titulosMetas = [];
@@ -229,7 +241,17 @@ function autoProgreso() {
                 mensaje.textContent = `Progreso: ${progressBar.value}%`;
                 comprobarEstadoProgreso();
                 if (progressBar.value < 100) actualizarProgresoBBDD(title.textContent, progressBar.value, 0);
-                else actualizarProgresoBBDD(title.textContent, progressBar.value, 1);
+                else {
+                    actualizarProgresoBBDD(title.textContent, progressBar.value, 1);
+                    titulosMetas.splice(titulosMetas.indexOf(title.textContent), 1);
+                    setTimeout(() => {
+                        borrarMetaBBDD(title.textContent);
+                    }, 1000);
+                    setTimeout(() => {
+                        console.log("Acualizando en la BBDD...");
+                        actualizarMetasBBDD();
+                    }, 2000);
+                }
                 if (progressBar.value >= 100) {
                     if(block === 0) {
                         AnimacionMonedas(container);
@@ -412,6 +434,117 @@ function actualizarProgresoBBDD(title, progreso, claim) {
         },
         error: function (xhr, status, error) {
             console.log(`toy flacido`, error)
+        }
+    });
+}
+
+function mostrarMetaDesdeBBDD(desafio) {
+    // Crear contenedor de la meta
+    const nuevaMeta = document.createElement("div");
+    nuevaMeta.classList.add("task");
+    nuevaMeta.id = `Meta ${metasContainer.children.length + 1}`;
+
+    // Crear botón de borrar
+    const botonBorrar = document.createElement("span");
+    botonBorrar.classList.add("borrar-meta-indiv");
+    const borrar = document.createElement("div");
+    borrar.classList.add("borrar-X");
+
+    botonBorrar.appendChild(borrar);
+
+    // Crear imagen de la meta
+    const imagenMeta = document.createElement("img");
+    imagenMeta.src = "../Imagenes/logo.png";
+    imagenMeta.alt = "Logo GymBuddy";
+    imagenMeta.classList.add("imagen_meta");
+
+    // Crear contenedor de título y progreso
+    const goalContainer = document.createElement("div");
+    goalContainer.classList.add("goal-container");
+
+    // Crear título de la meta
+    const tituloMeta = document.createElement("h1");
+    tituloMeta.classList.add("goal-title");
+    tituloMeta.textContent = desafio.titulo_desafio; //`Meta ${metasContainer.children.length + 1}`;
+    titulosMetas.push(tituloMeta.textContent);
+
+    // Crear contenedor para la descripción
+    const descripcionMeta = document.createElement("p");
+    descripcionMeta.classList.add("goal-description");
+    descripcionMeta.textContent = desafio.descripcion;
+
+    // Crear contenedor de progreso
+    const progressContainer = document.createElement("div");
+    progressContainer.classList.add("progress-container");
+
+    // Crear progreso de la meta
+    const barContainer = document.createElement("span");
+    const textContainer = document.createElement("div");
+    const textContainer_2 = document.createElement("div");
+    textContainer_2.classList.add("textContainer");
+    const textoProgresoMeta = document.createTextNode(`Progreso: ${desafio.progreso}%`);
+    const aumentarProgreso = document.createElement("button");
+    const progresoMeta = document.createElement("progress");
+    progresoMeta.id = `Barra ${metasContainer.children.length + 1}`;
+    progresoMeta.classList.add("BarraDeProgreso");
+    progresoMeta.max = 100;
+    progresoMeta.value = desafio.progreso;
+    aumentarProgreso.classList.add("aumentoProg");
+
+    textContainer_2.appendChild(textoProgresoMeta);
+    textContainer.appendChild(textContainer_2);
+    textContainer.appendChild(progresoMeta);
+    barContainer.appendChild(textContainer);
+    barContainer.appendChild(document.createElement("br"));
+    barContainer.appendChild(aumentarProgreso);
+
+    // Crear recompensa de la meta
+    const recompensaContainer = document.createElement("span");
+    const recom = document.createTextNode(` Recompensa: ${desafio.recompensa} KC`);
+    const imagenKC = document.createElement("img");
+    imagenKC.src = "../Imagenes/moneda_dorada.png";
+    imagenKC.title = "KC";
+    imagenKC.style.marginLeft = "5px";
+    imagenKC.style.width = "20px";
+    imagenKC.style.height = "20px";
+    imagenKC.style.filter = "drop-shadow(1px 1px 1px rgba(0, 0, 0, 1))";
+    recompensaContainer.style.display = "flex";
+    recompensaContainer.style.justifyContent = "center";
+    recompensaContainer.classList.add("Recompensas");
+
+    recompensaContainer.appendChild(recom);
+    recompensaContainer.appendChild(imagenKC);
+
+    // Añadir los elementos al contenedor de progreso
+    progressContainer.appendChild(barContainer);
+    progressContainer.appendChild(recompensaContainer);
+
+    // Añadir título, descripción y progreso al contenedor de la meta
+    goalContainer.appendChild(tituloMeta);
+    goalContainer.appendChild(descripcionMeta);
+    goalContainer.appendChild(progressContainer);
+
+    // Añadir imagen y contenedor al div principal de la meta
+    nuevaMeta.appendChild(botonBorrar);
+    nuevaMeta.appendChild(imagenMeta);
+    nuevaMeta.appendChild(goalContainer);
+
+    // Añadir la nueva meta al contenedor de metas
+    metasContainer.appendChild(nuevaMeta);
+
+    // Eventos
+    aumentarProgreso.addEventListener("click", () => {
+        autoProgreso();
+    });
+
+    botonBorrar.addEventListener("click", () => {
+        if (block_3 === 1) {
+            metasContainer.removeChild(nuevaMeta);
+            titulosMetas.splice(titulosMetas.indexOf(tituloMeta.textContent), 1);
+            borrarMetaBBDD(desafio.titulo_desafio);
+            setTimeout(() => {
+                actualizarMetasBBDD();
+            }, 1000);
         }
     });
 }

@@ -207,10 +207,10 @@ const databaseMethods = {
         });
     },
     /* Para cargar la pagina de cada user con sus desafios ya existentes */
-    obtenerDesafios: async () => {
+    obtenerDesafios: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM desafios';
-            connection.query(sql, (err, results) => {
+            const sql = 'SELECT titulo_desafio, descripcion, progreso, recompensa, reclamado FROM desafios WHERE id_usuario = ?';
+            connection.query(sql, [desafio], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
