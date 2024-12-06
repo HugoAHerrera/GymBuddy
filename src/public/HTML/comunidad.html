@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comunidad - GymBuddy</title>
-    <link rel="stylesheet" href="../CSS/comunidad.css">
+    <link rel="stylesheet" href="../CSS/comunidad.css">  <!-- Asegúrate de que la ruta sea correcta -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="icon" href="../Imagenes/logo-inicio.png" type="image/x-icon">
 </head>
 <body>
     <!-- CABECERA -->
-    <div id="header-container"></div>
+    <div id="header-container"></div> <!-- Contenedor para el header, el cual se carga dinámicamente -->
     <!-- CABECERA -->
 
     <main class="community-container">
+        <!-- Lista de Comunidades -->
         <aside class="community-list">
             <h3>Grupos Generales</h3>
             <ul>
@@ -24,11 +25,15 @@
             </ul>
         </aside>
 
+        <!-- Chat de Comunidad -->
         <section class="community-chat">
             <header class="chat-header">
                 <h2 id="current-group">Selecciona un grupo</h2>
             </header>
+            <!-- Aquí se cargan los mensajes -->
             <div class="chat-messages" id="chat-messages"></div>
+
+            <!-- Campo para escribir un mensaje -->
             <footer class="chat-input">
                 <input type="text" id="message-input" placeholder="Escribe un mensaje..." />
                 <button id="send-button">Enviar</button>
@@ -36,6 +41,7 @@
         </section>
     </main>
 
+    <!-- Pie de página -->
     <footer>
         <p>
             <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> |
@@ -45,8 +51,7 @@
         </p>
     </footer>
 
-    <script src="../JS/comunidad.js"></script>
+    <script src="../JS/comunidad.js"></script>  <!-- Asegúrate de que la ruta sea correcta -->
 </body>
 </html>
 
-  

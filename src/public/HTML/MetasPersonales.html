@@ -8,6 +8,7 @@
     <title> Desafios </title>
 </head>
 <body>
+    <!--<template id="header-template"></template>-->
     <header>
         <div class="header-top">
             <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
@@ -40,7 +41,7 @@
         </div>
         <div class="div-metas"></div>
     </div>
-
+    <!--<template id="footer-template"></template>-->
     <footer>
         <p>
             <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> | 
@@ -51,6 +52,26 @@
     </footer>
     <script src="../JS/MetasPersonales.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Cargar y usar el template
+        /*fetch('../HTML/header.html')
+            .then(response => response.text())
+            .then(data => {
+                const template = document.getElementById('header-template');
+                template.innerHTML = data;
+                document.body.insertBefore(template.content.cloneNode(true), document.body.firstChild);
+            })
+            .catch(error => console.error('Error al cargar el header:', error));
+
+        fetch('../HTML/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                const template = document.getElementById('footer-template');
+                template.innerHTML = data;
+                document.body.insertBefore(template.content.cloneNode(true), document.body.nextSibling);
+            })
+            .catch(error => console.error('Error al cargar el footer:', error));*/
+    </script>
 </body>
 </html>
 
