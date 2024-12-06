@@ -191,6 +191,25 @@ app.post('/api/guia-ejercicios', async (req, res) => {
     }
 });
 
+app.post('/guardar-sesion', async (req, res) => {
+    const { tiempo_total, fecha, nombre_rutina } = req.body;
+    
+    if (!tiempo_total || !fecha || !nombre_rutina) {
+        return res.status(400).json({ success: false, message: 'Datos incompletos' });
+    }
+
+    try {
+        const idUsuario = req.session.id_usuario;
+
+        await database.guardarSesion(idUsuario, nombre_rutina, tiempo_total, fecha);
+        res.json({ success: true, message: 'Sesión guardada con éxito' });
+    } catch (error) {
+        console.error('Error al guardar la sesión:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+
 app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) => {
     try {
         const imagenBase64 = await database.convertirBlobImagenEj(58);

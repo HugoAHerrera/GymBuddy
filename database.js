@@ -514,6 +514,39 @@ const databaseMethods = {
         });
     },
 
+    guardarSesion: async (idUsuario, nombreRutina, tiempoTotal, fecha) => {
+        return new Promise((resolve, reject) => {
+            const sqlRutina = 'SELECT id_rutina FROM rutina WHERE nombre_rutina = ?';
+            
+            connection.query(sqlRutina, [nombreRutina], (err, results) => {
+                if (err) {
+                    console.error('Error en la consulta SELECT:', err);
+                    return reject(err);
+                }
+                if (results.length === 0) {
+                    console.error('Rutina no encontrada');
+                    return reject(new Error('Rutina no encontrada'));
+                }
+                
+                const idRutina = results[0].id_rutina;
+    
+                const sqlSesion = `
+                    INSERT INTO sesion (id_usuario, id_rutina, tiempo_total, fecha)
+                    VALUES (?, ?, ?, ?)
+                `;
+                
+                connection.query(sqlSesion, [idUsuario, idRutina, tiempoTotal, fecha], (err, results) => {
+                    if (err) {
+                        console.error('Error en la consulta INSERT:', err);
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+        });
+    },
+    
+
     obtenerProductos: async () => {
         return new Promise((resolve, reject) => {
             const sql = 'SELECT * FROM tienda';

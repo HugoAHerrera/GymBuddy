@@ -101,11 +101,9 @@ function actualizarContador() {
         if (ejercicioEnCurso) {
             ejercicioEnCurso = false;
             tiempoRestante = tiempoTotalDescanso;
-            console.log("Toca descanso");
         } else {
             ejercicioEnCurso = true;
             tiempoRestante = tiempoTotalEjercicio;
-            console.log("Toca ejercicio");
             actualizarEjercicio();
         }
     }
@@ -120,6 +118,7 @@ function actualizarEjercicio() {
         document.querySelector('.boton-pausar-rutina').style.display = 'none';
         document.querySelector('.boton-crear-rutina').style.display = 'none';
         document.querySelector('.boton-empezar-rutina').style.display = 'none';
+        guardarSesion();
         return;
     }
 
@@ -188,4 +187,43 @@ function reanudarRutina() {
     tiempoIntervalo = setInterval(actualizarContador, 1000);
     document.querySelector('.boton-pausar-rutina').style.display = 'flex';
     document.querySelector('.barra-progreso-container').style.display = 'block';
+}
+
+function guardarSesion() {
+    const ejercicios = document.querySelectorAll('.ejercicio');
+    const cantidadDeEjercicios = ejercicios.length;
+    const resulatdoTiempoTotalEjercicio = parseInt(tiempoTotalEjercicio, 10);
+    const resulatdoTiempoTotalDescanso = parseInt(tiempoTotalDescanso, 10);
+    const tiempoTotal = (resulatdoTiempoTotalEjercicio + resulatdoTiempoTotalDescanso) * cantidadDeEjercicios;
+    const fechaActual = new Date().toISOString().split('T')[0];
+    const idRutina = document.title.replace('Rutina - ', '');
+    
+    console.log('Tiempo total:', tiempoTotal);
+    console.log('Fecha actual:', fechaActual);
+    console.log('ID Rutina:', idRutina);
+
+    if (!tiempoTotal || !idRutina) {
+        console.error('Datos insuficientes para guardar la sesión.');
+        return;
+    }
+
+    fetch('/guardar-sesion', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            tiempo_total: tiempoTotal,
+            fecha: fechaActual,
+            nombre_rutina: idRutina,
+        }),
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Error al guardar la sesión');
+        return response.json();
+    })
+    .catch(error => {
+        console.error('Error al realizar la solicitud:', error);
+        alert('Ocurrió un error al guardar la sesión.');
+    });
 }
