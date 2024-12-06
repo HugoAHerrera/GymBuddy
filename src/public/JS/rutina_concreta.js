@@ -1,5 +1,7 @@
 let tiempoEjercicio;
 let tiempoDescanso;
+let tiempoTotalEjercicio;
+let tiempoTotalDescanso;
 let ejercicioEnCurso = true;
 let tiempoIntervalo;
 let pausado = false;
@@ -89,7 +91,7 @@ function actualizarContador() {
     if (ejercicioEnCurso) {
         if (tiempoEjercicio > 0) {
             tiempoEjercicio--;
-            const porcentaje = ((tiempoDescanso - tiempoEjercicio) / tiempoDescanso) * 100;
+            const porcentaje = (tiempoEjercicio / tiempoTotalEjercicio) * 100;
             barraProgreso.style.width = `${porcentaje}%`;
             contadorDisplay.textContent = `Tiempo restante de ejercicio: ${tiempoEjercicio} segundos`;
         } else {
@@ -99,7 +101,7 @@ function actualizarContador() {
     } else {
         if (tiempoEjercicio) {
             tiempoEjercicio--;
-            const porcentaje = ((tiempoDescanso - tiempoEjercicio) / tiempoDescanso) * 100;
+            const porcentaje = (tiempoEjercicio / tiempoTotalDescanso) * 100;
             barraProgreso.style.width = `${porcentaje}%`;
             contadorDisplay.textContent = `Tiempo de descanso: ${tiempoEjercicio} segundos`;
             if (tiempoEjercicio <= 0) {
@@ -150,6 +152,8 @@ function iniciarRutina() {
     if (primeraEjecucion) {
         tiempoEjercicio = document.getElementById("tiempo-ejercicio").value;
         tiempoDescanso = document.getElementById("tiempo-descanso").value;
+        tiempoTotalEjercicio = tiempoEjercicio;
+        tiempoTotalDescanso = tiempoDescanso;
         document.querySelector('.boton-empezar-rutina').disabled = true;
         document.querySelector('.boton-empezar-rutina').removeEventListener('click', iniciarRutina);
         document.querySelector('.boton-crear-rutina').style.display = 'none';
