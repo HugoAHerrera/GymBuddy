@@ -229,12 +229,25 @@ function GoalDescription(progressContainer) {
 // METODO INCOMPLETO
 // - falta añadir la recompensa a los KC totales del user
 function RequestReward(KC) {
-    console.log(fechasFormateadas);
-    if (fechasFormateadas.length < 2) {
-        alert(`Has reclamado ${KC} KC!`);
-        // hacer q se añada a la bolsa del user
+    if(fechasFormateadas.length > 0) {
+        if (fechasFormateadas.at(-1) < new Date().toISOString().split('T')[0]) {
+            console.log("Toca borrar las fechas de dia:", fechasFormateadas.at(-1), "o anteriores. Ya puedes reclamar.");
+            fechasFormateadas.length = 0;   // vacio la lista
+            fechasFormateadas.push(new Date().toISOString().split('T')[0]);
+                console.log(fechasFormateadas);
+        } else {
+            if (fechasFormateadas.length >= 2) {
+                console.log("Ya has reclamado las maximas recompensas diarias");
+            } else {
+                console.log("Puedes reclamar otra recompensa hoy");
+                fechasFormateadas.push(new Date().toISOString().split('T')[0]);
+                    console.log(fechasFormateadas);
+            }
+        }
     }
-    else alert("No puedes reclamar mas de 2 recompensas diarias");
+    else console.log("Parecia no ibas a cobrar pero si");
+    fechasFormateadas.push(new Date().toISOString().split('T')[0]);
+        console.log(fechasFormateadas);
 }
 
 function autoProgreso() {
@@ -414,13 +427,7 @@ function actualizarMetasBBDD() {
             url: '/api/actualizarNumeroMetas',
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(cambioTitulos),
-            success: function (response) {
-                console.log("todos? o uno solo?", response);
-            },
-            error: function (xhr, status, error) {
-                console.log(`pues ninguno`, error);
-            }
+            data: JSON.stringify(cambioTitulos)
         });
     for (let i = 0; i < metasRestantes.length; i++) {
         metasRestantes[i].textContent = `Meta ${i + 1}`;
@@ -438,18 +445,11 @@ function actualizarProgresoBBDD(title, progreso) {
         url: '/api/actualizarProgreso',
         method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(goalProgress),
-        success: function (response) {
-            console.log("me falta menos para el jack tuah", response);
-        },
-        error: function (xhr, status, error) {
-            console.log(`toy flacido`, error);
-        }
+        data: JSON.stringify(goalProgress)
     });
 }
 
 function fechaDeComplecionMeta(date) {
-    console.log(date);
     const goalCompletion = {
         fecha: date
     };
@@ -458,13 +458,7 @@ function fechaDeComplecionMeta(date) {
         url: '/api/fechaDesafioCompletado',
         method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(goalCompletion),
-        success: function (response) {
-            console.log("Me cooorroooooo", response);
-        },
-        error: function (xhr, status, error) {
-            console.log(`nunca sere feliz`, error);
-        }
+        data: JSON.stringify(goalCompletion)
     });
 }
 function mostrarMetaDesdeBBDD(desafio) {
