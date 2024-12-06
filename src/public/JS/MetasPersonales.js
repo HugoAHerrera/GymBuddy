@@ -3,14 +3,30 @@ var block_2 = 1;
 var block_3 = 0;
 var cerrojo = 1;
 
+var fechasFormateadas = [];
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         const response = await fetch('/api/recuperarMetas');
         const desafiosBBDD = await response.json();
+        console.log(desafiosBBDD);
 
-        desafiosBBDD.forEach(desafio => {
-            mostrarMetaDesdeBBDD(desafio);
+        const desafiosCompletados = await fetch('/api/desafiosCompletados');
+        const claims = await desafiosCompletados.json();
+        //const fechas = [];
+        fechasFormateadas = claims.map(item => {
+            const fecha = new Date(item.fecha);
+            const dia = fecha.getDate();
+            const mes = fecha.getMonth() + 1;
+            const anio = fecha.getFullYear();
+            return `${dia}/${mes}/${anio}`;
         });
+        console.log(fechasFormateadas);
+
+        if(desafiosBBDD.length > 0) {
+            desafiosBBDD.forEach(desafio => {
+                mostrarMetaDesdeBBDD(desafio);
+            });
+        }
 
         document.querySelector(".boton-annadir-meta").addEventListener("click", () => {
             crearNuevaMeta();
@@ -89,7 +105,7 @@ function crearNuevaMeta() {
             // Crear recompensa de la meta
             const recompensaContainer = document.createElement("span");
             const KC = KCAmount();
-            const recom = document.createTextNode(` Recompensa: ${KC} KC`); // KCAmount()
+            const recom = document.createTextNode(`Recompensa: ${KC} KC`); // KCAmount()
             const imagenKC = document.createElement("img");
             imagenKC.src = "../Imagenes/moneda_dorada.png";
             imagenKC.title = "KC";
@@ -130,11 +146,13 @@ function crearNuevaMeta() {
             // solo si has dado a opciones borrar
             botonBorrar.addEventListener("click", () => {
                 if(block_3 === 1) {
+                    block_3 = 0;
                     metasContainer.removeChild(nuevaMeta);
                     titulosMetas.splice(titulosMetas.indexOf(tituloMeta.textContent), 1);
                     borrarMetaBBDD(tituloMeta.textContent);
                     setTimeout(() => {
                         actualizarMetasBBDD();
+                        block_3 = 1;
                     }, 1000);
                 }
             });
@@ -211,38 +229,31 @@ function GoalDescription(progressContainer) {
 // METODO INCOMPLETO
 // - falta añadir la recompensa a los KC totales del user
 function RequestReward(KC) {
-    document.querySelectorAll('.task').forEach((container) => {
-        if (!container.dataset.eventAdded) {
-            //container.addEventListener('click', () => {
-                // Obtener el ID de la barra de progreso
-                const progressBar = container.querySelector(".BarraDeProgreso");
-                if (progressBar.value >= 100) {
-                    if(block === 0) {
-                        AnimacionMonedas(container);
-                        EfectoFadeMeta(container);
-                    }
-                }
-            //});
-            // Marca este contenedor como procesado para evitar duplicados
-            container.dataset.eventAdded = "true";
-        }
-    });
+    console.log(fechasFormateadas);
+    if (fechasFormateadas.length < 2) {
+        alert(`Has reclamado ${KC} KC!`);
+        // hacer q se añada a la bolsa del user
+    }
+    else alert("No puedes reclamar mas de 2 recompensas diarias");
 }
 
 function autoProgreso() {
     document.querySelectorAll('.task').forEach((container) => {
         if (!container.dataset.eventAdded) {
-            container.addEventListener('click', () => {
+            const boton = container.querySelector(".aumentoProg");
+            boton.addEventListener('click', () => {
                 // Obtener el ID de la barra de progreso
                 const progressBar = container.querySelector(".BarraDeProgreso");
                 const mensaje = container.querySelector(".textContainer");
                 var title = container.querySelector(".goal-title");
+                const KC = container.querySelector(".Recompensas");
                 progressBar.value += 10;
                 mensaje.textContent = `Progreso: ${progressBar.value}%`;
                 comprobarEstadoProgreso();
-                if (progressBar.value < 100) actualizarProgresoBBDD(title.textContent, progressBar.value, 0);
-                else {
-                    actualizarProgresoBBDD(title.textContent, progressBar.value, 1);
+                actualizarProgresoBBDD(title.textContent, progressBar.value);
+                if (progressBar.value >= 100) {
+                    RequestReward(KC.textContent.match(/\d+/)[0]);
+                    fechaDeComplecionMeta(new Date().toISOString().split('T')[0]);  // añadir a metas completadas para limitar las diarias
                     titulosMetas.splice(titulosMetas.indexOf(title.textContent), 1);
                     setTimeout(() => {
                         borrarMetaBBDD(title.textContent);
@@ -251,9 +262,9 @@ function autoProgreso() {
                         console.log("Acualizando en la BBDD...");
                         actualizarMetasBBDD();
                     }, 2000);
-                }
-                if (progressBar.value >= 100) {
+
                     if(block === 0) {
+                        //RequestReward(0);
                         AnimacionMonedas(container);
                         EfectoFadeMeta(container);
                     }
@@ -408,7 +419,7 @@ function actualizarMetasBBDD() {
                 console.log("todos? o uno solo?", response);
             },
             error: function (xhr, status, error) {
-                console.log(`pues ninguno`, error)
+                console.log(`pues ninguno`, error);
             }
         });
     for (let i = 0; i < metasRestantes.length; i++) {
@@ -417,11 +428,10 @@ function actualizarMetasBBDD() {
     }
 }
 
-function actualizarProgresoBBDD(title, progreso, claim) {
+function actualizarProgresoBBDD(title, progreso) {
     const goalProgress = {
         titulo: title,
-        porcentage: progreso,
-        reclamado: claim
+        porcentage: progreso
     };
 
     $.ajax({
@@ -433,11 +443,30 @@ function actualizarProgresoBBDD(title, progreso, claim) {
             console.log("me falta menos para el jack tuah", response);
         },
         error: function (xhr, status, error) {
-            console.log(`toy flacido`, error)
+            console.log(`toy flacido`, error);
         }
     });
 }
 
+function fechaDeComplecionMeta(date) {
+    console.log(date);
+    const goalCompletion = {
+        fecha: date
+    };
+
+    $.ajax({
+        url: '/api/fechaDesafioCompletado',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(goalCompletion),
+        success: function (response) {
+            console.log("Me cooorroooooo", response);
+        },
+        error: function (xhr, status, error) {
+            console.log(`nunca sere feliz`, error);
+        }
+    });
+}
 function mostrarMetaDesdeBBDD(desafio) {
     // Crear contenedor de la meta
     const nuevaMeta = document.createElement("div");

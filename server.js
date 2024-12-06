@@ -562,12 +562,11 @@ app.post('/api/actualizarNumeroMetas', async (req, res) => {
 
 app.post('/api/actualizarProgreso', async (req, res) => {
     console.log("Progreso recibido:", req.body);
-    var { titulo, porcentage, reclamado } = req.body;
+    var { titulo, porcentage } = req.body;
     try {
         await database.actualizarProgreso({
             titulo,
             porcentage,
-            reclamado
         });
         res.status(201).json({ message: 'Progreso actualizado con éxito' });
     }
@@ -590,12 +589,29 @@ app.get('/api/recuperarMetas', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+app.post('/api/fechaDesafioCompletado', async (req, res) => {
+    console.log("Fecha de complecion", req.body);
+    const { fecha } = req.body;
+    id_usuario = req.session.id_usuario;
 
-app.post('/api/actualizarProgreso', async (req, res) => {
-    const porcentage = req.body;
     try {
-        const result = await database.actualizarProgreso(porcentage);
-        res.status(201).json({ message: 'Progreso actualizado con éxito' });
+        await database.fechaComplecionDesafio( {
+            fecha,
+            id_usuario
+        });
+        res.status(201).json({ message: 'Fecha añadida con éxito' });
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+        }
+    });
+app.get('/api/desafiosCompletados', async (req, res) => {
+    id_usuario = req.session.id_usuario;
+    try {
+        const fechas = await database.desafiosCompletados(id_usuario);
+        console.log("Fechas:", fechas);
+        res.json(fechas);
     }
     catch (error) {
         console.error('Error:', error);

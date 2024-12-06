@@ -212,7 +212,7 @@ const databaseMethods = {
     /* Para cargar la pagina de cada user con sus desafios ya existentes */
     obtenerDesafios: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT titulo_desafio, descripcion, progreso, recompensa, reclamado FROM desafios WHERE id_usuario = ?';
+            const sql = 'SELECT * FROM desafios WHERE id_usuario = ?';
             connection.query(sql, [desafio], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
@@ -222,8 +222,26 @@ const databaseMethods = {
     // actualizar el progreso del desafio
     actualizarProgreso: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'UPDATE desafios SET progreso = ?, reclamado = ? WHERE titulo_desafio = ?';
-            connection.query(sql, [desafio.porcentage, desafio.reclamado, desafio.titulo], (err, results) => {
+            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.porcentage, desafio.titulo], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+    fechaComplecionDesafio: async (desafio) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'INSERT INTO desafiosreclamados (fecha, id_usuario) VALUES (?, ?)';
+            connection.query(sql, [desafio.fecha, desafio.id_usuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+    desafiosCompletados: async (desafio) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT fecha FROM desafiosreclamados WHERE id_usuario = ?';
+            connection.query(sql, [desafio], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
