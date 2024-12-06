@@ -149,7 +149,7 @@ app.get('/comunidad', (req, res) => {
 });
 
 app.get('/progreso', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/guia_ejercicios.html'));
+    res.sendFile(path.join(__dirname, 'src/public/HTML/progreso.html'));
 });
 
 app.get('/rutina', (req, res) => {
