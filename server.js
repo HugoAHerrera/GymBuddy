@@ -149,7 +149,7 @@ app.get('/comunidad', (req, res) => {
 });
 
 app.get('/progreso', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/progreso.html'));
+    res.sendFile(path.join(__dirname, 'src/public/HTML/guia_ejercicios.html'));
 });
 
 app.get('/rutina', (req, res) => {
@@ -200,7 +200,7 @@ app.get('/api/guia_ejercicios',async(req,res) => {
 
 app.post('/api/guia-ejercicios', async (req, res) => {
     try {
-        const guia = await database.obtenerDescripcionEjercicios(52);
+        const guia = await database.obtenerDescripcionEjercicios(70);
         console.log(guia); // Asumiendo que quieres imprimir la respuesta en la consola.
         res.status(200).json(guia); // Enviar la respuesta al cliente
     } catch (error) {
@@ -211,7 +211,7 @@ app.post('/api/guia-ejercicios', async (req, res) => {
 
 app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) => {
     try {
-        const imagenBase64 = await database.convertirBlobImagenEj(52);
+        const imagenBase64 = await database.convertirBlobImagenEj(70);
 
         if (!imagenBase64) {
             return res.status(404).json({ error: 'No se encontró una imagen para este usuario.' });
