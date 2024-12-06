@@ -88,31 +88,29 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function actualizarContador() {
-    if (ejercicioEnCurso) {
-        if (tiempoEjercicio > 0) {
-            tiempoEjercicio--;
-            const porcentaje = (tiempoEjercicio / tiempoTotalEjercicio) * 100;
-            barraProgreso.style.width = `${porcentaje}%`;
-            contadorDisplay.textContent = `Tiempo restante de ejercicio: ${tiempoEjercicio} segundos`;
-        } else {
-            ejercicioEnCurso = false;
-            tiempoEjercicio = tiempoDescanso;
-        }
+    if (tiempoRestante > 0) {
+        tiempoRestante--;
+        const porcentaje = ejercicioEnCurso
+            ? (tiempoRestante / tiempoTotalEjercicio) * 100
+            : (tiempoRestante / tiempoTotalDescanso) * 100;
+        barraProgreso.style.width = `${porcentaje}%`;
+        contadorDisplay.textContent = ejercicioEnCurso
+            ? `Tiempo restante de ejercicio: ${tiempoRestante + 1} segundos`
+            : `Tiempo de descanso: ${tiempoRestante + 1} segundos`;
     } else {
-        if (tiempoEjercicio) {
-            tiempoEjercicio--;
-            const porcentaje = (tiempoEjercicio / tiempoTotalDescanso) * 100;
-            barraProgreso.style.width = `${porcentaje}%`;
-            contadorDisplay.textContent = `Tiempo de descanso: ${tiempoEjercicio} segundos`;
-            if (tiempoEjercicio <= 0) {
-                ejercicioEnCurso = true;
-                tiempoEjercicio = tiempoDescanso;
-                actualizarEjercicio();
-                setTimeout(cambiarEjercicio, 1000);
-            }
+        if (ejercicioEnCurso) {
+            ejercicioEnCurso = false;
+            tiempoRestante = tiempoTotalDescanso;
+            console.log("Toca descanso");
+        } else {
+            ejercicioEnCurso = true;
+            tiempoRestante = tiempoTotalEjercicio;
+            console.log("Toca ejercicio");
+            actualizarEjercicio();
         }
     }
 }
+
 
 function actualizarEjercicio() {
     if (ejercicios_restantes.length === 0 || imagenes_ejercicios_restantes.length === 0) {
@@ -154,6 +152,7 @@ function iniciarRutina() {
         tiempoDescanso = document.getElementById("tiempo-descanso").value;
         tiempoTotalEjercicio = tiempoEjercicio;
         tiempoTotalDescanso = tiempoDescanso;
+        tiempoRestante = tiempoEjercicio;
         document.querySelector('.boton-empezar-rutina').disabled = true;
         document.querySelector('.boton-empezar-rutina').removeEventListener('click', iniciarRutina);
         document.querySelector('.boton-crear-rutina').style.display = 'none';
