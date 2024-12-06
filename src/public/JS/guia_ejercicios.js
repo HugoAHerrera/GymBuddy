@@ -21,10 +21,19 @@ async function cargarEjercicio() {
         document.getElementById('equipo-necesario').textContent = ejercicio.equipo_necesario;
         document.getElementById('dificultad').textContent = ejercicio.dificultad;
         document.getElementById('objetivo').textContent = ejercicio.objetivo;
-        document.getElementById('preparacion').textContent = ejercicio.preparacion;
-        document.getElementById('ejecucion-lista').innerHTML = ejercicio.ejecucion.split('\n').map(step => `<li>${step}</li>`).join('');
-        document.getElementById('consejos-lista').innerHTML = ejercicio.consejos_clave.split('\n').map(tip => `<li>${tip}</li>`).join('');
-
+        document.getElementById('preparacion-lista').textContent = ejercicio.preparacion
+        .split('. ') // Dividir por cada punto y espacio (asegurándote de separar las frases correctamente)
+        .map(step => `<li>${step.trim()}.</li>`) // Añadir la etiqueta <li> y recortar cualquier espacio extra
+        .join(''); // Unir todos los elementos <li> en una cadena
+        document.getElementById('ejecucion-lista').innerHTML = ejercicio.ejecucion
+        .split('. ') // Dividir por cada punto y espacio (asegurándote de separar las frases correctamente)
+        .map(step => `<li>${step.trim()}.</li>`) // Añadir la etiqueta <li> y recortar cualquier espacio extra
+        .join(''); // Unir todos los elementos <li> en una cadena
+      
+        document.getElementById('consejos-lista').innerHTML = ejercicio.consejos_clave
+        .split('. ') // Dividir por cada punto y espacio (asegurándote de separar las frases correctamente)
+        .map(step => `<li>${step.trim()}.</li>`) // Añadir la etiqueta <li> y recortar cualquier espacio extra
+        .join(''); // Unir todos los elementos <li> en una cadena
         // Ahora solicitamos la imagen del ejercicio en formato Base64
         const responseImagen = await fetch('/api/blobAImagenEjercicio', {
             method: 'POST',

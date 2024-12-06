@@ -3,149 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comunidad - GymBuddy</title>
+    <link rel="stylesheet" href="../CSS/comunidad.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="icon" href="../Imagenes/logo-inicio.png" type="image/x-icon">
-    <link rel="stylesheet" href="../css/comunidad.css">
-    <script src="../js/comunidad.js" defer></script>
-    <title>Comunidad</title>
 </head>
 <body>
+    <!-- CABECERA -->
+    <div id="header-container"></div>
+    <!-- CABECERA -->
 
-    <header>
-        <div class="header-top">
-            <marquee class="header-marquee">¡Apúntate ya! Ofertas exclusivas en membresías.</marquee>
-            <div class="profile-search">
-                <input type="text" class="search-bar" placeholder="¿Qué quieres buscar? 🔍">
-                <button class="profile-btn" onclick="window.location.href='perfil.html'"></button>
-            </div>
-        </div>
-        <nav id="navegator">
-            <div class="even-nav">
-                <button class="nav-buttons" onclick="window.location.href='tienda.html'">Tienda</button>
-                <button class="nav-buttons" onclick="window.location.href='Progreso.html'">Progreso</button>
-                <button class="nav-buttons" onclick="window.location.href='rutina.html'">Rutinas</button>
-            </div>
-            <div class="logo">
-                <img id="logotype" src="../Imagenes/logo.png" alt="Logo GymBuddy" class="logo_img">
-            </div>
-            <div class="even-nav">
-                <button class="nav-buttons" onclick="window.location.href='comunidad.html'">Comunidad</button>
-                <button class="nav-buttons" onclick="window.location.href='metaspersonales.html'">Metas</button>
-                <button class="nav-buttons" onclick="window.location.href='desafios.html'">Desafios</button>
-            </div>
-        </nav>
-    </header>
+    <main class="community-container">
+        <aside class="community-list">
+            <h3>Grupos Generales</h3>
+            <ul>
+                <li class="community-group" data-group="Deportes">Deportes</li>
+                <li class="community-group" data-group="Tecnología">Tecnología</li>
+                <li class="community-group" data-group="Arte">Arte</li>
+                <li class="community-group" data-group="General">General</li>
+            </ul>
+        </aside>
 
-    <main>
-        <div class="container">
-            <!-- Contenedor principal -->
-            <div class="main-content">
-                <!-- Buscador -->
-                <div class="search-bar">
-                  <input type="text" placeholder="Buscador (nombre de usuario, evento, temática o palabras clave)">
-                  <button class="search-button">🔍</button>
-                </div>
-    
-                <!-- Sección de Tendencias Actuales -->
-                <section class="current-trends">
-                    <h2>TENDENCIAS ACTUALES</h2>
-                    <div class="trend-items">
-                        <div class="trend-item">
-                            <div class="trend-icon">
-                                <img src="../Imagenes/avatar.jpg" alt="Avatar">
-                            </div>
-                        </div>
-                        <div class="trend-item">
-                            <div class="trend-icon">
-                                <img src="../Imagenes/avatar.jpg" alt="Avatar">
-                            </div>
-                        </div>
-                        <div class="trend-item">
-                            <div class="trend-icon">
-                                <img src="../Imagenes/avatar.jpg" alt="Avatar">
-                            </div>
-                        </div>
-                        <div class="trend-item">
-                            <div class="trend-icon">
-                                <img src="../Imagenes/avatar.jpg" alt="Avatar">
-                            </div>
-                        </div>
-                        <div class="trend-item">
-                            <div class="trend-icon">
-                                <img src="../Imagenes/avatar.jpg" alt="Avatar">
-                            </div>
-                        </div>
-                    </div>
-                </section>
-    
-                <!-- Sección de Lo último de tus amigos -->
-                <section class="latest-friends">
-                    <h2>Lo último de tus amigos</h2>
-                    <div class="friend-items">
-                    <div class="friend-item">
-                        <div class="friend-icon">
-                        <img src="../Imagenes/avatar.jpg" alt="Avatar">
-                        </div>
-                    </div>
-                    <div class="friend-item">
-                        <div class="friend-icon">
-                        <img src="../Imagenes/avatar.jpg" alt="Avatar">
-                        </div>
-                    </div>
-                    <div class="friend-item">
-                        <div class="friend-icon">
-                        <img src="../Imagenes/avatar.jpg" alt="Avatar">
-                        </div>
-                    </div>
-                    <div class="friend-item">
-                        <div class="friend-icon">
-                        <img src="../Imagenes/avatar.jpg" alt="Avatar">
-                        </div>
-                    </div>
-                    <div class="friend-item">
-                        <div class="friend-icon">
-                        <img src="../Imagenes/avatar.jpg" alt="Avatar">
-                        </div>
-                    </div>
-                    </div>
-                </section>
-    
-                <!-- Slider de Eventos -->
-                <section class="event-slider">
-                  <div class="slide">
-                    <p>Aquí están los eventos que cambian cada 3s</p>
-                  </div>
-                </section>
-            </div>
-            
-            <!-- Usuarios destacados -->
-            <aside class="featured-users">
-              <h3>Usuarios destacados</h3>
-              <div class="user">
-                <div class="user-icon">👤</div>
-                <span>Username1</span>
-              </div>
-              <div class="user">
-                <div class="user-icon">👤</div>
-                <span>Username2</span>
-              </div>
-              <div class="user">
-                <div class="user-icon">👤</div>
-                <span>Username3</span>
-              </div>
-            </aside>
-        </div>
+        <section class="community-chat">
+            <header class="chat-header">
+                <h2 id="current-group">Selecciona un grupo</h2>
+            </header>
+            <div class="chat-messages" id="chat-messages"></div>
+            <footer class="chat-input">
+                <input type="text" id="message-input" placeholder="Escribe un mensaje..." />
+                <button id="send-button">Enviar</button>
+            </footer>
+        </section>
     </main>
-    
 
     <footer>
         <p>
-            <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> | 
-            <a href="terminosCondiciones.html" class="footer-enlace">Cookies</a> | 
-            <a href="Contacto.html" class="footer-enlace">Soporte técnico</a> | 
+            <a href="terminosCondiciones.html" class="footer-enlace">Términos y condiciones</a> |
+            <a href="contacto.html" class="footer-enlace">Cookies</a> |
+            <a href="correo.html" class="footer-enlace">Soporte técnico</a> |
             <a>GymBuddy &copy; 2024</a>
         </p>
     </footer>
 
+    <script src="../JS/comunidad.js"></script>
 </body>
 </html>
 

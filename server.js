@@ -168,6 +168,10 @@ app.get('/carro', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/carro.html'));
 });
 
+app.get('/pagar', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/pagar.html'));
+});
+
 app.get('/api/rutina-concreta', async (req, res) => {
     const rutinaNombre = req.query.id;
     try {
@@ -200,7 +204,7 @@ app.get('/api/guia_ejercicios',async(req,res) => {
 
 app.post('/api/guia-ejercicios', async (req, res) => {
     try {
-        const guia = await database.obtenerDescripcionEjercicios(52);
+        const guia = await database.obtenerDescripcionEjercicios(70);
         console.log(guia); // Asumiendo que quieres imprimir la respuesta en la consola.
         res.status(200).json(guia); // Enviar la respuesta al cliente
     } catch (error) {
@@ -209,9 +213,28 @@ app.post('/api/guia-ejercicios', async (req, res) => {
     }
 });
 
+app.post('/guardar-sesion', async (req, res) => {
+    const { tiempo_total, fecha, nombre_rutina } = req.body;
+    
+    if (!tiempo_total || !fecha || !nombre_rutina) {
+        return res.status(400).json({ success: false, message: 'Datos incompletos' });
+    }
+
+    try {
+        const idUsuario = req.session.id_usuario;
+
+        await database.guardarSesion(idUsuario, nombre_rutina, tiempo_total, fecha);
+        res.json({ success: true, message: 'Sesión guardada con éxito' });
+    } catch (error) {
+        console.error('Error al guardar la sesión:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+
 app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) => {
     try {
-        const imagenBase64 = await database.convertirBlobImagenEj(52);
+        const imagenBase64 = await database.convertirBlobImagenEj(70);
 
         if (!imagenBase64) {
             return res.status(404).json({ error: 'No se encontró una imagen para este usuario.' });
@@ -640,19 +663,27 @@ app.get('/api/obtenerCarro', async (req, res) => {
 
 
 app.delete('/api/vacioCarro', async (req, res) => {
-    const { idUsuario } = req.params;
+    // Obtener el idUsuario desde la sesión
+    const idUsuario = req.session.id_usuario;
+
+    if (!idUsuario) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
     try {
-        const exito = await database.vaciarCarro(idUsuario);
-        if (exito) {
-            res.json({ mensaje: 'carro vaciado correctamente' });
+        const result = await database.vaciarCarro(idUsuario);
+
+        if (result) {
+            res.status(200).json({ message: 'Carro vacío exitosamente' });
         } else {
-            res.status(400).json({ mensaje: 'No se pudo vaciar la carro' });
+            res.status(404).json({ message: 'No se encontró el carrito para el usuario' });
         }
-    } catch (error) {
-        console.error('Error al vaciar la carro', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+    } catch (err) {
+        console.error('Error al vaciar el carrito:', err);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
+
 
 app.post('/api/agregarAlCarro', async (req, res) => {
     const { idArticulo } = req.body;
@@ -684,5 +715,26 @@ app.get('/api/productos', async (req, res) => {
     } catch (error) {
         console.error('Error al obtener productos:', error);
         res.status(500).json({ message: 'Error al obtener productos' });
+    }
+});
+
+app.post('/api/guardarDatosTarjeta', async (req, res) => {
+    const { numero_tarjeta, fecha_caducidad, CVV } = req.body;
+    const idUsuario = req.session.id_usuario;
+
+    if (!idUsuario) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
+    if (!numero_tarjeta || !fecha_caducidad || !CVV) {
+        return res.status(400).json({ message: 'Faltan datos de la tarjeta' });
+    }
+
+    try {
+        const result = await database.guardarDatosTarjeta(idUsuario, numero_tarjeta, fecha_caducidad, CVV);
+        res.status(200).json({ message: 'Datos guardados correctamente', result });
+    } catch (err) {
+        console.error('Error al guardar los datos de la tarjeta:', err);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
