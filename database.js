@@ -110,29 +110,29 @@ const databaseMethods = {
         });
     },
 
-    obtenerSesiones: async (periodo = null) => {
+    obtenerSesiones: async (idUsuario, periodo = null) => {
         return new Promise((resolve, reject) => {
-            let sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kg, fecha FROM sesion';
-            let params = [];
+            let sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kg, fecha FROM sesion WHERE id_usuario = ?';
+            let params = [idUsuario]; // Se pasa idUsuario como parámetro de la consulta
 
             // Filtrar por periodo si se especifica
             if (periodo) {
                 switch (periodo) {
                     case 'semana':
-                        // Filtrar por la semana' actual (de lunes a domingo)
-                        sql += ' WHERE fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE())) DAY AND fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY';
+                        // Filtrar por la semana actual (de lunes a domingo)
+                        sql += ' AND fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE())) DAY AND fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY';
                         break;
                     case 'mes':
                         // Filtrar por el mes actual (del primer día al último día del mes)
-                        sql += ' WHERE MONTH(fecha) = MONTH(CURDATE()) AND YEAR(fecha) = YEAR(CURDATE())';
+                        sql += ' AND MONTH(fecha) = MONTH(CURDATE()) AND YEAR(fecha) = YEAR(CURDATE())';
                         break;
                     case 'año':
                         // Filtrar por el año actual
-                        sql += ' WHERE YEAR(fecha) = YEAR(CURDATE())';
+                        sql += ' AND YEAR(fecha) = YEAR(CURDATE())';
                         break;
                     case 'total':
-                        // Seleccionar todos los registros sin filtro
-                        sql += ' WHERE fecha IS NOT NULL';
+                        // Seleccionar todos los registros sin filtro adicional
+                        sql += ' AND fecha IS NOT NULL';
                         break;
                     default:
                         return reject(new Error('Periodo no válido'));
@@ -160,11 +160,13 @@ const databaseMethods = {
         });
     },
 
-    obtenerEstadisticasSesiones: async () => {
+
+    obtenerEstadisticasSesiones: async (idUsuario) => {
+        console.log('idUsuario:', idUsuario);
         return new Promise((resolve, reject) => {
-            // Consulta SQL para obtener las estadísticas
-            const sql = 'SELECT COUNT(*) AS sesiones_completadas, SUM(kilometros) AS distancia_recorrida, MAX(fecha) AS ultima_sesion FROM sesion';
-            connection.query(sql, (err, results) => {
+            // Consulta SQL para obtener las estadísticas filtrando por id_usuario
+            const sql = 'SELECT COUNT(*) AS sesiones_completadas, SUM(kilometros) AS distancia_recorrida, MAX(fecha) AS ultima_sesion FROM sesion WHERE id_usuario = ?';
+            connection.query(sql, [idUsuario], (err, results) => {  // Se pasa el idUsuario como parámetro
                 if (err) return reject(err);
 
                 const estadisticas = {
@@ -176,6 +178,7 @@ const databaseMethods = {
             });
         });
     },
+
 
     // Metodos para la pagina de Objetivos -- meta al completo (progreso, descripcion, recompensa...)
     // se ejecuta cada vez que cambia de pagina el usuario? -> ver cuando
@@ -263,16 +266,20 @@ const databaseMethods = {
     // Función para añadir o actualizar la imagen de un ejercicio dado un id_ejercicio manual
     añadirFotoEjercicio: async (idEjercicio, blob) => {
         return new Promise((resolve, reject) => {
-            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
             const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
-            
-            // Ejecutar la consulta SQL con los parámetros
-            connection.query(sql, [blob, idEjercicio], (err, results) => {
-                if (err) {
-                    return reject(err); // Si hay error, lo rechazamos
-                }
-                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
-            });
+                connection.query(sql, [blob, idEjercicio], (err, result) => {
+                    if (err) {
+                        console.error('Error al actualizar la base de datos:', err);
+                        return res.status(500).send('Error al actualizar la imagen.');
+                    }
+
+                    // Verifica si se actualizó alguna fila
+                    if (result.affectedRows === 0) {
+                        return res.status(404).send('No se encontró el ejercicio con el ID proporcionado.');
+                    }
+
+                    resolve('Imagen actualizada exitosamente.');
+                });
         });
     },
 
@@ -317,7 +324,8 @@ const databaseMethods = {
             });
         });
     },
-
+    
+    // Usuario
     convertirBlobImagen: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             // Consulta SQL para obtener la imagen del usuario desde la base de datos
@@ -336,6 +344,38 @@ const databaseMethods = {
                 try {
                     // Obtenemos el blob (almacenado como un Buffer en Node.js) de la consulta
                     const blob = results[0].imagenes;
+    
+                    // Convertir el Buffer a Base64
+                    const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
+    
+                    // Resolvemos con la imagen en formato Base64
+                    resolve(base64Image);
+                } catch (error) {
+                    reject(error); // Rechazamos si ocurre un error durante la conversión
+                }
+            });
+        });
+    },
+
+    //Ejercicio
+    convertirBlobImagenEj: async (id_ejercicio) => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL para obtener la imagen del ejercicio desde la base de datos
+            const sql = 'SELECT imagen FROM ejercicio WHERE id_ejercicio = ?';
+    
+            // Ejecutar la consulta SQL con el id_ejercicio como parámetro
+            connection.query(sql, [id_ejercicio], (err, results) => {
+                if (err) {
+                    return reject(err); // Si hay error, rechazamos la promesa
+                }
+    
+                if (results.length === 0) {
+                    return reject(new Error('No se encontró ninguna imagen para este ejercicio.'));
+                }
+    
+                try {
+                    // Obtenemos el blob (almacenado como un Buffer en Node.js) de la consulta
+                    const blob = results[0].imagen; // Asegúrate de que 'imagen' es el nombre correcto de la columna
     
                     // Convertir el Buffer a Base64
                     const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
@@ -439,10 +479,14 @@ const databaseMethods = {
     //Tienda
     agregarAlCarro: async ({ idArticulo, id_usuario }) => {
         return new Promise((resolve, reject) => {
-            const sql = 'INSERT INTO carro (idArticulo, id_usuario) VALUES (?, ?)';
+            const sql = `
+                INSERT INTO carro (idArticulo, id_usuario, cantidad)
+                VALUES (?, ?, 1)
+                ON DUPLICATE KEY UPDATE cantidad = cantidad + 1;
+            `;
             connection.query(sql, [idArticulo, id_usuario], (err, results) => {
                 if (err) return reject(err);
-                resolve(results);
+                resolve(results); // Devuelve el resultado de la operación
             });
         });
     },
@@ -458,14 +502,10 @@ const databaseMethods = {
     },
 
     //Carro
+    // Función para obtener los productos del carrito desde la base de datos
     obtenerProductosCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo
-                FROM carro
-                JOIN tienda ON carro.idArticulo = tienda.idArticulo
-                WHERE carro.id_usuario = ?;
-            `;
+            const sql = `SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo FROM carro JOIN tienda ON carro.idArticulo = tienda.idArticulo WHERE carro.id_usuario = ?`;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);

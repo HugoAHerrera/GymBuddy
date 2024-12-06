@@ -50,10 +50,10 @@ async function cargarProductos() {
             const tarjetaProducto = document.createElement("div");
             tarjetaProducto.classList.add("tarjeta-producto");
 
-            // Imagen del producto (colocamos un texto de "Imagen de Producto" por ahora)
+            // Imagen del producto
             const imagenProducto = document.createElement("div");
             imagenProducto.classList.add("imagen-producto");
-            imagenProducto.textContent = "Imagen de Producto";  // Aquí puedes agregar la imagen si la tienes como URL o Blob
+            imagenProducto.textContent = "Imagen de Producto"; 
 
             // Nombre del producto
             const nombreProducto = document.createElement("div");
@@ -96,7 +96,7 @@ function buscarProductos() {
     const productos = document.querySelectorAll(".tarjeta-producto");
     
     productos.forEach(producto => {
-        const nombreProducto = producto.querySelector(".imagen-producto").textContent.toLowerCase();
+        const nombreProducto = producto.querySelector(".nombre-producto").textContent.toLowerCase();
         
         // Si el nombre del producto incluye el texto del buscador, se muestra; de lo contrario, se oculta
         if (nombreProducto.includes(input)) {
@@ -110,22 +110,41 @@ function buscarProductos() {
 document.getElementById("buscador-productos").addEventListener("input", buscarProductos);
 
 // Función para añadir un producto al carrito
-function añadirAlCarrito(id, nombreProducto, precio) {
-    // Crear un objeto con la información del producto
-    const producto = {
-        id: id,
-        nombre: nombreProducto,
-        precio: precio
-    };
+async function añadirAlCarrito(idArticulo, nombreProducto, precio) {
+    try {
+        // Crear el objeto con el idArticulo y los datos del producto
+        const producto = { idArticulo, nombreArticulo: nombreProducto, precio };
 
-    // Enviar al header.js para que actualice el carrito
-    if (typeof actualizarCarrito !== 'undefined') {
-        actualizarCarrito(producto);  // Asegúrate de que la función está definida correctamente en header.js
+        // Enviar la solicitud POST al servidor para agregar el producto al carrito
+        const response = await fetch('/api/agregarAlCarro', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(producto)
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            alert(`El producto "${nombreProducto}" ha sido añadido al carrito.`);
+
+            // Actualizamos el carrito visualmente
+            const scriptHeader = document.querySelector("script[src='../JS/header.js']");
+            if (scriptHeader) {
+                // Invocamos la función actualizarCarrito que está en header.js
+                if (typeof window.actualizarCarrito === 'function') {
+                    window.actualizarCarrito();
+                }
+            }
+        } else {
+            alert('Error al añadir el producto al carrito.');
+        }
+    } catch (error) {
+        console.error('Error al añadir el producto al carrito:', error);
+        alert('Error al añadir el producto al carrito.');
     }
-
-    // Mostrar mensaje de éxito
-    alert(`El producto "${nombreProducto}" ha sido añadido al carrito.`);
 }
+
 
 // Cargar el header y el footer con fetch
 fetch('../HTML/header.html')
