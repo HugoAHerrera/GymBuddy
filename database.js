@@ -202,18 +202,18 @@ const databaseMethods = {
     },
     actualizarNumerosMetas: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
-            connection.query(sql, [desafio.titulo], (err, results) => {
+            const sql = 'UPDATE desafios SET titulo_desafio = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.nuevoTitulo, desafio.antiguoTitulo], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
     },
     /* Para cargar la pagina de cada user con sus desafios ya existentes */
-    obtenerDesafios: async () => {
+    obtenerDesafios: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM desafios';
-            connection.query(sql, (err, results) => {
+            const sql = 'SELECT titulo_desafio, descripcion, progreso, recompensa, reclamado FROM desafios WHERE id_usuario = ?';
+            connection.query(sql, [desafio], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -222,8 +222,8 @@ const databaseMethods = {
     // actualizar el progreso del desafio
     actualizarProgreso: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
-            connection.query(sql, [desafio.titulo], (err, results) => {
+            const sql = 'UPDATE desafios SET progreso = ?, reclamado = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.porcentage, desafio.reclamado, desafio.titulo], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -266,16 +266,20 @@ const databaseMethods = {
     // Función para añadir o actualizar la imagen de un ejercicio dado un id_ejercicio manual
     añadirFotoEjercicio: async (idEjercicio, blob) => {
         return new Promise((resolve, reject) => {
-            // Consulta SQL para actualizar la imagen del ejercicio en la base de datos
             const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
-            
-            // Ejecutar la consulta SQL con los parámetros
-            connection.query(sql, [blob, idEjercicio], (err, results) => {
-                if (err) {
-                    return reject(err); // Si hay error, lo rechazamos
-                }
-                resolve(results); // Si todo va bien, resolvemos la promesa con los resultados
-            });
+                connection.query(sql, [blob, idEjercicio], (err, result) => {
+                    if (err) {
+                        console.error('Error al actualizar la base de datos:', err);
+                        return res.status(500).send('Error al actualizar la imagen.');
+                    }
+
+                    // Verifica si se actualizó alguna fila
+                    if (result.affectedRows === 0) {
+                        return res.status(404).send('No se encontró el ejercicio con el ID proporcionado.');
+                    }
+
+                    resolve('Imagen actualizada exitosamente.');
+                });
         });
     },
 
@@ -475,10 +479,14 @@ const databaseMethods = {
     //Tienda
     agregarAlCarro: async ({ idArticulo, id_usuario }) => {
         return new Promise((resolve, reject) => {
-            const sql = 'INSERT INTO carro (idArticulo, id_usuario) VALUES (?, ?)';
+            const sql = `
+                INSERT INTO carro (idArticulo, id_usuario, cantidad)
+                VALUES (?, ?, 1)
+                ON DUPLICATE KEY UPDATE cantidad = cantidad + 1;
+            `;
             connection.query(sql, [idArticulo, id_usuario], (err, results) => {
                 if (err) return reject(err);
-                resolve(results);
+                resolve(results); // Devuelve el resultado de la operación
             });
         });
     },
@@ -494,6 +502,7 @@ const databaseMethods = {
     },
 
     //Carro
+    // Función para obtener los productos del carrito desde la base de datos
     obtenerProductosCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo FROM carro JOIN tienda ON carro.idArticulo = tienda.idArticulo WHERE carro.id_usuario = ?`;
