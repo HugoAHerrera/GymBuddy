@@ -168,6 +168,10 @@ app.get('/carro', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/carro.html'));
 });
 
+app.get('/pagar', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/pagar.html'));
+});
+
 app.get('/api/rutina-concreta', async (req, res) => {
     const rutinaNombre = req.query.id;
     try {
@@ -208,6 +212,25 @@ app.post('/api/guia-ejercicios', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
+
+app.post('/guardar-sesion', async (req, res) => {
+    const { tiempo_total, fecha, nombre_rutina } = req.body;
+    
+    if (!tiempo_total || !fecha || !nombre_rutina) {
+        return res.status(400).json({ success: false, message: 'Datos incompletos' });
+    }
+
+    try {
+        const idUsuario = req.session.id_usuario;
+
+        await database.guardarSesion(idUsuario, nombre_rutina, tiempo_total, fecha);
+        res.json({ success: true, message: 'Sesión guardada con éxito' });
+    } catch (error) {
+        console.error('Error al guardar la sesión:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 
 app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) => {
     try {
@@ -504,7 +527,7 @@ app.get('/api/usuarios', async (req, res) => {
 
 app.post('/api/guardarMeta', async (req, res) => {
     console.log("Datos recibidos:", req.body);
-     id_usuario = req.session.id_usuario;
+    id_usuario = req.session.id_usuario;
 
     const { titulo, desc, recompensa } = req.body;
 
@@ -531,6 +554,7 @@ app.post('/api/borrarMeta', async (req, res) => {
     const titulo = req.body;
     try {
         await database.borrarMeta(titulo);
+        console.log(titulo, "borrado con exito.");
         res.status(201).json({ message: 'Desafio borrado con éxito' });
     }
     catch (error) {
@@ -540,12 +564,35 @@ app.post('/api/borrarMeta', async (req, res) => {
     });
 
 app.post('/api/actualizarNumeroMetas', async (req, res) => {
-    const titulos = req.body;
+    console.log("Titulos con descripcion recibidos:", req.body);
+    var { antiguoTitulo, nuevoTitulo } = req.body;
+
     try {
-        for(let i = 0; i < titulos.length; i++){
-            await database.actualizarNumerosMetas(titulos[i]);
-            res.status(201).json({ message: 'Desafio borrado con éxito' });
+        for(let i = 0; i < antiguoTitulo.length; i++) {
+            await database.actualizarNumerosMetas({
+                antiguoTitulo: antiguoTitulo[i],
+                nuevoTitulo: nuevoTitulo[i]
+            });
+            console.log(antiguoTitulo[i], " actualizado con éxito a", nuevoTitulo[i]);
         }
+        res.status(201).json({message: 'Desafios actualizados con éxito'});
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+        }
+    });
+
+app.post('/api/actualizarProgreso', async (req, res) => {
+    console.log("Progreso recibido:", req.body);
+    var { titulo, porcentage, reclamado } = req.body;
+    try {
+        await database.actualizarProgreso({
+            titulo,
+            porcentage,
+            reclamado
+        });
+        res.status(201).json({ message: 'Progreso actualizado con éxito' });
     }
     catch (error) {
         console.error('Error:', error);
@@ -555,9 +602,10 @@ app.post('/api/actualizarNumeroMetas', async (req, res) => {
 
 // falta por poner en front?
 app.get('/api/recuperarMetas', async (req, res) => {
+    id_usuario = req.session.id_usuario;
     try {
-        const infoDesafios = await database.obtenerDesafios();
-        console.log(infoDesafios);
+        const infoDesafios = await database.obtenerDesafios(id_usuario);
+        console.log("Datos obtenidos de la BBDD", infoDesafios);
         res.json(infoDesafios);
     }
     catch (error) {
@@ -599,22 +647,31 @@ app.get('/api/obtenerCarro', async (req, res) => {
 
 
 app.delete('/api/vacioCarro', async (req, res) => {
-    const { idUsuario } = req.params;
+    // Obtener el idUsuario desde la sesión
+    const idUsuario = req.session.id_usuario;
+
+    if (!idUsuario) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
     try {
-        const exito = await database.vaciarCarro(idUsuario);
-        if (exito) {
-            res.json({ mensaje: 'carro vaciado correctamente' });
+        const result = await database.vaciarCarro(idUsuario);
+
+        if (result) {
+            res.status(200).json({ message: 'Carro vacío exitosamente' });
         } else {
-            res.status(400).json({ mensaje: 'No se pudo vaciar la carro' });
+            res.status(404).json({ message: 'No se encontró el carrito para el usuario' });
         }
-    } catch (error) {
-        console.error('Error al vaciar la carro', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+    } catch (err) {
+        console.error('Error al vaciar el carrito:', err);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
 
+
 app.post('/api/agregarAlCarro', async (req, res) => {
-    const { idArticulo, id_usuario } = req.body;
+    const { idArticulo } = req.body;
+    const id_usuario = req.session.id_usuario;
     try {
         const result = await database.agregarAlCarro({ idArticulo, id_usuario });
         res.status(201).json({ message: 'Producto añadido al carro', result });
@@ -642,5 +699,26 @@ app.get('/api/productos', async (req, res) => {
     } catch (error) {
         console.error('Error al obtener productos:', error);
         res.status(500).json({ message: 'Error al obtener productos' });
+    }
+});
+
+app.post('/api/guardarDatosTarjeta', async (req, res) => {
+    const { numero_tarjeta, fecha_caducidad, CVV } = req.body;
+    const idUsuario = req.session.id_usuario;
+
+    if (!idUsuario) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
+    if (!numero_tarjeta || !fecha_caducidad || !CVV) {
+        return res.status(400).json({ message: 'Faltan datos de la tarjeta' });
+    }
+
+    try {
+        const result = await database.guardarDatosTarjeta(idUsuario, numero_tarjeta, fecha_caducidad, CVV);
+        res.status(200).json({ message: 'Datos guardados correctamente', result });
+    } catch (err) {
+        console.error('Error al guardar los datos de la tarjeta:', err);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 });

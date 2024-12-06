@@ -202,18 +202,18 @@ const databaseMethods = {
     },
     actualizarNumerosMetas: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
-            connection.query(sql, [desafio.titulo], (err, results) => {
+            const sql = 'UPDATE desafios SET titulo_desafio = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.nuevoTitulo, desafio.antiguoTitulo], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
     },
     /* Para cargar la pagina de cada user con sus desafios ya existentes */
-    obtenerDesafios: async () => {
+    obtenerDesafios: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM desafios';
-            connection.query(sql, (err, results) => {
+            const sql = 'SELECT titulo_desafio, descripcion, progreso, recompensa, reclamado FROM desafios WHERE id_usuario = ?';
+            connection.query(sql, [desafio], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -222,8 +222,8 @@ const databaseMethods = {
     // actualizar el progreso del desafio
     actualizarProgreso: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
-            connection.query(sql, [desafio.titulo], (err, results) => {
+            const sql = 'UPDATE desafios SET progreso = ?, reclamado = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.porcentage, desafio.reclamado, desafio.titulo], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -479,10 +479,14 @@ const databaseMethods = {
     //Tienda
     agregarAlCarro: async ({ idArticulo, id_usuario }) => {
         return new Promise((resolve, reject) => {
-            const sql = 'INSERT INTO carro (idArticulo, id_usuario) VALUES (?, ?)';
+            const sql = `
+                INSERT INTO carro (idArticulo, id_usuario, cantidad)
+                VALUES (?, ?, 1)
+                ON DUPLICATE KEY UPDATE cantidad = cantidad + 1;
+            `;
             connection.query(sql, [idArticulo, id_usuario], (err, results) => {
                 if (err) return reject(err);
-                resolve(results);
+                resolve(results); // Devuelve el resultado de la operación
             });
         });
     },
@@ -514,10 +518,43 @@ const databaseMethods = {
             const sql = `DELETE FROM carro WHERE id_usuario = ?;`;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
-                resolve(results.affectedRows > 0);
+                resolve(results);
             });
         });
     },
+
+    guardarSesion: async (idUsuario, nombreRutina, tiempoTotal, fecha) => {
+        return new Promise((resolve, reject) => {
+            const sqlRutina = 'SELECT id_rutina FROM rutina WHERE nombre_rutina = ?';
+            
+            connection.query(sqlRutina, [nombreRutina], (err, results) => {
+                if (err) {
+                    console.error('Error en la consulta SELECT:', err);
+                    return reject(err);
+                }
+                if (results.length === 0) {
+                    console.error('Rutina no encontrada');
+                    return reject(new Error('Rutina no encontrada'));
+                }
+                
+                const idRutina = results[0].id_rutina;
+    
+                const sqlSesion = `
+                    INSERT INTO sesion (id_usuario, id_rutina, tiempo_total, fecha)
+                    VALUES (?, ?, ?, ?)
+                `;
+                
+                connection.query(sqlSesion, [idUsuario, idRutina, tiempoTotal, fecha], (err, results) => {
+                    if (err) {
+                        console.error('Error en la consulta INSERT:', err);
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+        });
+    },
+    
 
     obtenerProductos: async () => {
         return new Promise((resolve, reject) => {
@@ -527,7 +564,19 @@ const databaseMethods = {
                 resolve(results);
             });
         });
-    }
+    },
+
+    // Función para guardar los datos de la tarjeta en la base de datos
+    guardarDatosTarjeta: async (idUsuario, numeroTarjeta, fechaCaducidad, CVV) => {
+        return new Promise((resolve, reject) => {
+            const sql = `UPDATE usuario SET numero_tarjeta = ?, fecha_caducidad = ?, CVV = ? WHERE id_usuario = ?`;
+            connection.query(sql, [numeroTarjeta, fechaCaducidad, CVV, idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
 };
 
 module.exports = databaseMethods;
