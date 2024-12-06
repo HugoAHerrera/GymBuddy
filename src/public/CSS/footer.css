@@ -17,6 +17,10 @@ footer a.footer-enlace:hover {
     color: rgb(154, 233, 233);
 }
 
-.center{
+body {
+    display: flex;
+    flex-direction: column;
+}
+body > *:not(footer) {
     flex-grow: 1;
 }

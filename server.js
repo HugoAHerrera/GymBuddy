@@ -175,6 +175,16 @@ app.get('/pagar', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/pagar.html'));
 });
 
+//Redireciones del footer
+app.get('/terminosCondiciones', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/terminosCondiciones.html'));
+});
+
+app.get('/contacto', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/Contacto.html'));
+});
+
+
 app.get('/api/rutina-concreta', async (req, res) => {
     const rutinaNombre = req.query.id;
     try {
@@ -267,7 +277,7 @@ app.get('/perfil', (req, res) => {
         return res.status(400).send('ID de usuario no proporcionado');
     }
     console.log('Perfil:',req.session.id_usuario)
-    res.sendFile(path.join(__dirname, 'src/public/HTML/blob.html'));
+    res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
 });
 
 app.post('/api/blob', upload.single('imagen'), async (req, res) => {
