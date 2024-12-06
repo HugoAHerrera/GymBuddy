@@ -517,7 +517,8 @@ app.delete('/api/carro', async (req, res) => {
 });
 
 app.post('/api/agregarAlCarro', async (req, res) => {
-    const { idArticulo, id_usuario } = req.body;
+    const { idArticulo } = req.body;
+    const id_usuario = req.session.id_usuario;
     try {
         const result = await database.agregarAlCarro({ idArticulo, id_usuario });
         res.status(201).json({ message: 'Producto añadido al carro', result });

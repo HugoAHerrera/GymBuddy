@@ -439,10 +439,14 @@ const databaseMethods = {
     //Tienda
     agregarAlCarro: async ({ idArticulo, id_usuario }) => {
         return new Promise((resolve, reject) => {
-            const sql = 'INSERT INTO carro (idArticulo, id_usuario) VALUES (?, ?)';
+            const sql = `
+                INSERT INTO carro (idArticulo, id_usuario, cantidad)
+                VALUES (?, ?, 1)
+                ON DUPLICATE KEY UPDATE cantidad = cantidad + 1;
+            `;
             connection.query(sql, [idArticulo, id_usuario], (err, results) => {
                 if (err) return reject(err);
-                resolve(results);
+                resolve(results); // Devuelve el resultado de la operación
             });
         });
     },
