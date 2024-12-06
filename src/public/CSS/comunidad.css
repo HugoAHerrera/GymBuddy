@@ -1,128 +1,148 @@
-/* Estilo general para el chat */
-.community-container {
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    color: #333;
+}
+
+/* Contenedor principal del chat */
+.chat-container {
     display: flex;
     height: 100vh;
-    flex-direction: row;
 }
 
-.community-list {
-    width: 250px;
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-right: 1px solid #ddd;
+/* Barra lateral de comunidades */
+.sidebar {
+    width: 25%;
+    max-width: 250px;
+    background: #ffffff;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-.community-group {
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
     padding: 10px;
+    border-bottom: 1px solid #ddd;
     cursor: pointer;
+    color: #333;
 }
 
-.community-group:hover {
-    background-color: #ddd;
+.sidebar li:hover {
+    background: #efefef;
 }
 
-.community-group.active {
-    background-color: #34b7f1;
-    color: white;
+.sidebar li.active {
+    background: #c4d9ed;
+    font-weight: bold;
 }
 
-.community-chat {
+/* Sección principal del chat */
+.chat-section {
     flex: 1;
     display: flex;
     flex-direction: column;
+    background: #f4f4f4;
 }
 
 .chat-header {
-    padding: 15px;
-    background-color: #34b7f1;
-    color: white;
-    font-size: 1.2rem;
+    background: rgb(2, 126, 243);
+    color: #fff;
+    padding: 20px;
+    font-size: 1.2em;
 }
 
 .chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 10px;
-    background-color: #f8f8f8;
-    margin: 10px;
-    border-radius: 10px;
-}
-
-.message-container {
-    margin-bottom: 15px;
+    padding: 20px;
+    background: #ffffff;
 }
 
 .message {
-    max-width: 60%;
-    background-color: #e5e5e5;
-    border-radius: 10px;
+    margin-bottom: 15px;
+    max-width: 80%;
     padding: 10px;
-    margin-left: 10px;
+    border-radius: 5px;
     position: relative;
-    word-wrap: break-word;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    clear: both;
 }
 
-/* Estilo para los mensajes enviados por el usuario */
-.message.sent {
-    background-color: #dcf8c6;
-    align-self: flex-end;
-    border-radius: 10px;
-}
-
-.message-header {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 5px;
-}
-
-.sender-name {
+.message .sender {
     font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
 }
 
-.message-time {
-    font-size: 0.8rem;
-    color: #777;
+.message .time {
+    font-size: 0.8em;
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+    color: #555;
 }
 
-.message-body {
+/* Mensajes enviados por el usuario actual */
+.message.sent {
+    background: #c4d9ed;
+    margin-left: auto;
+    text-align: right;
+}
+
+/* Mensajes recibidos (otros usuarios) */
+.message.received {
+    background: #ededed;
+    margin-right: auto;
+    text-align: left;
+}
+
+/* Input para enviar mensajes */
+.chat-input {
+    display: flex;
+    border-top: 1px solid #ccc;
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    outline: none;
     font-size: 1rem;
     color: #333;
 }
 
-.chat-input {
-    display: flex;
-    padding: 10px;
-    background-color: #fff;
-    border-top: 1px solid #ddd;
-}
-
-#message-input {
-    width: 80%;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    font-size: 1rem;
-}
-
-#send-button {
-    width: 20%;
-    background-color: #34b7f1;
-    color: white;
-    padding: 10px;
-    border-radius: 10px;
+.chat-input button {
+    background: rgb(2, 126, 243);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    margin-left: 10px;
     cursor: pointer;
     font-size: 1rem;
-    border: none;
 }
 
-#send-button:hover {
-    background-color: #128C7E;
+.chat-input button:hover {
+    background: #035daf;
 }
 
-#message-container button:focus, #message-container input:focus {
-    outline: none;
-}
+
 

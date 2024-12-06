@@ -61,8 +61,20 @@ const databaseMethods = {
                 if (err) return reject(err);
                 resolve(results[0]);
             });
+        });},
+
+    obtenerUsuarioPorId: async (id) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM usuario WHERE id_usuario = ?';
+            connection.query(sql, [id], (err, results) => {
+                if (err) return reject(err);
+                if (results.length === 0) return resolve(null);
+                resolve(results[0]);
+            });
         });
     },
+
+
 
     obtenerRutinas: async () => {
         return new Promise((resolve, reject) => {
@@ -594,35 +606,7 @@ const databaseMethods = {
             });
         });
     },
-    obtenerMensajes: async (comunidad) => {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                SELECT m.contenido, m.hora, m.fecha, u.nombre_usuario AS emisor
-                FROM mensajes m
-                JOIN usuario u ON m.id_emisor = u.id_usuario
-                WHERE m.destinatario = ?
-                ORDER BY m.fecha ASC, m.hora ASC
-            `;
-            connection.query(sql, [comunidad], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
-            });
-        });
-    },
 
-    // Enviar mensaje a una comunidad
-    enviarMensaje: async ({ contenido, comunidad, id_emisor }) => {
-        return new Promise((resolve, reject) => {
-            const sql = `
-                INSERT INTO mensajes (contenido, destinatario, id_emisor, fecha, hora)
-                VALUES (?, ?, ?, CURDATE(), CURTIME())
-            `;
-            connection.query(sql, [contenido, comunidad, id_emisor], (err, result) => {
-                if (err) return reject(err);
-                resolve(result);
-            });
-        });
-    },
 
 };
 

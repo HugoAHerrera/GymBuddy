@@ -1,16 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const database = require('../database');  // Para interactuar con la base de datos
+const database = require('../database');
 
 // Obtener mensajes de una comunidad
 router.get('/', async (req, res) => {
-    const { comunidad } = req.query;  // Nombre de la comunidad (por ejemplo: 'general', 'Deportes montaña', etc.)
+    const { comunidad } = req.query;
     if (!comunidad) return res.status(400).json({ error: 'El nombre de la comunidad es requerido' });
 
     try {
-        // Llamar a la base de datos para obtener los mensajes de la comunidad
         const mensajes = await database.obtenerMensajes(comunidad);
-        res.status(200).json(mensajes);  // Enviar los mensajes como respuesta
+        res.status(200).json(mensajes);
     } catch (error) {
         console.error('Error al obtener mensajes:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
@@ -19,21 +18,24 @@ router.get('/', async (req, res) => {
 
 // Enviar mensaje a una comunidad
 router.post('/', async (req, res) => {
-    const { contenido, comunidad } = req.body;  // Datos del mensaje: contenido y nombre de la comunidad
-    const id_emisor = req.session.id_usuario;  // ID del usuario logueado
-
+    const { contenido, comunidad, id_emisor } = req.body;
     if (!contenido || !comunidad || !id_emisor) {
-        return res.status(400).json({ error: 'Faltan datos requeridos' });
+        return res.status(400).json({ error: 'Contenido, comunidad y emisor son requeridos' });
     }
 
+    const fecha = new Date();
+    const hora = fecha.toLocaleTimeString(); // Obtiene la hora actual
+    const fechaHoy = fecha.toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
+
     try {
-        // Guardar el mensaje en la base de datos
-        await database.enviarMensaje({ contenido, comunidad, id_emisor });
-        res.status(201).json({ message: 'Mensaje enviado con éxito' });
+        const sql = 'INSERT INTO mensajes (id_emisor, contenido, receptor, hora, fecha) VALUES (?, ?, ?, ?, ?)';
+        await database.query(sql, [id_emisor, contenido, comunidad, hora, fechaHoy]);
+
+        res.status(200).json({ message: 'Mensaje enviado con éxito' });
     } catch (error) {
-        console.error('Error al enviar mensaje:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+        console.error('Error al guardar el mensaje:', error);
+        res.status(500).json({ error: 'Error al guardar el mensaje' });
     }
 });
 
-module.exports = router;  // Exportar el router para usarlo en server.js
+module.exports = router;

@@ -2,46 +2,42 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <title>Comunidad - Chat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comunidad - GymBuddy</title>
-    <link rel="stylesheet" href="../CSS/comunidad.css">  <!-- Asegúrate de que la ruta sea correcta -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../CSS/comunidad.css">
     <link rel="icon" href="../Imagenes/logo-inicio.png" type="image/x-icon">
 </head>
 <body>
     <div id="header-container"></div>
-
-    <main class="community-container">
-        <!-- Lista de Comunidades -->
-        <aside class="community-list">
-            <h3>Grupos Generales</h3>
-            <ul>
-                <li class="community-group" data-group="Deportes">Deportes</li>
-                <li class="community-group" data-group="Tecnología">Tecnología</li>
-                <li class="community-group" data-group="Arte">Arte</li>
-                <li class="community-group" data-group="General">General</li>
+    <main class="chat-container">
+        <aside class="sidebar">
+            <h2>Comunidades</h2>
+            <ul id="community-list">
+                <li data-comunidad="General" class="active">General</li>
+                <li data-comunidad="Deportes de montaña">Deportes de montaña</li>
+                <li data-comunidad="Gymbros">Gymbros</li>
+                <li data-comunidad="Nos gusta sudar">Nos gusta sudar</li>
+                <li data-comunidad="Alimentación">Alimentación</li>
+                <li data-comunidad="Planes saludables">Planes saludables</li>
             </ul>
         </aside>
 
-        <!-- Chat de Comunidad -->
-        <section class="community-chat">
-            <header class="chat-header">
-                <h2 id="current-group">Selecciona un grupo</h2>
-            </header>
-            <!-- Aquí se cargan los mensajes -->
-            <div class="chat-messages" id="chat-messages"></div>
-
-            <!-- Campo para escribir un mensaje -->
-            <footer class="chat-input">
-                <input type="text" id="message-input" placeholder="Escribe un mensaje..." />
+        <section class="chat-section">
+            <div class="chat-header">
+                <h2 id="current-community">General</h2>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Aquí se insertarán los mensajes -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="message-input" placeholder="Escribe un mensaje..." autocomplete="off">
                 <button id="send-button">Enviar</button>
-            </footer>
+            </div>
         </section>
     </main>
 
     <div id="footer-container"></div>
-
-    <script src="../JS/comunidad.js"></script>
+    <script src="../js/comunidad.js" defer></script>
 </body>
 </html>
 
