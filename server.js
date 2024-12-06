@@ -150,6 +150,10 @@ app.get('/carro', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/carro.html'));
 });
 
+app.get('/pagar', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/pagar.html'));
+});
+
 app.get('/api/rutina-concreta', async (req, res) => {
     const rutinaNombre = req.query.id;
     try {
@@ -550,19 +554,27 @@ app.get('/api/obtenerCarro', async (req, res) => {
 
 
 app.delete('/api/vacioCarro', async (req, res) => {
-    const { idUsuario } = req.params;
+    // Obtener el idUsuario desde la sesión
+    const idUsuario = req.session.idUsuario;
+
+    if (!idUsuario) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
     try {
-        const exito = await database.vaciarCarro(idUsuario);
-        if (exito) {
-            res.json({ mensaje: 'carro vaciado correctamente' });
+        const result = await vaciarCarro(idUsuario);
+
+        if (result) {
+            res.status(200).json({ message: 'Carro vacío exitosamente' });
         } else {
-            res.status(400).json({ mensaje: 'No se pudo vaciar la carro' });
+            res.status(404).json({ message: 'No se encontró el carrito para el usuario' });
         }
-    } catch (error) {
-        console.error('Error al vaciar la carro', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
+    } catch (err) {
+        console.error('Error al vaciar el carrito:', err);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
+
 
 app.post('/api/agregarAlCarro', async (req, res) => {
     const { idArticulo, id_usuario } = req.body;

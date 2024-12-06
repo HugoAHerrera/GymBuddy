@@ -510,7 +510,7 @@ const databaseMethods = {
             const sql = `DELETE FROM carro WHERE id_usuario = ?;`;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
-                resolve(results.affectedRows > 0);
+                resolve(results);
             });
         });
     },

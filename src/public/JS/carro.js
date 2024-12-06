@@ -1,6 +1,6 @@
 async function actualizarCarrito() {
     try {
-        const response = await fetch('/api/obtenerCarro'); // Ya no es necesario pasar el id_usuario en la URL
+        const response = await fetch('/api/obtenerCarro');
         console.log('Respuesta de la API:', response); // Verificar la respuesta completa de la API
 
         if (!response.ok) {
@@ -39,37 +39,43 @@ async function actualizarCarrito() {
 // Llamar a la función cuando la página cargue
 document.addEventListener('DOMContentLoaded', actualizarCarrito);
 
+// Mostrar la alerta cuando se hace clic en el botón "Pagar"
+document.querySelector('.checkout-btn').addEventListener('click', function() {
+    // Mostrar la alerta de confirmación
+    document.getElementById('custom-alert').style.display = 'block';
+});
 
+// Si el usuario elige "Seguir Comprando"
+document.getElementById('seguir-comprando').addEventListener('click', function() {
+    // Cerrar la alerta y redirigir al usuario a la tienda
+    document.getElementById('custom-alert').style.display = 'none';
+    window.location.href = 'tienda';  // Cambia esto a la URL correcta de la tienda
+});
 
-document.addEventListener('DOMContentLoaded', function () {
-    const payButton = document.querySelector('.checkout-btn');
-    const customAlert = document.getElementById('custom-alert');
-    const seguirComprandoButton = document.getElementById('seguir-comprando');
-    const procederPagoButton = document.getElementById('proceder-pago');
+document.getElementById('proceder-pago').addEventListener('click', async function() {
+    // Cerrar la alerta y redirigir al usuario a la página de pago
+    const response = await fetch('/api/vacioCarro', { method: 'DELETE' });
 
-    payButton.addEventListener('click', function () {
-        customAlert.style.display = 'block';
-    });
+    if (!response.ok) {
+        throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+    }
 
-    seguirComprandoButton.addEventListener('click', function () {
-        window.location.href = 'tienda.html';
-    });
-
-    procederPagoButton.addEventListener('click', function () {
-        window.location.href = 'pagar.html';
-    });
+    // Cierra la alerta personalizada
+    document.getElementById('custom-alert').style.display = 'none';
+    // Redirige a la página de pago
+    window.location.href = 'pagar';
 });
 
 // Cargar el header y el footer con fetch
 fetch('../HTML/header.html')
-.then(res => res.text())
-.then(html => {
-    document.getElementById('header-container').innerHTML = html;
-    const script = document.createElement('script');
-    script.src = '../JS/header.js';
-    script.defer = true;
-    document.body.appendChild(script);
-})
+    .then(res => res.text())
+    .then(html => {
+        document.getElementById('header-container').innerHTML = html;
+        const script = document.createElement('script');
+        script.src = '../JS/header.js';
+        script.defer = true;
+        document.body.appendChild(script);
+    })
 fetch('../HTML/footer.html')
-.then(response => response.text())
-.then(data => document.getElementById('footer-container').innerHTML = data);
+    .then(response => response.text())
+    .then(data => document.getElementById('footer-container').innerHTML = data);
