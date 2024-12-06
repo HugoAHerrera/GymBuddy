@@ -494,6 +494,7 @@ const databaseMethods = {
     },
 
     //Carro
+    // Función para obtener los productos del carrito desde la base de datos
     obtenerProductosCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo FROM carro JOIN tienda ON carro.idArticulo = tienda.idArticulo WHERE carro.id_usuario = ?`;

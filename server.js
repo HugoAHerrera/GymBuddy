@@ -529,15 +529,25 @@ app.post('/api/actualizarProgreso', async (req, res) => {
         }
     });
 
+// Ruta para obtener los productos del carrito
 app.get('/api/obtenerCarro', async (req, res) => {
+    const idUsuario = req.session.id_usuario; // Obtener el id_usuario desde la sesión
+    console.log('idUsuario en backend:', idUsuario); // Verificar que el idUsuario se obtiene correctamente
+    if (!idUsuario) {
+        return res.status(400).json({ error: 'El id_usuario no está disponible' });
+    }
+
     try {
-        const productos = await database.obtenerProductosCarro();
+        // Obtener productos del carrito desde la base de datos
+        const productos = await database.obtenerProductosCarro(idUsuario);
+        console.log('Productos obtenidos desde la base de datos:', productos); // Verificar los productos obtenidos
         res.json(productos); // Enviar los productos en formato JSON
     } catch (error) {
         console.error('Error al obtener productos del carrito:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
 
 app.delete('/api/vacioCarro', async (req, res) => {
     const { idUsuario } = req.params;
