@@ -391,10 +391,15 @@ app.post('/api/descripcion', async (req, res) => {
 
 app.get('/api/sesiones', async (req, res) => {
     const { periodo } = req.query; // Obtener el parámetro 'periodo' del query string
+    const idUsuario = req.session.id_usuario; // Obtener el id_usuario desde la sesión
+
+    if (!idUsuario) {
+        return res.status(400).json({ error: 'No se ha encontrado el id_usuario en la sesión' });
+    }
 
     try {
-        // Pasar el periodo como argumento a la función obtenerSesiones
-        const sesiones = await database.obtenerSesiones(periodo);
+        // Pasar idUsuario y periodo como argumento a la función obtenerSesiones
+        const sesiones = await database.obtenerSesiones(idUsuario, periodo);
 
         console.log(sesiones); // Log para verificar las sesiones obtenidas
         res.json(sesiones);
@@ -411,15 +416,22 @@ app.get('/api/sesiones', async (req, res) => {
 });
 
 app.get('/api/estadisticas/', async (req, res) => {
+    const idUsuario = req.session.id_usuario; // Obtener el id_usuario desde la sesión
+    console.log('idUsuario:', idUsuario);
+    if (!idUsuario) {
+        return res.status(400).json({ error: 'No se ha encontrado el id_usuario en la sesión' });
+    }
+
     try {
-        const estadisticas = await database.obtenerEstadisticasSesiones();
+        const estadisticas = await database.obtenerEstadisticasSesiones(idUsuario); // Pasar el idUsuario a la función
         console.log(estadisticas);
         res.json(estadisticas);
     } catch (error) {
-        console.error('Error al obtener estadisticas', error);
+        console.error('Error al obtener estadísticas', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
 
 // COSAS PARA LA PAGINA DESAFIOS
 /*app.get('/api/guiaejercicios/', async(req, res => {
@@ -566,18 +578,27 @@ app.post('/api/actualizarProgreso', async (req, res) => {
         }
     });
 
-app.get('/api/carro', async (req, res) => {
-    const { idUsuario } = req.params;
+// Ruta para obtener los productos del carrito
+app.get('/api/obtenerCarro', async (req, res) => {
+    const idUsuario = req.session.id_usuario; // Obtener el id_usuario desde la sesión
+    console.log('idUsuario en backend:', idUsuario); // Verificar que el idUsuario se obtiene correctamente
+    if (!idUsuario) {
+        return res.status(400).json({ error: 'El id_usuario no está disponible' });
+    }
+
     try {
+        // Obtener productos del carrito desde la base de datos
         const productos = await database.obtenerProductosCarro(idUsuario);
-        res.json(productos);
+        console.log('Productos obtenidos desde la base de datos:', productos); // Verificar los productos obtenidos
+        res.json(productos); // Enviar los productos en formato JSON
     } catch (error) {
-        console.error('Error al obtener productos de la carro', error);
+        console.error('Error al obtener productos del carrito:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
 
-app.delete('/api/carro', async (req, res) => {
+
+app.delete('/api/vacioCarro', async (req, res) => {
     const { idUsuario } = req.params;
     try {
         const exito = await database.vaciarCarro(idUsuario);

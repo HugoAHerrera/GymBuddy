@@ -39,7 +39,7 @@ async function obtenerDatosSesiones() {
 
 async function obtenerEstadisticas() {
     try {
-        const response = await fetch(`/api/estadisticas/`);
+        const response = await fetch(`/api/estadisticas`);
         const data = await response.json();
         const sesionesCompletadas = data.sesionesCompletadas || 0;
         const distanciaRecorrida = data.distanciaRecorrida || 0;
