@@ -741,3 +741,79 @@ app.post('/api/guardarDatosTarjeta', async (req, res) => {
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
+
+app.get('/api/mensajes', async (req, res) => {
+    const { comunidad } = req.query;
+
+    if (!comunidad) {
+        return res.status(400).json({ error: 'El nombre de la comunidad es requerido' });
+    }
+
+    try {
+        const sql = 'SELECT * FROM mensajes WHERE receptor = ? ORDER BY fecha DESC, hora DESC';
+        connection.query(sql, [comunidad], (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener los mensajes' });
+            res.status(200).json(results);  // Enviar los mensajes como respuesta
+        });
+    } catch (error) {
+        console.error("Error al obtener los mensajes:", error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+
+app.get('/api/mensajes', async (req, res) => {
+    const { comunidad } = req.query;
+
+    if (!comunidad) {
+        return res.status(400).json({ error: 'El nombre de la comunidad es requerido' });
+    }
+
+    try {
+        // Ajustamos la consulta para hacer JOIN con la tabla usuario y obtener el nombre_usuario
+        const sql = `SELECT m.*, u.nombre_usuario 
+                     FROM mensajes m
+                     JOIN usuario u ON m.id_emisor = u.id_usuario
+                     WHERE m.receptor = ?
+                     ORDER BY m.fecha DESC, m.hora DESC`;
+        connection.query(sql, [comunidad], (err, results) => {
+            if (err) return res.status(500).json({ error: 'Error al obtener los mensajes' });
+            res.status(200).json(results);
+        });
+    } catch (error) {
+        console.error("Error al obtener los mensajes:", error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+const comunidadRouter = require('./routes/comunidad');  // Asegúrate de importar la ruta correctamente
+
+// Usa la ruta para los mensajes de comunidad
+app.use('/api/mensajes', comunidadRouter);  // La ruta de la API será '/api/mensajes'
+
+app.get('/comunidad', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/comunidad.html'));
+});
+
+// Asegúrate de tener la ruta para otras páginas como inicio
+app.get('/inicio', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
+});
+
+app.get('/api/mi-usuario', async (req, res) => {
+    if (!req.session.id_usuario) {
+        return res.status(401).json({ error: 'No autenticado' });
+    }
+    try {
+        const user = await database.obtenerUsuarioPorId(req.session.id_usuario);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+        // user debería contener al menos: {id_usuario, nombre_usuario}
+        res.json({ id_usuario: user.id_usuario, nombre_usuario: user.nombre_usuario });
+    } catch (error) {
+        console.error('Error al obtener usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+

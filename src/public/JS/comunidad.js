@@ -1,106 +1,149 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const communityList = document.querySelectorAll(".community-group");  // Lista de comunidades
-    const chatMessages = document.getElementById("chat-messages");  // Contenedor de los mensajes
-    const messageInput = document.getElementById("message-input");  // Campo para escribir mensaje
-    const sendButton = document.getElementById("send-button");  // Botón de enviar
-    const currentGroupTitle = document.getElementById("current-group");  // Título de la comunidad activa
-    let currentGroup = null;  // Variable para almacenar la comunidad seleccionada
+document.addEventListener('DOMContentLoaded', () => {
+    const communityList = document.getElementById('community-list');
+    const chatMessages = document.getElementById('chat-messages');
+    const currentCommunityEl = document.getElementById('current-community');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
 
-    // Función para cargar los mensajes de la comunidad
-    const loadMessages = async (groupName) => {
+    let currentCommunity = 'General';
+    let currentUserId = null;
+    let currentUserName = null;
+
+    // Primero obtenemos el usuario actual
+    async function getCurrentUser() {
         try {
-            console.log("Cargando mensajes para la comunidad:", groupName); // Verificar qué comunidad se está seleccionando
-            const response = await fetch(`/api/mensajes?comunidad=${groupName}`);
+            const response = await fetch('/api/mi-usuario');
             if (!response.ok) {
-                throw new Error("Error al obtener los mensajes");
+                console.log('Usuario no logueado o error al obtener el usuario.');
+                return;
             }
-            const messages = await response.json();  // Parsear los mensajes
-            console.log("Mensajes cargados:", messages);  // Verificar si los mensajes son recibidos correctamente
-
-            // Limpiar mensajes previos
-            chatMessages.innerHTML = messages
-                .map(
-                    (msg) => `
-                    <div class="message-container">
-                        <div class="message">
-                            <div class="message-header">
-                                <strong class="sender-name">${msg.emisor}</strong>
-                                <span class="message-time">${msg.fecha} ${msg.hora}</span>
-                            </div>
-                            <div class="message-body">
-                                ${msg.contenido}
-                            </div>
-                        </div>
-                    </div>
-                `
-                )
-                .join("");  // Unir todos los mensajes en un solo string
-
-            chatMessages.scrollTop = chatMessages.scrollHeight;  // Desplazar hacia el último mensaje
-        } catch (error) {
-            console.error("Error al cargar mensajes:", error);
+            const data = await response.json();
+            currentUserId = data.id_usuario;
+            currentUserName = data.nombre_usuario;
+        } catch (err) {
+            console.error('Error al obtener el usuario actual:', err);
         }
-    };
+    }
 
-    // Función para enviar un mensaje
-    sendButton.addEventListener("click", async () => {
-        const message = messageInput.value.trim();  // Obtener el mensaje escrito
-        if (!message || !currentGroup) {
-            console.log("No se pudo enviar el mensaje: No hay mensaje o no se seleccionó una comunidad.");
-            return;  // Si no hay mensaje o no hay comunidad seleccionada, no hacer nada
+    // Cargar mensajes de la comunidad actual
+    async function loadMessages(comunidad) {
+        try {
+            const response = await fetch(`/api/mensajes?comunidad=${encodeURIComponent(comunidad)}`);
+            if (!response.ok) {
+                console.error('Error al cargar los mensajes');
+                return;
+            }
+            const data = await response.json();
+            renderMessages(data);
+        } catch (err) {
+            console.error('Error fetching messages:', err);
+        }
+    }
+
+    // Renderizar los mensajes
+    function renderMessages(messages) {
+        chatMessages.innerHTML = '';
+        // Asumimos que `messages` es un array de objetos con {id_mensaje, id_emisor, contenido, receptor, hora, fecha}
+        // Sería ideal que devuelvan también el nombre_usuario del emisor.
+        // Si no lo hace, tendremos que hacer una segunda petición.
+        // Aquí asumiremos que el endpoint actual solo devuelve mensajes.
+        // Si no incluye el nombre del usuario, tendremos que modificar el backend o hacer otra petición.
+        // Por ahora, supondré que el backend ya los devuelve con un JOIN que retorne 'nombre_usuario'.
+
+        messages.forEach(msg => {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message');
+
+            // Comprobar si el mensaje es del usuario actual
+            if (msg.id_emisor === currentUserId) {
+                msgDiv.classList.add('sent');
+            } else {
+                msgDiv.classList.add('received');
+            }
+
+            const senderEl = document.createElement('div');
+            senderEl.classList.add('sender');
+            senderEl.textContent = msg.nombre_usuario || ('Usuario '+msg.id_emisor);
+
+            const contentEl = document.createElement('div');
+            contentEl.classList.add('content');
+            contentEl.textContent = msg.contenido;
+
+            const timeEl = document.createElement('div');
+            timeEl.classList.add('time');
+            // Formatear fecha y hora si se requiere
+            const fecha = new Date(msg.fecha);
+            const hora = msg.hora;
+            timeEl.textContent = `${fecha.toLocaleDateString()} ${hora}`;
+
+            msgDiv.appendChild(senderEl);
+            msgDiv.appendChild(contentEl);
+            msgDiv.appendChild(timeEl);
+
+            chatMessages.appendChild(msgDiv);
+        });
+
+        // Scroll al final
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Enviar mensaje
+    async function sendMessage() {
+        const contenido = messageInput.value.trim();
+        if (!contenido) return;
+
+        if (!currentUserId) {
+            console.error('No hay usuario logueado. No se puede enviar mensaje.');
+            return;
         }
 
-        console.log("Enviando mensaje:");
-        console.log("Contenido:", message);
-        console.log("Comunidad:", currentGroup);
+        const data = {
+            contenido: contenido,
+            comunidad: currentCommunity,
+            id_emisor: currentUserId
+        };
 
         try {
-            const response = await fetch("/api/mensajes", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    contenido: message,
-                    comunidad: currentGroup,
-                }),
+            const response = await fetch('/api/mensajes', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
             });
 
             if (response.ok) {
-                console.log("Mensaje enviado con éxito");
-                messageInput.value = "";  // Limpiar el campo de texto
-                loadMessages(currentGroup);  // Recargar los mensajes de la comunidad seleccionada
+                messageInput.value = '';
+                loadMessages(currentCommunity);
             } else {
-                console.error("Error al enviar el mensaje:", await response.text());
+                console.error('Error al enviar el mensaje');
             }
-        } catch (error) {
-            console.error("Error al enviar mensaje:", error);
+        } catch (err) {
+            console.error('Error al enviar el mensaje:', err);
+        }
+    }
+
+    // Cambiar de comunidad al hacer clic
+    communityList.addEventListener('click', (e) => {
+        if (e.target.tagName === 'LI') {
+            const lis = communityList.querySelectorAll('li');
+            lis.forEach(li => li.classList.remove('active'));
+
+            e.target.classList.add('active');
+            currentCommunity = e.target.getAttribute('data-comunidad');
+            currentCommunityEl.textContent = currentCommunity;
+            loadMessages(currentCommunity);
         }
     });
 
-    // Cambiar de comunidad al hacer clic en una
-    communityList.forEach((group) =>
-        group.addEventListener("click", (e) => {
-            const groupName = e.target.dataset.group;  // Obtener el nombre de la comunidad
-            currentGroup = groupName;  // Establecer la comunidad seleccionada
-            currentGroupTitle.textContent = groupName;  // Actualizar el título
-
-            // Resaltar la comunidad seleccionada
-            communityList.forEach((g) => g.classList.remove("active"));
-            e.target.classList.add("active");
-
-            console.log("Comunidad seleccionada:", groupName);
-            loadMessages(groupName);  // Cargar los mensajes de la comunidad seleccionada
-        })
-    );
-
-    // Inicializar la primera comunidad (General) al cargar la página
-    if (communityList.length > 0) {
-        communityList[0].click();  // Simular un clic en la primera comunidad
-    }
-
-    // Cargar los mensajes cada 3 segundos
-    setInterval(() => {
-        if (currentGroup) {
-            loadMessages(currentGroup);  // Recargar los mensajes de la comunidad cada 3 segundos
+    sendButton.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
         }
-    }, 3000);
+    });
+
+    // Inicializar
+    (async function init() {
+        await getCurrentUser();
+        loadMessages(currentCommunity);
+    })();
 });
