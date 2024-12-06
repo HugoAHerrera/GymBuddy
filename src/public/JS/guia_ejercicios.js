@@ -72,7 +72,7 @@ async function cargarImagenUsuario() {
         }
 
         // Asignar la imagen al elemento <img> usando el ID
-        const imgElemento = document.getElementById('imagen-mostrada');
+        const imgElemento = document.getElementById('imagen-ejercicio');
         imgElemento.src = datos.imagen; // datos.imagen es el Base64 devuelto por la API
     } catch (error) {
         console.error('Error al cargar la imagen:', error);
