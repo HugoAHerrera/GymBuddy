@@ -148,6 +148,9 @@ app.get('/comunidad', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/comunidad.html'));
 });
 
+const comunidadRouter = require('./routes/comunidad');
+app.use
+
 app.get('/progreso', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/progreso.html'));
 });
