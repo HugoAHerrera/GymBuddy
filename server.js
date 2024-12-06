@@ -648,14 +648,14 @@ app.get('/api/obtenerCarro', async (req, res) => {
 
 app.delete('/api/vacioCarro', async (req, res) => {
     // Obtener el idUsuario desde la sesión
-    const idUsuario = req.session.idUsuario;
+    const idUsuario = req.session.id_usuario;
 
     if (!idUsuario) {
         return res.status(401).json({ message: 'Usuario no autenticado' });
     }
 
     try {
-        const result = await vaciarCarro(idUsuario);
+        const result = await database.vaciarCarro(idUsuario);
 
         if (result) {
             res.status(200).json({ message: 'Carro vacío exitosamente' });
@@ -699,5 +699,26 @@ app.get('/api/productos', async (req, res) => {
     } catch (error) {
         console.error('Error al obtener productos:', error);
         res.status(500).json({ message: 'Error al obtener productos' });
+    }
+});
+
+app.post('/api/guardarDatosTarjeta', async (req, res) => {
+    const { numero_tarjeta, fecha_caducidad, CVV } = req.body;
+    const idUsuario = req.session.id_usuario;
+
+    if (!idUsuario) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
+    if (!numero_tarjeta || !fecha_caducidad || !CVV) {
+        return res.status(400).json({ message: 'Faltan datos de la tarjeta' });
+    }
+
+    try {
+        const result = await database.guardarDatosTarjeta(idUsuario, numero_tarjeta, fecha_caducidad, CVV);
+        res.status(200).json({ message: 'Datos guardados correctamente', result });
+    } catch (err) {
+        console.error('Error al guardar los datos de la tarjeta:', err);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 });

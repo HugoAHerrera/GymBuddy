@@ -564,7 +564,19 @@ const databaseMethods = {
                 resolve(results);
             });
         });
-    }
+    },
+
+    // Función para guardar los datos de la tarjeta en la base de datos
+    guardarDatosTarjeta: async (idUsuario, numeroTarjeta, fechaCaducidad, CVV) => {
+        return new Promise((resolve, reject) => {
+            const sql = `UPDATE usuario SET numero_tarjeta = ?, fecha_caducidad = ?, CVV = ? WHERE id_usuario = ?`;
+            connection.query(sql, [numeroTarjeta, fechaCaducidad, CVV, idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
 };
 
 module.exports = databaseMethods;
