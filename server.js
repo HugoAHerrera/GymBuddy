@@ -5,9 +5,10 @@ require('dotenv').config();
 const database = require('./database');
 const { encriptarContraseña, compararContraseña } = require('./encryptor');
 const session = require('express-session');
- 
+const mysql = require('mysql2');
+
 const multer = require('multer');
-const upload = multer(); // Configuración básica para manejar multipart/form-data
+const upload = multer({ storage: multer.memoryStorage() }); // Configuración básica para manejar multipart/form-data
 
 const app = express();
 
@@ -22,11 +23,28 @@ app.use(session({
     cookie: { secure: false }  // En producción, usa `secure: true` si usas HTTPS
 }));
 
-
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/index.html'));
 });
 
+app.post('/upload', upload.single('file'), (req, res) => {
+    const id = req.body.id; // ID proporcionado por el usuario
+    const file = req.file; // Datos del archivo subido
+
+    if (!file) {
+        return res.status(400).send('No se ha subido ningún archivo.');
+    }
+
+    // Solo necesitamos el buffer (contenido binario) para la columna `imagen`
+    database.añadirFotoEjercicio(id,file.buffer);
+});
+
+
+/*
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/index.html'));
+});
+*/
 app.post('/api/usuario-existe', async (req, res) => {
   const { nombre_usuario } = req.body;
 
@@ -131,7 +149,7 @@ app.get('/comunidad', (req, res) => {
 });
 
 app.get('/progreso', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
+    res.sendFile(path.join(__dirname, 'src/public/HTML/guia_ejercicios.html'));
 });
 
 app.get('/rutina', (req, res) => {
@@ -182,7 +200,7 @@ app.get('/api/guia_ejercicios',async(req,res) => {
 
 app.post('/api/guia-ejercicios', async (req, res) => {
     try {
-        const guia = await database.obtenerDescripcionEjercicios(58);
+        const guia = await database.obtenerDescripcionEjercicios(52);
         console.log(guia); // Asumiendo que quieres imprimir la respuesta en la consola.
         res.status(200).json(guia); // Enviar la respuesta al cliente
     } catch (error) {
@@ -193,7 +211,7 @@ app.post('/api/guia-ejercicios', async (req, res) => {
 
 app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) => {
     try {
-        const imagenBase64 = await database.convertirBlobImagenEj(58);
+        const imagenBase64 = await database.convertirBlobImagenEj(52);
 
         if (!imagenBase64) {
             return res.status(404).json({ error: 'No se encontró una imagen para este usuario.' });
@@ -223,8 +241,39 @@ app.get('/perfil', (req, res) => {
         return res.status(400).send('ID de usuario no proporcionado');
     }
     console.log('Perfil:',req.session.id_usuario)
-    res.sendFile(path.join(__dirname, 'src/public/HTML/guia_ejercicios.html'));
+    res.sendFile(path.join(__dirname, 'src/public/HTML/blob.html'));
 });
+
+app.post('/api/blob', upload.single('imagen'), async (req, res) => {
+    try {
+        const idEjercicio = req.body.idEjercicio;
+        const imagenBuffer = req.file?.buffer;
+
+        if (!idEjercicio || !imagenBuffer) {
+            return res.status(400).json({ error: 'ID de ejercicio o imagen no proporcionados.' });
+        }
+
+        const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
+        connection.query(sql, [imagenBuffer, idEjercicio], (err, results) => {
+            if (err) {
+                console.error('Error al ejecutar la consulta:', err);
+                return res.status(500).json({ error: 'Error al guardar la imagen.' });
+            }
+
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ error: 'Ejercicio no encontrado.' });
+            }
+
+            res.status(200).json({ message: 'Imagen subida correctamente.' });
+        });
+    } catch (error) {
+        console.error('Error en el servidor:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+
+
 
 app.post('/api/cambiarNombreUsuario', upload.single('imagen'), async (req, res) => {
     try {
