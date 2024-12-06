@@ -17,7 +17,21 @@ async function actualizarCarrito() {
         // Verificar si productos está vacío o no
         if (productos.length === 0) {
             console.log('El carrito está vacío');
+            contenedorProducto.innerHTML = `<p>No tienes ningún producto en el carrito.</p>`;  // Mensaje de carrito vacío
+
+            // Deshabilitar el botón de pago
+            const procederPagoBtn = document.getElementById('proceder-pago');
+            if (procederPagoBtn) {
+                procederPagoBtn.disabled = true;  // Deshabilitar el botón de pago si no hay productos
+            }
+
         } else {
+            // Habilitar el botón de pago
+            const procederPagoBtn = document.getElementById('proceder-pago');
+            if (procederPagoBtn) {
+                procederPagoBtn.disabled = false;  // Habilitar el botón de pago si hay productos
+            }
+
             productos.forEach(producto => {
                 const precioConDescuento = producto.precio * (1 - producto.descuentoArticulo); // Calculamos el precio con descuento
                 contenedorProducto.innerHTML += `
@@ -39,6 +53,7 @@ async function actualizarCarrito() {
 // Llamar a la función cuando la página cargue
 document.addEventListener('DOMContentLoaded', actualizarCarrito);
 
+
 // Mostrar la alerta cuando se hace clic en el botón "Pagar"
 document.querySelector('.checkout-btn').addEventListener('click', function() {
     // Mostrar la alerta de confirmación
@@ -53,7 +68,16 @@ document.getElementById('seguir-comprando').addEventListener('click', function()
 });
 
 document.getElementById('proceder-pago').addEventListener('click', async function() {
-    // Cerrar la alerta y redirigir al usuario a la página de pago
+    // Comprobar si el carrito está vacío antes de proceder
+    const contenedorProducto = document.querySelector('.producto');
+    const productos = contenedorProducto.querySelectorAll('.producto');
+
+    if (productos.length === 0) {
+        alert('No tienes ningún producto en el carrito para proceder al pago.');
+        return;  // Detener la acción si no hay productos en el carrito
+    }
+
+    // Si el carrito tiene productos, proceder con la eliminación y la redirección
     const response = await fetch('/api/vacioCarro', { method: 'DELETE' });
 
     if (!response.ok) {
@@ -65,6 +89,7 @@ document.getElementById('proceder-pago').addEventListener('click', async functio
     // Redirige a la página de pago
     window.location.href = 'pagar';
 });
+
 
 // Cargar el header y el footer con fetch
 fetch('../HTML/header.html')
