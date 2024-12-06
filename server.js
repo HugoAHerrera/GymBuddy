@@ -5,9 +5,10 @@ require('dotenv').config();
 const database = require('./database');
 const { encriptarContraseña, compararContraseña } = require('./encryptor');
 const session = require('express-session');
- 
+const mysql = require('mysql2');
+
 const multer = require('multer');
-const upload = multer(); // Configuración básica para manejar multipart/form-data
+const upload = multer({ storage: multer.memoryStorage() }); // Configuración básica para manejar multipart/form-data
 
 const app = express();
 
@@ -22,11 +23,28 @@ app.use(session({
     cookie: { secure: false }  // En producción, usa `secure: true` si usas HTTPS
 }));
 
-
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/index.html'));
 });
 
+app.post('/upload', upload.single('file'), (req, res) => {
+    const id = req.body.id; // ID proporcionado por el usuario
+    const file = req.file; // Datos del archivo subido
+
+    if (!file) {
+        return res.status(400).send('No se ha subido ningún archivo.');
+    }
+
+    // Solo necesitamos el buffer (contenido binario) para la columna `imagen`
+    database.añadirFotoEjercicio(id,file.buffer);
+});
+
+
+/*
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/index.html'));
+});
+*/
 app.post('/api/usuario-existe', async (req, res) => {
   const { nombre_usuario } = req.body;
 
@@ -131,7 +149,7 @@ app.get('/comunidad', (req, res) => {
 });
 
 app.get('/progreso', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/Progreso.html'));
+    res.sendFile(path.join(__dirname, 'src/public/HTML/progreso.html'));
 });
 
 app.get('/rutina', (req, res) => {
@@ -186,7 +204,7 @@ app.get('/api/guia_ejercicios',async(req,res) => {
 
 app.post('/api/guia-ejercicios', async (req, res) => {
     try {
-        const guia = await database.obtenerDescripcionEjercicios(58);
+        const guia = await database.obtenerDescripcionEjercicios(52);
         console.log(guia); // Asumiendo que quieres imprimir la respuesta en la consola.
         res.status(200).json(guia); // Enviar la respuesta al cliente
     } catch (error) {
@@ -195,9 +213,28 @@ app.post('/api/guia-ejercicios', async (req, res) => {
     }
 });
 
+app.post('/guardar-sesion', async (req, res) => {
+    const { tiempo_total, fecha, nombre_rutina } = req.body;
+    
+    if (!tiempo_total || !fecha || !nombre_rutina) {
+        return res.status(400).json({ success: false, message: 'Datos incompletos' });
+    }
+
+    try {
+        const idUsuario = req.session.id_usuario;
+
+        await database.guardarSesion(idUsuario, nombre_rutina, tiempo_total, fecha);
+        res.json({ success: true, message: 'Sesión guardada con éxito' });
+    } catch (error) {
+        console.error('Error al guardar la sesión:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+
 app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) => {
     try {
-        const imagenBase64 = await database.convertirBlobImagenEj(58);
+        const imagenBase64 = await database.convertirBlobImagenEj(52);
 
         if (!imagenBase64) {
             return res.status(404).json({ error: 'No se encontró una imagen para este usuario.' });
@@ -227,8 +264,39 @@ app.get('/perfil', (req, res) => {
         return res.status(400).send('ID de usuario no proporcionado');
     }
     console.log('Perfil:',req.session.id_usuario)
-    res.sendFile(path.join(__dirname, 'src/public/HTML/guia_ejercicios.html'));
+    res.sendFile(path.join(__dirname, 'src/public/HTML/blob.html'));
 });
+
+app.post('/api/blob', upload.single('imagen'), async (req, res) => {
+    try {
+        const idEjercicio = req.body.idEjercicio;
+        const imagenBuffer = req.file?.buffer;
+
+        if (!idEjercicio || !imagenBuffer) {
+            return res.status(400).json({ error: 'ID de ejercicio o imagen no proporcionados.' });
+        }
+
+        const sql = 'UPDATE ejercicio SET imagen = ? WHERE id_ejercicio = ?';
+        connection.query(sql, [imagenBuffer, idEjercicio], (err, results) => {
+            if (err) {
+                console.error('Error al ejecutar la consulta:', err);
+                return res.status(500).json({ error: 'Error al guardar la imagen.' });
+            }
+
+            if (results.affectedRows === 0) {
+                return res.status(404).json({ error: 'Ejercicio no encontrado.' });
+            }
+
+            res.status(200).json({ message: 'Imagen subida correctamente.' });
+        });
+    } catch (error) {
+        console.error('Error en el servidor:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+
+
 
 app.post('/api/cambiarNombreUsuario', upload.single('imagen'), async (req, res) => {
     try {
@@ -459,7 +527,7 @@ app.get('/api/usuarios', async (req, res) => {
 
 app.post('/api/guardarMeta', async (req, res) => {
     console.log("Datos recibidos:", req.body);
-     id_usuario = req.session.id_usuario;
+    id_usuario = req.session.id_usuario;
 
     const { titulo, desc, recompensa } = req.body;
 
@@ -486,6 +554,7 @@ app.post('/api/borrarMeta', async (req, res) => {
     const titulo = req.body;
     try {
         await database.borrarMeta(titulo);
+        console.log(titulo, "borrado con exito.");
         res.status(201).json({ message: 'Desafio borrado con éxito' });
     }
     catch (error) {
@@ -495,12 +564,35 @@ app.post('/api/borrarMeta', async (req, res) => {
     });
 
 app.post('/api/actualizarNumeroMetas', async (req, res) => {
-    const titulos = req.body;
+    console.log("Titulos con descripcion recibidos:", req.body);
+    var { antiguoTitulo, nuevoTitulo } = req.body;
+
     try {
-        for(let i = 0; i < titulos.length; i++){
-            await database.actualizarNumerosMetas(titulos[i]);
-            res.status(201).json({ message: 'Desafio borrado con éxito' });
+        for(let i = 0; i < antiguoTitulo.length; i++) {
+            await database.actualizarNumerosMetas({
+                antiguoTitulo: antiguoTitulo[i],
+                nuevoTitulo: nuevoTitulo[i]
+            });
+            console.log(antiguoTitulo[i], " actualizado con éxito a", nuevoTitulo[i]);
         }
+        res.status(201).json({message: 'Desafios actualizados con éxito'});
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+        }
+    });
+
+app.post('/api/actualizarProgreso', async (req, res) => {
+    console.log("Progreso recibido:", req.body);
+    var { titulo, porcentage, reclamado } = req.body;
+    try {
+        await database.actualizarProgreso({
+            titulo,
+            porcentage,
+            reclamado
+        });
+        res.status(201).json({ message: 'Progreso actualizado con éxito' });
     }
     catch (error) {
         console.error('Error:', error);
@@ -510,9 +602,10 @@ app.post('/api/actualizarNumeroMetas', async (req, res) => {
 
 // falta por poner en front?
 app.get('/api/recuperarMetas', async (req, res) => {
+    id_usuario = req.session.id_usuario;
     try {
-        const infoDesafios = await database.obtenerDesafios();
-        console.log(infoDesafios);
+        const infoDesafios = await database.obtenerDesafios(id_usuario);
+        console.log("Datos obtenidos de la BBDD", infoDesafios);
         res.json(infoDesafios);
     }
     catch (error) {
@@ -577,7 +670,8 @@ app.delete('/api/vacioCarro', async (req, res) => {
 
 
 app.post('/api/agregarAlCarro', async (req, res) => {
-    const { idArticulo, id_usuario } = req.body;
+    const { idArticulo } = req.body;
+    const id_usuario = req.session.id_usuario;
     try {
         const result = await database.agregarAlCarro({ idArticulo, id_usuario });
         res.status(201).json({ message: 'Producto añadido al carro', result });
