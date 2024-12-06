@@ -219,8 +219,8 @@ const databaseMethods = {
     // actualizar el progreso del desafio
     actualizarProgreso: async (desafio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'UPDATE desafios SET progreso = ? WHERE titulo_desafio = ?';
-            connection.query(sql, [desafio.titulo], (err, results) => {
+            const sql = 'UPDATE desafios SET progreso = ?, reclamado = ? WHERE titulo_desafio = ?';
+            connection.query(sql, [desafio.porcentage, desafio.reclamado, desafio.titulo], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

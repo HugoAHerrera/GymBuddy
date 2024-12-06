@@ -472,6 +472,23 @@ app.post('/api/actualizarNumeroMetas', async (req, res) => {
         }
     });
 
+app.post('/api/actualizarProgreso', async (req, res) => {
+    console.log("Progreso recibido:", req.body);
+    var { titulo, porcentage, reclamado } = req.body;
+    try {
+        await database.actualizarProgreso({
+            titulo,
+            porcentage,
+            reclamado
+        });
+        res.status(201).json({ message: 'Progreso actualizado con éxito' });
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+        }
+    });
+
 // falta por poner en front?
 app.get('/api/recuperarMetas', async (req, res) => {
     try {
@@ -484,18 +501,6 @@ app.get('/api/recuperarMetas', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
-
-app.post('/api/actualizarProgreso', async (req, res) => {
-    const porcentage = req.body;
-    try {
-        const result = await database.actualizarProgreso(porcentage);
-        res.status(201).json({ message: 'Progreso actualizado con éxito' });
-    }
-    catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ message: 'Error', error: error.message });
-        }
-    });
 
 app.get('/api/carro', async (req, res) => {
     const { idUsuario } = req.params;

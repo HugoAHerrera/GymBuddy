@@ -224,8 +224,12 @@ function autoProgreso() {
                 // Obtener el ID de la barra de progreso
                 const progressBar = container.querySelector(".BarraDeProgreso");
                 const mensaje = container.querySelector(".textContainer");
+                var title = container.querySelector(".goal-title");
                 progressBar.value += 10;
                 mensaje.textContent = `Progreso: ${progressBar.value}%`;
+                comprobarEstadoProgreso();
+                if (progressBar.value < 100) actualizarProgresoBBDD(title.textContent, progressBar.value, 0);
+                else actualizarProgresoBBDD(title.textContent, progressBar.value, 1);
                 if (progressBar.value >= 100) {
                     if(block === 0) {
                         AnimacionMonedas(container);
@@ -237,7 +241,6 @@ function autoProgreso() {
             container.dataset.eventAdded = "true";
         }
     });
-    comprobarEstadoProgreso();
 }
 
 function comprobarEstadoProgreso() {
@@ -330,7 +333,6 @@ function AnimacionMonedas(container) {
                     fill: "forwards"
                 }
             );
-
             container.appendChild(coin);
 
             // Eliminar la moneda después de la animación
@@ -393,9 +395,11 @@ function actualizarMetasBBDD() {
     }
 }
 
-function actualizarProgreso(progreso) {
+function actualizarProgresoBBDD(title, progreso, claim) {
     const goalProgress = {
-        porcentage: progreso
+        titulo: title,
+        porcentage: progreso,
+        reclamado: claim
     };
 
     $.ajax({
