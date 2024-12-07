@@ -43,7 +43,7 @@ document.getElementById('contenedor-guardar').addEventListener('click', async fu
 
         const result = await response.json();
         if (response.ok) {
-            console.log("Rutina guardada correctamente", result);
+            window.location.href = 'rutina';
         } else {
             console.error("Error al guardar la rutina:", result.error);
         }
