@@ -88,6 +88,9 @@ app.post('/api/registro', async (req, res) => {
           correo
       });
 
+      const user = await database.comprobarCredenciales(correo);
+      req.session.id_usuario = user.id_usuario;
+
       // Redirigir al usuario a la página de inicio después de un registro exitoso
       res.redirect('/inicio');
     } catch (error) {
