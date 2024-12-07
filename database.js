@@ -115,8 +115,6 @@ const databaseMethods = {
                     WHERE nombre_rutina = ?;
                 `;
 
-                console.log(sqlUpdate);
-
                 connection.query(sqlUpdate, [nombreRutina], (errUpdate, resultUpdate) => {
                     if (errUpdate) {
                         return reject(errUpdate);
@@ -129,22 +127,32 @@ const databaseMethods = {
     },
        
 
-    obtenerRutinas: async () => {
+    obtenerRutinas: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT categoria, nombre_rutina, lista_ejercicios FROM rutina';
-            connection.query(sql, (err, results) => {
-                if (err) return reject(err);
-
+            const sql = `
+                SELECT categoria, nombre_rutina, lista_ejercicios 
+                FROM rutina
+                WHERE id_usuario = ? OR id_usuario IS NULL
+            `;
+            
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+    
                 const rutinas = results.map(row => ({
                     categoria: row.categoria,
                     nombre: row.nombre_rutina,
-                    ejercicios: row.lista_ejercicios.split(',').map(Number),
+                    ejercicios: row.lista_ejercicios 
+                        ? row.lista_ejercicios.split(',').map(Number)
+                        : [],
                 }));
-
+    
                 resolve(rutinas);
             });
         });
-    },
+    }
+    ,
 
     obtenerEjercicios: async (rutinaNombre) => {
         return new Promise((resolve, reject) => {

@@ -297,13 +297,14 @@ app.get('/api/rutina-concreta', async (req, res) => {
 });
 
 app.get('/api/rutinas', async (req, res) => {
-  try {
-      const rutinas = await database.obtenerRutinas();
-      res.json(rutinas);
-  } catch (error) {
-      console.error('Error al obtener rutinas:', error);
-      res.status(500).json({ error: 'Error interno del servidor' });
-  }
+    try {
+        const idUsuario = req.session.id_usuario;
+        const rutinas = await database.obtenerRutinas(idUsuario);
+        res.json(rutinas);
+    } catch (error) {
+        console.error('Error al obtener rutinas:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
 });
 
 app.get('/guia-ejercicios',async(req,res) => {
