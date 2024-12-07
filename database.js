@@ -211,6 +211,39 @@ const databaseMethods = {
         });
     },
 
+    obtenerCategoriaTodosEjercicio: async () => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL parametrizada
+            const sql = `
+                SELECT categoria, lista_ejercicios FROM rutina`;
+            // Ejecutar la consulta SQL usando el conector de la base de datos (mysql2, por ejemplo)
+            connection.query(sql, (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    },
+    
+
+    obtenerIDNombreDificultadTodosEjercicio: async () => {
+        return new Promise((resolve, reject) => {
+            // Definir la consulta SQL con el parámetro id_ejercicio
+            const sql = 'SELECT id_ejercicio,nombre_ejercicio, dificultad FROM ejercicio';
+    
+            // Ejecutar la consulta SQL pasando el parámetro
+            connection.query(sql, (err, results) => {
+                if (err) {
+                    reject(err); // Si ocurre un error, rechaza la promesa
+                } else {
+                    resolve(results); // Si la consulta es exitosa, resuelve la promesa con los resultados
+                }
+            });
+        });
+    },
+
 
     // Metodos para la pagina de Objetivos -- meta al completo (progreso, descripcion, recompensa...)
     // se ejecuta cada vez que cambia de pagina el usuario? -> ver cuando
