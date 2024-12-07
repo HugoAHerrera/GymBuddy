@@ -3,7 +3,7 @@ document.getElementById('añadir-ejercicio').addEventListener('click', function(
     abrirVentanaEmergente();
 });
 
-document.getElementById('contenedor-guardar').addEventListener('click', function() {
+document.getElementById('contenedor-guardar').addEventListener('click', async function() {
     // Obtener el nuevo título editado del <h1> con id="titulo-rutina"
     const nuevoTitulo = document.getElementById('titulo-rutina').textContent;
     
@@ -30,9 +30,26 @@ document.getElementById('contenedor-guardar').addEventListener('click', function
     const headerContents = Array.from(headers).map(header => header.textContent);
     headerContents.unshift(nuevoTitulo); // Agrega el nuevo título al inicio del arreglo
     
-    // Imprimimos el arreglo con todos los títulos
-    window.location.href = 'rutina';
-    console.log("[Nombre rutina, Ej1, Ej2, ...]",headerContents);
+    try {
+        const response = await fetch('/api/guardar-rutina', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                rutina: headerContents
+            })
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            console.log("Rutina guardada correctamente", result);
+        } else {
+            console.error("Error al guardar la rutina:", result.error);
+        }
+    } catch (error) {
+        console.error('Error de comunicación con el servidor:', error);
+    }
 });
 
 

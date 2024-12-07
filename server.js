@@ -222,7 +222,6 @@ app.get('/api/rutina-nueva', async (req, res) => {
 
         if (combinados.length > 0) {  // Cambiado a .length > 0
             res.json({ combinados });
-            console.log("Funciona");
         } else {
             res.status(404).json({ error: 'Rutina no encontrada' });
         }
@@ -232,6 +231,29 @@ app.get('/api/rutina-nueva', async (req, res) => {
         res.status(500).json({ error: 'Error al obtener los ejercicios' });
     }
 });
+
+app.post('/api/guardar-rutina', async (req, res) => {
+    try {
+        const { rutina } = req.body; 
+        
+        const nombreRutina = rutina[0];
+        const ejercicios = rutina.slice(1);
+        
+        const idUsuario = req.session.id_usuario;
+        
+        if (!idUsuario) {
+            return res.status(400).json({ error: 'No se ha encontrado el id del usuario.' });
+        }
+
+        const resultado = await database.insertarRutina(idUsuario, nombreRutina, ejercicios);
+
+        res.status(200).json({ message: 'Rutina guardada correctamente', data: resultado });
+    } catch (error) {
+        console.error('Error al guardar la rutina:', error);
+        res.status(500).json({ error: 'Error al guardar la rutina.' });
+    }
+});
+
 
 app.get('/desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));

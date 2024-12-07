@@ -94,7 +94,40 @@ const databaseMethods = {
         });
     },
 
+    insertarRutina: async (idUsuario, nombreRutina, ejercicios) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'INSERT INTO rutina (id_usuario, categoria, nombre_rutina, personalizada) VALUES (?, ?, ?, ?)';
+            
+            connection.query(sql, [idUsuario, 'Tus rutinas creadas', nombreRutina, 1], (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+    
+                const ejercicioNames = ejercicios.map(ejercicio => `'${ejercicio}'`).join(", ");
+                
+                const sqlUpdate = `
+                    UPDATE rutina
+                    SET lista_ejercicios = (
+                        SELECT GROUP_CONCAT(id_ejercicio ORDER BY FIELD(nombre_ejercicio, ${ejercicioNames}))
+                        FROM ejercicio
+                        WHERE nombre_ejercicio IN (${ejercicioNames})
+                    )
+                    WHERE nombre_rutina = ?;
+                `;
 
+                console.log(sqlUpdate);
+
+                connection.query(sqlUpdate, [nombreRutina], (errUpdate, resultUpdate) => {
+                    if (errUpdate) {
+                        return reject(errUpdate);
+                    }
+    
+                    resolve(result);
+                });
+            });
+        });
+    },
+       
 
     obtenerRutinas: async () => {
         return new Promise((resolve, reject) => {
