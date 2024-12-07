@@ -127,6 +127,48 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+app.post('/api/cambiar-contrasena', async (req, res) => {
+    const { email, contraseña, contraseña_nueva } = req.body;
+    console.log("Recibiendo solicitud para cambiar contraseña");
+
+    if (!email || !contraseña || !contraseña_nueva) {
+        return res.status(400).json({ message: 'Faltan datos requeridos' });
+    }
+
+    try {
+        const user = await database.comprobarCredenciales(email);
+
+        if (!user) {
+            return res.status(401).json({ message: 'Credenciales incorrectas' });
+        }
+
+        const isValid = await compararContraseña(contraseña, user.contraseña);
+
+        if (!isValid) {
+            return res.status(401).json({ message: 'Credenciales incorrectas' });
+        }
+
+        try {
+            const contraseñaHashed = await encriptarContraseña(contraseña_nueva);
+            const result = await database.cambiarContraseña({ contraseña: contraseñaHashed, correo: email });
+
+            if (!result) {
+                return res.status(500).json({ message: 'Error al cambiar la contraseña' });
+            }
+
+            return res.status(200).json({ message: 'Contraseña cambiada exitosamente' });
+
+        } catch (error) {
+            console.error('Error:', error);
+            return res.status(500).json({ message: 'Error al cambiar la contraseña', error: error.message });
+        }
+
+    } catch (error) {
+        console.error('Error al iniciar sesión:', error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+
 
 //Redirecciones del header
 app.get('/inicio', (req, res) => {

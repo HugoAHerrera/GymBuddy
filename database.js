@@ -54,6 +54,17 @@ const databaseMethods = {
         });
     },
 
+    cambiarContraseña: async (user) => {
+        return new Promise((resolve, reject) => {
+            console.log()
+            const sql = 'UPDATE usuario SET contraseña = ? WHERE correo = ?';
+            connection.query(sql, [user.contraseña, user.correo], (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        });
+    },
+
     comprobarCredenciales: async (email) => {
         return new Promise((resolve, reject) => {
             const sql = 'SELECT * FROM usuario WHERE correo = ?';
