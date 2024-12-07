@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         document.querySelector(".boton-annadir-meta").addEventListener("click", () => {
             crearNuevaMeta();
-        //aumentarProgresoConTiempo();
         });
         document.querySelector(".boton-borrar-meta").addEventListener("click", OpcionBorrarMetas);
         document.querySelector(".oculto").addEventListener("click", CancelarBorrarMetas);
@@ -78,7 +77,7 @@ function crearNuevaMeta() {
         const progressContainer = document.createElement("div");
         progressContainer.classList.add("progress-container");
 
-        const goalDescription = GoalDescription(progressContainer);
+        var goalDescription = GoalDescription(progressContainer);
         if (goalDescription !== '') {
             // Crear progreso de la meta
             const barContainer = document.createElement("span");
@@ -141,7 +140,6 @@ function crearNuevaMeta() {
             aumentarProgreso.addEventListener("click", () => {
                 autoProgreso();
             });
-            //nuevaMeta.addEventListener("click", () => { RequestReward(KC); });
 
             // solo si has dado a opciones borrar
             botonBorrar.addEventListener("click", () => {
@@ -159,7 +157,14 @@ function crearNuevaMeta() {
         }
     }
     else {
-        alert("No puedes crear metas en este momento");
+        Swal.fire({
+                title: `No puedes crear mas metas en este momento. (10 máx.)`,
+                confirmButtonText: 'Okey',
+                confirmButtonColor: '#3085d6',
+                backdrop: true,
+                allowOutsideClick: true,
+                allowEscapeKey: true,
+            });
     }
 }
 
@@ -195,12 +200,20 @@ function CancelarBorrarMetas() {
 }
 
 function GoalDescription(progressContainer) {
-    var desc = prompt("Por favor, escriba una descripción corta de su meta.");
+    var desc = prompt("Por favor, escriba una descripción corta de su meta.");  // cambiar
+
     if (desc !== '') {
         const words = desc.trim().split(/\s+/);
         if (words.length > 35) {
-            alert(`Tu descripción tiene ${words.length} palabras. Por favor, reduce el texto a 35 palabras o menos.`);  // CAMBIAR EL ALERT A OTRA COSA
-            return 0;
+            Swal.fire({
+                title: `Tu descripción tiene ${words.length} palabras. Por favor, reduce el texto a 35 palabras o menos.`,
+                confirmButtonText: 'Okey',
+                confirmButtonColor: '#3085d6',
+                backdrop: true,
+                allowOutsideClick: true,
+                allowEscapeKey: true,
+            });
+            return '';
         }
         const spanContainer = document.createElement("span");
         const objetivoText = document.createTextNode(`Objetivo:`);
@@ -221,7 +234,15 @@ function GoalDescription(progressContainer) {
         return desc.replace("Objetivo:", '');
     }
     else {
-        alert("Es obligatorio poner una descripción.");
+        //alert("Es obligatorio poner una descripción.");
+        Swal.fire({
+                title: "Es obligatorio poner una descripción.",
+                confirmButtonText: 'Okey',
+                confirmButtonColor: '#3085d6',
+                backdrop: true,
+                allowOutsideClick: true,
+                allowEscapeKey: true,
+            });
         return '';
     }
 }
