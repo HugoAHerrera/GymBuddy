@@ -193,10 +193,6 @@ function guardarSesion() {
     const tiempoTotal = (resulatdoTiempoTotalEjercicio + resulatdoTiempoTotalDescanso) * cantidadDeEjercicios;
     const fechaActual = new Date().toISOString().split('T')[0];
     const idRutina = document.title.replace('Rutina - ', '');
-    
-    console.log('Tiempo total:', tiempoTotal);
-    console.log('Fecha actual:', fechaActual);
-    console.log('ID Rutina:', idRutina);
 
     if (!tiempoTotal || !idRutina) {
         console.error('Datos insuficientes para guardar la sesión.');

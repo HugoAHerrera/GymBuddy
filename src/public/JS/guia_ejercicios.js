@@ -4,6 +4,7 @@ async function cargarEjercicio() {
         const urlParams = new URLSearchParams(window.location.search);
         const nombreEjercicio = urlParams.get('id'); // 'id' es el parámetro en la URL
 
+        document.title = `Guía - ${nombreEjercicio}`;
         if (!nombreEjercicio) {
             throw new Error('No se proporcionó un nombre de ejercicio en la URL.');
         }
