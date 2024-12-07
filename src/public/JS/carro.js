@@ -67,28 +67,36 @@ document.getElementById('seguir-comprando').addEventListener('click', function()
     window.location.href = 'tienda';  // Cambia esto a la URL correcta de la tienda
 });
 
-document.getElementById('proceder-pago').addEventListener('click', async function() {
-    // Comprobar si el carrito está vacío antes de proceder
-    const contenedorProducto = document.querySelector('.producto');
-    const productos = contenedorProducto.querySelectorAll('.producto');
+document.getElementById('proceder-pago').addEventListener('click', async function () {
+    try {
+        // Comprobar si el carrito está vacío antes de proceder
+        const contenedorProducto = document.querySelector('.producto');
+        const productos = contenedorProducto.querySelectorAll('.producto');
 
-    if (productos.length === 0) {
-        alert('No tienes ningún producto en el carrito para proceder al pago.');
-        return;  // Detener la acción si no hay productos en el carrito
+        if (productos.length === 0) {
+            alert('No tienes ningún producto en el carrito para proceder al pago.');
+            return; // Detener la acción si no hay productos en el carrito
+        }
+
+        // Paso 1: Pasar la información del carrito a pedido en la base de datos
+        const response = await fetch('/api/pasarAPedido', { method: 'POST' });
+
+        if (!response.ok) {
+            throw new Error(`Error al procesar el pedido: ${response.status} ${response.statusText}`);
+        }
+
+        // Paso 2: Vaciar el carrito después de crear el pedido
+       await fetch('/api/vacioCarro', { method: 'DELETE' });
+
+        // Si todo va bien, mostrar éxito y redirigir
+        alert('Pedido realizado correctamente.');
+        window.location.href = '/pagar'; // Redirige a la página de pago
+    } catch (err) {
+        console.error(err);
+        alert(`Hubo un problema: ${err.message}`);
     }
-
-    // Si el carrito tiene productos, proceder con la eliminación y la redirección
-    const response = await fetch('/api/vacioCarro', { method: 'DELETE' });
-
-    if (!response.ok) {
-        throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
-    }
-
-    // Cierra la alerta personalizada
-    document.getElementById('custom-alert').style.display = 'none';
-    // Redirige a la página de pago
-    window.location.href = 'pagar';
 });
+
 
 
 // Cargar el header y el footer con fetch

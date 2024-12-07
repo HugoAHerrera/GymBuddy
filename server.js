@@ -759,20 +759,15 @@ app.get('/api/mi-usuario', async (req, res) => {
 app.post('/message', asistente.handleMessage);
 
 app.post('/api/pasarAPedido', async (req, res) => {
-    const idUsuario = req.session.id_usuario;
+    const idUsuario = req.session.id_usuario; // Asegúrate de que el usuario esté autenticado
 
     if (!idUsuario) {
         return res.status(401).json({ message: 'Usuario no autenticado' });
     }
 
     try {
-        // Mover datos del carrito a pedido
-        await database.pasarAPedido(idUsuario);
-
-        // Vaciar el carrito después de transferir los datos
-        await database.vaciarCarro(idUsuario);
-
-        res.status(200).json({ message: 'Pedido creado correctamente.' });
+        const result = await database.pasarAPedido(idUsuario); // Llama a la función en `database.js`
+        res.status(200).json({ message: 'Pedido procesado correctamente', result });
     } catch (err) {
         console.error('Error al procesar el pedido:', err);
         res.status(500).json({ message: 'Error interno del servidor' });
