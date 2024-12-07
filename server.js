@@ -197,6 +197,10 @@ app.get('/rutina-concreta', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_concreta.html'));
 });
 
+app.get('/editar-rutina', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_concreta.html'));
+});
+
 app.get('/rutina-nueva', (req,res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_nueva.html'));
 })

@@ -16,11 +16,41 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         rutinas.forEach(rutina => {
             const container = categoriasMap[rutina.categoria];
-
+    
             if (container) {
                 const div = document.createElement('div');
                 div.classList.add(rutina.categoria === "Para ti" ? "recomendacion" : "rutina");
                 div.textContent = rutina.nombre;
+    
+                if (rutina.categoria === "Tus rutinas creadas") {
+                    const editDiv = document.createElement('div');
+                    editDiv.style.width = '20px';
+                    editDiv.style.height = '100%';
+                    editDiv.style.position = 'relative';
+                    editDiv.style.marginLeft = "20px";
+                    editDiv.style.backgroundColor = "white";
+                    editDiv.style.borderRadius = '5px';
+                    editDiv.style.overflow = 'hidden';
+                    editDiv.style.cursor = 'pointer';
+
+                    const editImage = document.createElement('img');
+                    editImage.src = "../Imagenes/editar.png";
+                    editImage.alt = "Editar rutina";
+                    editImage.style.width = '100%';
+                    editImage.style.height = '100%';
+                    editImage.style.objectFit = 'contain'; 
+    
+                    editDiv.appendChild(editImage);
+                    div.appendChild(editDiv);
+
+                    editDiv.addEventListener('click', (e) => {
+                        const rutinaDiv = e.currentTarget.closest('.rutina');
+                        if (!rutinaDiv) return;
+                        const rutinaNombre = rutinaDiv.childNodes[0].textContent.trim();
+                        window.open(`/editar-rutina?id=${encodeURIComponent(rutinaNombre)}`, '_blank');
+                    });
+                }
+    
                 container.appendChild(div);
             }
         });
