@@ -808,3 +808,20 @@ app.post('/api/pasarAPedido', async (req, res) => {
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 });
+
+app.get('/api/obtenerProductos', async (req, res) => {
+    const idUsuario = req.session.id_usuario;
+    if (!idUsuario) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+    try {
+        const productos = await database.obtenerProductosComprados(idUsuario);
+        if (productos.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron productos comprados.' });
+        }
+        res.json(productos);
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).json({ message: 'Error al obtener productos comprados.' });
+    }
+});

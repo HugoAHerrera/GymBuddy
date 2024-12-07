@@ -663,6 +663,21 @@ const databaseMethods = {
         });
     },
 
+    obtenerProductosComprados: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+            SELECT tienda.nombreArticulo AS nombreProducto, tienda.descuentoArticulo AS descuento, tienda.precio AS precio
+            FROM pedido
+            JOIN tienda ON pedido.idArticulo = tienda.idArticulo
+            WHERE pedido.id_usuario = ?;
+        `;
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
 
 };
 
