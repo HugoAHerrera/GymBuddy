@@ -95,12 +95,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (rutinaCargada) {
         document.querySelector('.boton-empezar-rutina').addEventListener('click', iniciarRutina);
         document.querySelector('.boton-pausar-rutina').addEventListener('click', pausarRutina);
-
-        document.querySelectorAll('.btn-guia').forEach(button => {
-            button.addEventListener('click', () => {
-                window.open('guia_ejercicios.html', '_blank');
-            });
-        });
     } else {
         alert('No se pudo cargar la rutina correctamente.');
     }
