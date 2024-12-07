@@ -88,6 +88,9 @@ app.post('/api/registro', async (req, res) => {
           correo
       });
 
+      const user = await database.comprobarCredenciales(correo);
+      req.session.id_usuario = user.id_usuario;
+
       // Redirigir al usuario a la página de inicio después de un registro exitoso
       res.redirect('/inicio');
     } catch (error) {
@@ -198,6 +201,60 @@ app.get('/rutina-nueva', (req,res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_nueva.html'));
 })
 
+app.get('/api/rutina-nueva', async (req, res) => {
+    try {
+        // Obtener datos de la base de datos
+        const categoria = await database.obtenerCategoriaTodosEjercicio();
+        const categoria_transformed = categoria.flatMap(item => 
+            item.lista_ejercicios.split(',').map(ejercicio => [parseInt(ejercicio), item.categoria])
+        );
+
+        const id_nombre_dificultad = await database.obtenerIDNombreDificultadTodosEjercicio();
+        const id_nombre_dificultad_transformed = id_nombre_dificultad.map(item => 
+            [item.id_ejercicio, item.nombre_ejercicio, item.dificultad]
+        );
+
+        // Combinar los datos
+        const combinados = categoria_transformed.map(([id, categoria]) => {
+            const ejercicio = id_nombre_dificultad_transformed.find(([ejercicioId]) => ejercicioId === id);
+            return ejercicio ? [id, categoria, ejercicio[1], ejercicio[2]] : null;
+        }).filter(item => item !== null);
+
+        if (combinados.length > 0) {  // Cambiado a .length > 0
+            res.json({ combinados });
+        } else {
+            res.status(404).json({ error: 'Rutina no encontrada' });
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener los ejercicios' });
+    }
+});
+
+app.post('/api/guardar-rutina', async (req, res) => {
+    try {
+        const { rutina } = req.body; 
+        
+        const nombreRutina = rutina[0];
+        const ejercicios = rutina.slice(1);
+        
+        const idUsuario = req.session.id_usuario;
+        
+        if (!idUsuario) {
+            return res.status(400).json({ error: 'No se ha encontrado el id del usuario.' });
+        }
+
+        const resultado = await database.insertarRutina(idUsuario, nombreRutina, ejercicios);
+
+        res.status(200).json({ message: 'Rutina guardada correctamente', data: resultado });
+    } catch (error) {
+        console.error('Error al guardar la rutina:', error);
+        res.status(500).json({ error: 'Error al guardar la rutina.' });
+    }
+});
+
+
 app.get('/desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
 });
@@ -208,6 +265,10 @@ app.get('/carro', (req, res) => {
 
 app.get('/pagar', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/pagar.html'));
+});
+
+app.get('/obtenerProducto', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/obtenerProducto.html'));
 });
 
 //Redireciones del footer
@@ -236,13 +297,14 @@ app.get('/api/rutina-concreta', async (req, res) => {
 });
 
 app.get('/api/rutinas', async (req, res) => {
-  try {
-      const rutinas = await database.obtenerRutinas();
-      res.json(rutinas);
-  } catch (error) {
-      console.error('Error al obtener rutinas:', error);
-      res.status(500).json({ error: 'Error interno del servidor' });
-  }
+    try {
+        const idUsuario = req.session.id_usuario;
+        const rutinas = await database.obtenerRutinas(idUsuario);
+        res.json(rutinas);
+    } catch (error) {
+        console.error('Error al obtener rutinas:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
 });
 
 app.get('/guia-ejercicios',async(req,res) => {
@@ -753,3 +815,36 @@ app.get('/api/mi-usuario', async (req, res) => {
 });
 
 app.post('/message', asistente.handleMessage);
+
+app.post('/api/pasarAPedido', async (req, res) => {
+    const idUsuario = req.session.id_usuario; // Asegúrate de que el usuario esté autenticado
+
+    if (!idUsuario) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
+    try {
+        const result = await database.pasarAPedido(idUsuario); // Llama a la función en `database.js`
+        res.status(200).json({ message: 'Pedido procesado correctamente', result });
+    } catch (err) {
+        console.error('Error al procesar el pedido:', err);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+
+app.get('/api/obtenerProductos', async (req, res) => {
+    const idUsuario = req.session.id_usuario;
+    if (!idUsuario) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+    try {
+        const productos = await database.obtenerProductosComprados(idUsuario);
+        if (productos.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron productos comprados.' });
+        }
+        res.json(productos);
+    } catch (error) {
+        console.error('Error al obtener productos:', error);
+        res.status(500).json({ message: 'Error al obtener productos comprados.' });
+    }
+});

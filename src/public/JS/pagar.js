@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Confirmación
         const confirmation = confirm('¿Desea guardar estos datos?');
         if (!confirmation) {
-            window.location.href = 'obtenerProducto.html';
+            window.location.href = '/obtenerProducto';
             return;
         }
 
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
             if (response.ok) {
                 alert('Datos guardados correctamente.');
-                window.location.href = 'obtenerProducto.html';
+                window.location.href = '/obtenerProducto';
             } else {
                 console.error(data.message);
                 alert('Error: ' + data.message);

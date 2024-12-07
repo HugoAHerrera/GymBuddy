@@ -46,13 +46,22 @@ const databaseMethods = {
 
     registrarUsuario: async (user) => {
         return new Promise((resolve, reject) => {
-            const sql = 'INSERT INTO usuario (nombre_usuario, contraseña, correo) VALUES (?, ?, ?)';
-            connection.query(sql, [user.nombre_usuario, user.contraseña, user.correo], (err, result) => {
+            const sqlInsertarUsuario = 'INSERT INTO usuario (nombre_usuario, contraseña, correo) VALUES (?, ?, ?)';
+            
+            connection.query(sqlInsertarUsuario, [user.nombre_usuario, user.contraseña, user.correo], (err, result) => {
                 if (err) return reject(err);
-                resolve(result);
+                
+                const sqlPonerImagen = 'UPDATE usuario SET imagenes = (SELECT imagenes FROM imagen_default LIMIT 1) WHERE nombre_usuario = ?';
+                
+                connection.query(sqlPonerImagen, [user.nombre_usuario], (errUpdate, resultUpdate) => {
+                    if (errUpdate) return reject(errUpdate);
+                    
+                    resolve(resultUpdate);
+                });
             });
         });
     },
+    
 
     cambiarContraseña: async (user) => {
         return new Promise((resolve, reject) => {
@@ -85,24 +94,65 @@ const databaseMethods = {
         });
     },
 
-
-
-    obtenerRutinas: async () => {
+    insertarRutina: async (idUsuario, nombreRutina, ejercicios) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT categoria, nombre_rutina, lista_ejercicios FROM rutina';
-            connection.query(sql, (err, results) => {
-                if (err) return reject(err);
+            const sql = 'INSERT INTO rutina (id_usuario, categoria, nombre_rutina, personalizada) VALUES (?, ?, ?, ?)';
+            
+            connection.query(sql, [idUsuario, 'Tus rutinas creadas', nombreRutina, 1], (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+    
+                const ejercicioNames = ejercicios.map(ejercicio => `'${ejercicio}'`).join(", ");
+                
+                const sqlUpdate = `
+                    UPDATE rutina
+                    SET lista_ejercicios = (
+                        SELECT GROUP_CONCAT(id_ejercicio ORDER BY FIELD(nombre_ejercicio, ${ejercicioNames}))
+                        FROM ejercicio
+                        WHERE nombre_ejercicio IN (${ejercicioNames})
+                    )
+                    WHERE nombre_rutina = ?;
+                `;
 
-                const rutinas = results.map(row => ({
-                    categoria: row.categoria,
-                    nombre: row.nombre_rutina,
-                    ejercicios: row.lista_ejercicios.split(',').map(Number),
-                }));
-
-                resolve(rutinas);
+                connection.query(sqlUpdate, [nombreRutina], (errUpdate, resultUpdate) => {
+                    if (errUpdate) {
+                        return reject(errUpdate);
+                    }
+    
+                    resolve(result);
+                });
             });
         });
     },
+       
+
+    obtenerRutinas: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT categoria, nombre_rutina, lista_ejercicios 
+                FROM rutina
+                WHERE id_usuario = ? OR id_usuario IS NULL
+            `;
+            
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+    
+                const rutinas = results.map(row => ({
+                    categoria: row.categoria,
+                    nombre: row.nombre_rutina,
+                    ejercicios: row.lista_ejercicios 
+                        ? row.lista_ejercicios.split(',').map(Number)
+                        : [],
+                }));
+    
+                resolve(rutinas);
+            });
+        });
+    }
+    ,
 
     obtenerEjercicios: async (rutinaNombre) => {
         return new Promise((resolve, reject) => {
@@ -198,6 +248,39 @@ const databaseMethods = {
                     ultimaSesion: results[0].ultima_sesion || 'Nunca',
                 };
                 resolve(estadisticas);
+            });
+        });
+    },
+
+    obtenerCategoriaTodosEjercicio: async () => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL parametrizada
+            const sql = `
+                SELECT categoria, lista_ejercicios FROM rutina`;
+            // Ejecutar la consulta SQL usando el conector de la base de datos (mysql2, por ejemplo)
+            connection.query(sql, (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    },
+    
+
+    obtenerIDNombreDificultadTodosEjercicio: async () => {
+        return new Promise((resolve, reject) => {
+            // Definir la consulta SQL con el parámetro id_ejercicio
+            const sql = 'SELECT id_ejercicio,nombre_ejercicio, dificultad FROM ejercicio';
+    
+            // Ejecutar la consulta SQL pasando el parámetro
+            connection.query(sql, (err, results) => {
+                if (err) {
+                    reject(err); // Si ocurre un error, rechaza la promesa
+                } else {
+                    resolve(results); // Si la consulta es exitosa, resuelve la promesa con los resultados
+                }
             });
         });
     },
@@ -541,6 +624,22 @@ const databaseMethods = {
         });
     },
 
+    pasarAPedido: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                INSERT INTO pedido (id_usuario, idArticulo)
+                SELECT id_usuario, idArticulo
+                FROM carro
+                WHERE id_usuario = ?;
+            `;
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+
     vaciarCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM carro WHERE id_usuario = ?;`;
@@ -599,6 +698,21 @@ const databaseMethods = {
         return new Promise((resolve, reject) => {
             const sql = `UPDATE usuario SET numero_tarjeta = ?, fecha_caducidad = ?, CVV = ? WHERE id_usuario = ?`;
             connection.query(sql, [numeroTarjeta, fechaCaducidad, CVV, idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    obtenerProductosComprados: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+            SELECT tienda.nombreArticulo AS nombreProducto, tienda.descuentoArticulo AS descuento, tienda.precio AS precio
+            FROM pedido
+            JOIN tienda ON pedido.idArticulo = tienda.idArticulo
+            WHERE pedido.id_usuario = ?;
+        `;
+            connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
