@@ -17,6 +17,8 @@ const imagenes_ejercicios_restantes = [];
 
 const divEjercicios = document.getElementById('div-ejercicios');
 
+let rutinaCargada = false;
+
 async function cargarRutina() {
     const rutinaId = new URLSearchParams(window.location.search).get('id');
     const apiUrl = `/api/rutina-concreta?id=${rutinaId}`;
@@ -36,8 +38,6 @@ async function cargarRutina() {
         }
 
         const divEjercicios = document.getElementById('div-ejercicios');
-        const ejercicios_restantes = [];
-        const imagenes_ejercicios_restantes = [];
 
         for (const [index, ejercicio] of ejercicios.entries()) {
             const ejercicioDiv = document.createElement('div');
@@ -77,6 +77,7 @@ async function cargarRutina() {
         document.querySelector('.tiempos-container').style.visibility = 'visible';
         divEjercicios.classList.add('show');
         document.getElementById('loading').style.display = 'none';
+        rutinaCargada = true;
     } catch (error) {
         console.error('Error al cargar la rutina:', error);
 
@@ -88,17 +89,21 @@ async function cargarRutina() {
 }
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    cargarRutina();
+document.addEventListener("DOMContentLoaded", async function () {
+    await cargarRutina();
 
-    document.querySelector('.boton-empezar-rutina').addEventListener('click', iniciarRutina);
-    document.querySelector('.boton-pausar-rutina').addEventListener('click', pausarRutina);
+    if (rutinaCargada) {
+        document.querySelector('.boton-empezar-rutina').addEventListener('click', iniciarRutina);
+        document.querySelector('.boton-pausar-rutina').addEventListener('click', pausarRutina);
 
-    document.querySelectorAll('.btn-guia').forEach(button => {
-        button.addEventListener('click', () => {
-            window.open('guia_ejercicios.html', '_blank');
+        document.querySelectorAll('.btn-guia').forEach(button => {
+            button.addEventListener('click', () => {
+                window.open('guia_ejercicios.html', '_blank');
+            });
         });
-    });
+    } else {
+        alert('No se pudo cargar la rutina correctamente.');
+    }
 });
 
 function actualizarContador() {
