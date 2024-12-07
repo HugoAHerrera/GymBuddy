@@ -210,6 +210,10 @@ app.get('/pagar', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/pagar.html'));
 });
 
+app.get('/obtenerProducto', (req, res) => {
+    res.sendFile(path.join(__dirname, '/src/public/HTML/obtenerProducto.html'));
+});
+
 //Redireciones del footer
 app.get('/terminosCondiciones', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/terminosCondiciones.html'));
