@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title> Galería de Ejercicios </title>
+  <title>Galería de Ejercicios</title>
   <meta name="description" content="Rutina Personalizada">
   <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,18 +13,47 @@
 <body>
     <div id="header-container"></div>
     <main>
-        <h1> Nueva Rutina </h1>
-        <div class="contenedor-boton" id="contenedor-guardar">
-            <button id="guardar"  onclick="window.location.href='rutina.html'">Guardar</button>
-        </div>
-        <div class="contenedor" id="contenedor">
+        <h1>Nueva Rutina</h1>
 
+        <div class="contenedor-boton" id="contenedor-guardar">
+            <button id="guardar" onclick="window.location.href='rutina.html'">Guardar</button>
         </div>
+
+        <div class="contenedor" id="contenedor">
+            <!-- Ejercicios se agregarán aquí dinámicamente -->
+        </div>
+
         <div class="contenedor-boton">
             <button id="añadir-ejercicio">Añadir Ejercicio</button>
         </div>
     </main>
+
+    <!-- Ventana emergente (Modal) -->
+    <div id="ventanaEmergente" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar">&times;</span>
+            <h2>Añadir Nuevo Ejercicio</h2>
+            <label for="ejercicio-nombre">Seleccione un ejercicio:</label><br>
+            <!-- Lista desplegable para elegir el nombre del ejercicio -->
+            <select id="ejercicio-nombre">
+                <option value="Flexión de Brazos">Flexión de Brazos</option>
+                <option value="Sentadillas">Sentadillas</option>
+                <option value="Plancha">Plancha</option>
+                <option value="Abdominales">Abdominales</option>
+                <option value="Burpees">Burpees</option>
+                <!-- Agregar más opciones aquí -->
+            </select>
+            <br>
+            <label for="imagen-ejercicio">Seleccionar Imagen:</label>
+            <input type="file" id="imagen-ejercicio" accept="image/*">
+
+            <button id="confirmar-ejercicio">Confirmar</button>
+            <button id="cancelar-ejercicio">Cancelar</button>
+        </div>
+    </div>
+
     <div id="footer-container"></div>
+
     <script src="../JS/rutina_personalizada.js"></script>
 </body>
 </html>
