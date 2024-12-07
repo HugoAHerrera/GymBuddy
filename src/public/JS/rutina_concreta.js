@@ -17,51 +17,76 @@ const imagenes_ejercicios_restantes = [];
 
 const divEjercicios = document.getElementById('div-ejercicios');
 
-function cargarRutina() {
+async function cargarRutina() {
     const rutinaId = new URLSearchParams(window.location.search).get('id');
     const apiUrl = `/api/rutina-concreta?id=${rutinaId}`;
 
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) throw new Error('Error al cargar la rutina');
-            return response.json();
-        })
-        .then(data => {
-            const { rutinaNombre, ejercicios } = data;
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error('Error al cargar la rutina');
 
-            document.title = `Rutina - ${rutinaNombre}`;
+        const data = await response.json();
+        const { rutinaNombre, ejercicios } = data;
 
-            const rutinaTitulo = document.getElementById('rutina-titulo');
-            if (rutinaTitulo) {
-                rutinaTitulo.textContent = `Rutina de ${rutinaNombre}`;
-            }
+        document.title = `Rutina - ${rutinaNombre}`;
 
-            ejercicios.forEach((ejercicio, index) => {
-                const ejercicioDiv = document.createElement('div');
-                ejercicioDiv.classList.add('ejercicio');
-                ejercicioDiv.innerHTML = `
-                    <img src="../Imagenes/curl_pesas.png" alt="Ejercicio ${index + 1}" class="imagen_ejercicio">
-                    <h1>Ejercicio ${index + 1}: ${ejercicio}</h1>
-                    <button class="btn-guia">Ver Guía</button>
-                `;
-                divEjercicios.appendChild(ejercicioDiv);
+        const rutinaTitulo = document.getElementById('rutina-titulo');
+        if (rutinaTitulo) {
+            rutinaTitulo.textContent = `Rutina de ${rutinaNombre}`;
+        }
 
-                ejercicios_restantes.push(ejercicio);
-                imagenes_ejercicios_restantes.push('../Imagenes/curl_pesas.png');
+        const divEjercicios = document.getElementById('div-ejercicios');
+        const ejercicios_restantes = [];
+        const imagenes_ejercicios_restantes = [];
+
+        for (const [index, ejercicio] of ejercicios.entries()) {
+            const ejercicioDiv = document.createElement('div');
+            ejercicioDiv.classList.add('ejercicio');
+
+            const respuesta = await fetch('/api/blobAImagenEjercicio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nombre_ejercicio: ejercicio }),
             });
-            document.querySelector('.Cabecera-rutina').style.visibility = 'visible';
-            document.querySelector('.tiempos-container').style.visibility = 'visible';
-            divEjercicios.classList.add('show');
-            document.getElementById('loading').style.display = 'none';
-        })
-        .catch(error => {
-            console.error(error);
-            const rutinaTitulo = document.getElementById('rutina-titulo');
-            if (rutinaTitulo) {
-                rutinaTitulo.textContent = 'Error al cargar la rutina';
+
+            if (!respuesta.ok) {
+                throw new Error('No se pudo cargar la imagen del ejercicio');
             }
-        });
+
+            const datos = await respuesta.json();
+
+            if (!datos.imagen) {
+                console.error('No se recibió una imagen válida.');
+                continue;
+            }
+
+            ejercicioDiv.innerHTML = `
+                <img src="${datos.imagen}" alt="Ejercicio ${index + 1}" class="imagen_ejercicio">
+                <h1>Ejercicio ${index + 1}: ${ejercicio}</h1>
+                <button class="btn-guia">Ver Guía</button>
+            `;
+            divEjercicios.appendChild(ejercicioDiv);
+
+            ejercicios_restantes.push(ejercicio);
+            imagenes_ejercicios_restantes.push(datos.imagen || '../Imagenes/curl_pesas.png');
+        }
+
+        document.querySelector('.Cabecera-rutina').style.visibility = 'visible';
+        document.querySelector('.tiempos-container').style.visibility = 'visible';
+        divEjercicios.classList.add('show');
+        document.getElementById('loading').style.display = 'none';
+    } catch (error) {
+        console.error('Error al cargar la rutina:', error);
+
+        const rutinaTitulo = document.getElementById('rutina-titulo');
+        if (rutinaTitulo) {
+            rutinaTitulo.textContent = 'Error al cargar la rutina';
+        }
+    }
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     cargarRutina();

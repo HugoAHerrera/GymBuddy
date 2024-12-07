@@ -483,13 +483,15 @@ const databaseMethods = {
                     return reject(err); 
                 }
     
-                if (results.length === 0) {
-                    return reject(new Error('No se encontró ninguna imagen para este ejercicio.'));
+                if (results.length === 0 || !results[0].imagen) {
+                    // Si no se encuentra la imagen o la columna imagen es NULL, devolver la imagen por defecto
+                    return resolve('../Imagenes/curl_pesas.png');  // Ruta de la imagen por defecto
                 }
     
                 try {
                     const blob = results[0].imagen;
-                    
+    
+                    // Convertir el blob a base64
                     const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
     
                     resolve(base64Image);
@@ -498,9 +500,7 @@ const databaseMethods = {
                 }
             });
         });
-    },
-    
-    
+    },    
 
     obtenerDatosUsuario: async (idUsuario) => {
         return new Promise((resolve, reject) => {
