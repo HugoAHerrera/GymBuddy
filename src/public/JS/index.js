@@ -44,6 +44,7 @@ $(document).ready(function () {
             <p id="contraseñas-vacias" style="color: red; display: none;">Rellene las contraseñas </p>
             <p id="credenciales-incorrectas" style="color: red; display: none;">Email o contraseña original incorrecto</p>
             <p id="cambio-exitoso" style="color: green; display: none;">Contraseña cambiada correctamente</p>
+            <p id="contraseñas-no-valid" style="color: red; display: none;">Contraseña inválida: 1 mayúscula, 1 número, 8 letras mínimo</p>
             <p id="contraseñas-error" style="color: red; display: none;">Las contraseñas no coinciden</p>
         </form>
     `;
@@ -77,7 +78,7 @@ $(document).ready(function () {
             <p id="usuario-repetido" style="color: red; display: none;">Nombre de usuario ya en uso</p>
             <p id="usuario-vacio" style="color: red; display: none;">Inserte un nombre de usuario</p>
             <p id="contraseñas-error" style="color: red; display: none;">Las contraseñas no coinciden</p>
-            <p id="contraseñas-vacias" style="color: red; display: none;">La contraseñas no pueden estar vacías: 1 mayúscula, 1 número, 8 letras mínimo</p>
+            <p id="contraseñas-vacias" style="color: red; display: none;">Las contraseñas no pueden estar vacías: 1 mayúscula, 1 número, 8 letras mínimo</p>
             <p id="email-error" style="color: red; display: none;">Ingrese un email válido</p>
             <p id="email-repetido" style="color: red; display: none;">Email ya en uso</p>
             <p id="terms-error" style="color: red; display: none;">Debe aceptar los términos y condiciones</p>
@@ -161,7 +162,7 @@ $(document).ready(function () {
         const contraseñaNueva = document.getElementById('contraseña_nueva').value;
         const contraseñaNueva2 = document.getElementById('contraseña_nueva2').value;
         
-        $("#contraseñas-vacias, #contraseñas-error, #credenciales-incorrectas, #cambio-exitoso").hide();
+        $("#contraseñas-vacias, #contraseñas-error, #credenciales-incorrectas, #cambio-exitoso, #contraseñas-no-valid").hide();
 
         if (contraseñaUsuario.length === 0 || contraseñaNueva.length === 0 || contraseñaNueva2.length === 0) {
             $("#contraseñas-vacias").show();
@@ -171,6 +172,12 @@ $(document).ready(function () {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         if (!emailRegex.test(email)) {
             $("#email-error").show();
+            return;
+        }
+
+        let regexContraseña = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\W]{8,}$/;
+        if (contraseñaNueva.length === 0 || contraseñaNueva2.length === 0 || !regexContraseña.test(contraseñaUsuario)) {
+            $("#contraseñas-no-valid").show();
             return;
         }
 
@@ -194,9 +201,6 @@ $(document).ready(function () {
                 $("#cambio-exitoso").show();
             },
             error: function(xhr, status, error) {
-                console.log("XHR:", xhr); // Esto te dará detalles sobre la respuesta
-                console.log("Status:", status); // Esto te dirá el estado de la solicitud
-                console.log("Error:", error);
                 if (xhr.status === 401) { //No autorizado
                     $("#credenciales-incorrectas").show();
                 } else {
@@ -240,7 +244,7 @@ $(document).ready(function () {
             return;
         }
 
-        let regexContraseña = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;
+        let regexContraseña = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\W]{8,}$/;
         if (contraseñaUsuario.length === 0 || contraseñaRepeticion.length === 0 || !regexContraseña.test(contraseñaUsuario)) {
             $("#contraseñas-vacias").show();
             return;

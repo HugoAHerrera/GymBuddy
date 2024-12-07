@@ -129,7 +129,6 @@ app.post('/api/login', async (req, res) => {
 
 app.post('/api/cambiar-contrasena', async (req, res) => {
     const { email, contraseña, contraseña_nueva } = req.body;
-    console.log("Recibiendo solicitud para cambiar contraseña");
 
     if (!email || !contraseña || !contraseña_nueva) {
         return res.status(400).json({ message: 'Faltan datos requeridos' });
