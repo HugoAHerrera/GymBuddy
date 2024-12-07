@@ -1,24 +1,35 @@
 document.addEventListener('DOMContentLoaded', function () {
     const payButton = document.getElementById('pay-button');
 
-    payButton.addEventListener('click', function () {
-        // Obtener los valores de los campos de la tarjeta
-        const cardNumber = document.getElementById('card-number').value;
-        const expirationDate = document.getElementById('expiration-date').value;
-        const cvv = document.getElementById('cvv').value;
+    payButton.addEventListener('click', async function () {
+        const cardNumber = document.getElementById('card-number').value.trim();
+        const expirationDate = document.getElementById('expiration-date').value.trim();
+        const cvv = document.getElementById('cvv').value.trim();
 
-        // Validar que todos los campos estén llenos
+        // Validación básica
         if (!cardNumber || !expirationDate || !cvv) {
             alert('Por favor, complete todos los campos de la tarjeta.');
             return;
         }
 
-        // Mostrar la alerta
+        /*
+        // Validación del número de tarjeta (Algoritmo de Luhn)
+        if (!isValidCardNumber(cardNumber)) {
+            alert('Número de tarjeta inválido.');
+            return;
+        }
+        */
+        // Confirmación
         const confirmation = confirm('¿Desea guardar estos datos?');
+        if (!confirmation) {
+            window.location.href = 'obtenerProducto.html';
+            return;
+        }
 
-        if (confirmation) {
-            // Si el usuario acepta, guardamos los datos en la base de datos
-            fetch('/api/guardarDatosTarjeta', {
+        // Guardar datos
+        payButton.disabled = true; // Evita clics repetidos
+        try {
+            const response = await fetch('/api/guardarDatosTarjeta', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,21 +39,45 @@ document.addEventListener('DOMContentLoaded', function () {
                     fecha_caducidad: expirationDate,
                     CVV: cvv
                 })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // Si la respuesta es exitosa, redirigir a obtenerProducto.html
-                    window.location.href = 'obtenerProducto.html';
-                })
-                .catch(error => {
-                    console.error('Error al guardar los datos de la tarjeta:', error);
-                    alert('Hubo un error al guardar los datos.');
-                });
-        } else {
-            // Si el usuario no acepta, simplemente redirigimos a obtenerProducto.html
-            window.location.href = 'obtener^Producto.html';
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Datos guardados correctamente.');
+                window.location.href = 'obtenerProducto.html';
+            } else {
+                console.error(data.message);
+                alert('Error: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error al guardar los datos de la tarjeta:', error);
+            alert('Hubo un error al guardar los datos.');
+        } finally {
+            payButton.disabled = false; // Rehabilita el botón
         }
     });
+/*
+    // Valida un número de tarjeta con el Algoritmo de Luhn
+    function isValidCardNumber(number) {
+        let sum = 0;
+        let shouldDouble = false;
+
+        for (let i = number.length - 1; i >= 0; i--) {
+            let digit = parseInt(number[i], 10);
+
+            if (shouldDouble) {
+                digit *= 2;
+                if (digit > 9) digit -= 9;
+            }
+
+            sum += digit;
+            shouldDouble = !shouldDouble;
+        }
+
+        return sum % 10 === 0;
+    }
+
+ */
 });
 
 
