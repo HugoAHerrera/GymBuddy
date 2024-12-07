@@ -186,10 +186,6 @@ function guardarSesion() {
     const tiempoTotal = (resulatdoTiempoTotalEjercicio + resulatdoTiempoTotalDescanso) * cantidadDeEjercicios;
     const fechaActual = new Date().toISOString().split('T')[0];
     const idRutina = document.title.replace('Rutina - ', '');
-    
-    console.log('Tiempo total:', tiempoTotal);
-    console.log('Fecha actual:', fechaActual);
-    console.log('ID Rutina:', idRutina);
 
     if (!tiempoTotal || !idRutina) {
         console.error('Datos insuficientes para guardar la sesión.');
@@ -305,5 +301,13 @@ chatTextarea.addEventListener('keypress', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendMessageButton.click();
+    }
+});
+
+document.body.addEventListener('click', (event) => {
+    if (event.target.matches('.btn-guia')) {
+        const h1Element = event.target.previousElementSibling;
+        const rutinaNombre = h1Element.textContent.split(': ')[1];
+        window.open(`/guia-ejercicios?id=${encodeURIComponent(rutinaNombre)}`, '_blank');
     }
 });
