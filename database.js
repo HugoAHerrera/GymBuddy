@@ -541,6 +541,16 @@ const databaseMethods = {
         });
     },
 
+    pasarAPedido: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `INSERT INTO pedido (id_usuario, id_articulo, cantidad) SELECT id_usuario, id_articulo FROM carro WHERE id_usuario = ?`;
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
     vaciarCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM carro WHERE id_usuario = ?;`;
