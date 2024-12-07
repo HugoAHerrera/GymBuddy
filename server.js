@@ -88,6 +88,9 @@ app.post('/api/registro', async (req, res) => {
           correo
       });
 
+      const user = await database.comprobarCredenciales(correo);
+      req.session.id_usuario = user.id_usuario;
+
       // Redirigir al usuario a la página de inicio después de un registro exitoso
       res.redirect('/inicio');
     } catch (error) {
@@ -197,6 +200,38 @@ app.get('/rutina-concreta', (req, res) => {
 app.get('/rutina-nueva', (req,res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_nueva.html'));
 })
+
+app.get('/api/rutina-nueva', async (req, res) => {
+    try {
+        // Obtener datos de la base de datos
+        const categoria = await database.obtenerCategoriaTodosEjercicio();
+        const categoria_transformed = categoria.flatMap(item => 
+            item.lista_ejercicios.split(',').map(ejercicio => [parseInt(ejercicio), item.categoria])
+        );
+
+        const id_nombre_dificultad = await database.obtenerIDNombreDificultadTodosEjercicio();
+        const id_nombre_dificultad_transformed = id_nombre_dificultad.map(item => 
+            [item.id_ejercicio, item.nombre_ejercicio, item.dificultad]
+        );
+
+        // Combinar los datos
+        const combinados = categoria_transformed.map(([id, categoria]) => {
+            const ejercicio = id_nombre_dificultad_transformed.find(([ejercicioId]) => ejercicioId === id);
+            return ejercicio ? [id, categoria, ejercicio[1], ejercicio[2]] : null;
+        }).filter(item => item !== null);
+
+        if (combinados.length > 0) {  // Cambiado a .length > 0
+            res.json({ combinados });
+            console.log("Funciona");
+        } else {
+            res.status(404).json({ error: 'Rutina no encontrada' });
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener los ejercicios' });
+    }
+});
 
 app.get('/desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));

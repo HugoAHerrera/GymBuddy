@@ -74,13 +74,6 @@ document.addEventListener("DOMContentLoaded", function () {
             window.open('guia_ejercicios.html', '_blank');
         });
     });
-
-    document.querySelectorAll('.boton-crear-rutina').forEach(button => {
-        button.addEventListener('click', () => {
-            window.location.href = "rutina_nueva.html";
-            window.open('/rutina-nueva', '_blank');
-        });
-    });
 });
 
 function actualizarContador() {
@@ -193,6 +186,10 @@ function guardarSesion() {
     const tiempoTotal = (resulatdoTiempoTotalEjercicio + resulatdoTiempoTotalDescanso) * cantidadDeEjercicios;
     const fechaActual = new Date().toISOString().split('T')[0];
     const idRutina = document.title.replace('Rutina - ', '');
+    
+    console.log('Tiempo total:', tiempoTotal);
+    console.log('Fecha actual:', fechaActual);
+    console.log('ID Rutina:', idRutina);
 
     if (!tiempoTotal || !idRutina) {
         console.error('Datos insuficientes para guardar la sesión.');
@@ -308,18 +305,5 @@ chatTextarea.addEventListener('keypress', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
         sendMessageButton.click();
-    }
-});
-
-document.body.addEventListener('click', (event) => {
-    if (event.target.matches('.btn-guia')) {
-        // Selecciona el h1 hermano anterior al botón
-        const h1Element = event.target.previousElementSibling;
-
-        // Obtén el texto después del "Ejercicio X: "
-        const rutinaNombre = h1Element.textContent.split(': ')[1];
-
-        // Abre la nueva ventana con el nombre del ejercicio
-        window.open(`/guia-ejercicios?id=${encodeURIComponent(rutinaNombre)}`, '_blank');
     }
 });

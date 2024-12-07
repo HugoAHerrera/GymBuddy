@@ -46,13 +46,22 @@ const databaseMethods = {
 
     registrarUsuario: async (user) => {
         return new Promise((resolve, reject) => {
-            const sql = 'INSERT INTO usuario (nombre_usuario, contraseña, correo) VALUES (?, ?, ?)';
-            connection.query(sql, [user.nombre_usuario, user.contraseña, user.correo], (err, result) => {
+            const sqlInsertarUsuario = 'INSERT INTO usuario (nombre_usuario, contraseña, correo) VALUES (?, ?, ?)';
+            
+            connection.query(sqlInsertarUsuario, [user.nombre_usuario, user.contraseña, user.correo], (err, result) => {
                 if (err) return reject(err);
-                resolve(result);
+                
+                const sqlPonerImagen = 'UPDATE usuario SET imagenes = (SELECT imagenes FROM imagen_default LIMIT 1) WHERE nombre_usuario = ?';
+                
+                connection.query(sqlPonerImagen, [user.nombre_usuario], (errUpdate, resultUpdate) => {
+                    if (errUpdate) return reject(errUpdate);
+                    
+                    resolve(resultUpdate);
+                });
             });
         });
     },
+    
 
     cambiarContraseña: async (user) => {
         return new Promise((resolve, reject) => {
@@ -198,6 +207,39 @@ const databaseMethods = {
                     ultimaSesion: results[0].ultima_sesion || 'Nunca',
                 };
                 resolve(estadisticas);
+            });
+        });
+    },
+
+    obtenerCategoriaTodosEjercicio: async () => {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL parametrizada
+            const sql = `
+                SELECT categoria, lista_ejercicios FROM rutina`;
+            // Ejecutar la consulta SQL usando el conector de la base de datos (mysql2, por ejemplo)
+            connection.query(sql, (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+    },
+    
+
+    obtenerIDNombreDificultadTodosEjercicio: async () => {
+        return new Promise((resolve, reject) => {
+            // Definir la consulta SQL con el parámetro id_ejercicio
+            const sql = 'SELECT id_ejercicio,nombre_ejercicio, dificultad FROM ejercicio';
+    
+            // Ejecutar la consulta SQL pasando el parámetro
+            connection.query(sql, (err, results) => {
+                if (err) {
+                    reject(err); // Si ocurre un error, rechaza la promesa
+                } else {
+                    resolve(results); // Si la consulta es exitosa, resuelve la promesa con los resultados
+                }
             });
         });
     },
