@@ -9,10 +9,43 @@ $(document).ready(function () {
                 <input type="password" id="contraseña_original" class="pass" required>
                 <i class="bx bx-show-alt"></i>
             </div>
-            <button type="submit" id="submit-btn-inicio-sesion">Enviar</button>
+            <button type="submit" id="submit-btn-inicio-sesion">Iniciar sesión</button>
+            <p class="cambio-contraseña"> Cambiar contraseña</p>
             <p id="contraseñas-vacias" style="color: red; display: none;">La contraseña no puede estar vacía</p>
             <p id="email-error" style="color: red; display: none;">Ingrese un email válido</p>
-            <p id="credenciales-incorrectas" style="color: red; display: none;">Mail o contraseña incorrecto</p>
+            <p id="credenciales-incorrectas" style="color: red; display: none;">Email o contraseña incorrecto</p>
+        </form>
+    `;
+
+    const cambiarContraseña = `
+        <form>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" class="pass" required>
+            
+            <label for="contraseña_original">Contraseña original:</label><br>
+            <div class="contraseña">
+                <input type="password" id="contraseña_original" class="pass" required>
+                <i class="bx bx-show-alt"></i>
+            </div>
+            
+            <label for="contraseña_nueva">Nueva contraseña:</label><br>
+            <div class="contraseña">
+                <input type="password" id="contraseña_nueva" class="pass" required>
+                <i class="bx bx-show-alt"></i>
+            </div>
+
+            <label for="contraseña_nueva2">Repetir contraseña:</label><br>
+            <div class="contraseña">
+                <input type="password" id="contraseña_nueva2" class="pass" required>
+                <i class="bx bx-show-alt"></i>
+            </div>
+
+            <button type="submit" id="submit-btn-cambiar-contraseña">Cambiar contraseña</button>
+            <p id="contraseñas-vacias" style="color: red; display: none;">Rellene las contraseñas </p>
+            <p id="credenciales-incorrectas" style="color: red; display: none;">Email o contraseña original incorrecto</p>
+            <p id="cambio-exitoso" style="color: green; display: none;">Contraseña cambiada correctamente</p>
+            <p id="contraseñas-no-valid" style="color: red; display: none;">Contraseña inválida: 1 mayúscula, 1 número, 8 letras mínimo</p>
+            <p id="contraseñas-error" style="color: red; display: none;">Las contraseñas no coinciden</p>
         </form>
     `;
 
@@ -41,16 +74,20 @@ $(document).ready(function () {
                 <label for="terms" class="terms-label"> Aceptar términos y condiciones</label>
             </div>
 
-            <button type="submit" id="submit-btn">Enviar</button>
+            <button type="submit" id="submit-btn">Registrarse</button>
             <p id="usuario-repetido" style="color: red; display: none;">Nombre de usuario ya en uso</p>
             <p id="usuario-vacio" style="color: red; display: none;">Inserte un nombre de usuario</p>
             <p id="contraseñas-error" style="color: red; display: none;">Las contraseñas no coinciden</p>
-            <p id="contraseñas-vacias" style="color: red; display: none;">La contraseñas no pueden estar vacías: 1 mayúscula, 1 número, 8 letras mínimo</p>
+            <p id="contraseñas-vacias" style="color: red; display: none;">Las contraseñas no pueden estar vacías: 1 mayúscula, 1 número, 8 letras mínimo</p>
             <p id="email-error" style="color: red; display: none;">Ingrese un email válido</p>
             <p id="email-repetido" style="color: red; display: none;">Email ya en uso</p>
             <p id="terms-error" style="color: red; display: none;">Debe aceptar los términos y condiciones</p>
         </form>
     `;
+
+    $(document).on('click', '.cambio-contraseña', function (event) {
+        $("#formulario").html(cambiarContraseña);
+    });
 
     $("#div-iniciar-sesion").click(function () {
         $("#formulario").html(iniciarSesionHTML);
@@ -117,6 +154,62 @@ $(document).ready(function () {
         });
     });
 
+    $("#formulario").on("click", "#submit-btn-cambiar-contraseña", function(event) {
+        event.preventDefault();
+
+        const contraseñaUsuario = document.getElementById('contraseña_original').value;
+        const email = document.getElementById('email').value;
+        const contraseñaNueva = document.getElementById('contraseña_nueva').value;
+        const contraseñaNueva2 = document.getElementById('contraseña_nueva2').value;
+        
+        $("#contraseñas-vacias, #contraseñas-error, #credenciales-incorrectas, #cambio-exitoso, #contraseñas-no-valid").hide();
+
+        if (contraseñaUsuario.length === 0 || contraseñaNueva.length === 0 || contraseñaNueva2.length === 0) {
+            $("#contraseñas-vacias").show();
+            return;
+        }
+
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailRegex.test(email)) {
+            $("#email-error").show();
+            return;
+        }
+
+        let regexContraseña = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\W]{8,}$/;
+        if (contraseñaNueva.length === 0 || contraseñaNueva2.length === 0 || !regexContraseña.test(contraseñaUsuario)) {
+            $("#contraseñas-no-valid").show();
+            return;
+        }
+
+        if (contraseñaNueva !== contraseñaNueva2) {
+            $("#contraseñas-error").show();
+            return;
+        }
+
+        const userData = {
+            email: email,
+            contraseña: contraseñaUsuario,
+            contraseña_nueva: contraseñaNueva
+        };
+    
+        $.ajax({
+            url: '/api/cambiar-contrasena',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(userData),
+            success: function(response) {
+                $("#cambio-exitoso").show();
+            },
+            error: function(xhr, status, error) {
+                if (xhr.status === 401) { //No autorizado
+                    $("#credenciales-incorrectas").show();
+                } else {
+                    alert('Hubo un error al iniciar sesión');
+                }
+            }
+        });
+    });
+
     function verificarUsuarioExistente(nombre_usuario) {
         return $.ajax({
             url: '/api/usuario-existe',
@@ -140,7 +233,7 @@ $(document).ready(function () {
 
         const nombreUsuario = document.getElementById('nombre_usuario').value;
         const contraseñaUsuario = document.getElementById('contraseña_original').value;
-        const contaseñaRepeticion = document.getElementById('contraseña_repeticion').value;
+        const contraseñaRepeticion = document.getElementById('contraseña_repeticion').value;
         const email = document.getElementById('email').value;
         const aceptarTerminos = document.getElementById('terms').checked;
 
@@ -151,13 +244,13 @@ $(document).ready(function () {
             return;
         }
 
-        let regexContraseña = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;
-        if (contraseñaUsuario.length === 0 || contaseñaRepeticion.length === 0 || !regexContraseña.test(contraseñaUsuario)) {
+        let regexContraseña = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\W]{8,}$/;
+        if (contraseñaUsuario.length === 0 || contraseñaRepeticion.length === 0 || !regexContraseña.test(contraseñaUsuario)) {
             $("#contraseñas-vacias").show();
             return;
         }
 
-        if (contraseñaUsuario !== contaseñaRepeticion) {
+        if (contraseñaUsuario !== contraseñaRepeticion) {
             $("#contraseñas-error").show();
             return;
         }
@@ -207,19 +300,12 @@ $(document).ready(function () {
         });
     });
 
-    function cargarIniciarSesion() {
-        $("#formulario").html(iniciarSesionHTML);
-        $('#div-iniciar-sesion').addClass('boton-pulsado');
-        $('#div-crear-cuenta').removeClass('boton-pulsado');
-    }
-
     function cargarCrearCuenta() {
         $("#formulario").html(crearCuentaHTML);
         $('#div-crear-cuenta').addClass('boton-pulsado');
         $('#div-iniciar-sesion').removeClass('boton-pulsado');
     }
 
-    cargarIniciarSesion();
     cargarCrearCuenta();
 });
 

@@ -3,7 +3,7 @@ let contadorCarrito = 0;  // Número total de productos
 let carrito = [];  // Lista de productos en el carrito
 
 // Función para alternar la visibilidad del menú del carrito
-function toggleCarrito() {
+function desplegarCarrito() {
     const menuCarrito = document.getElementById("menu-carrito");
     menuCarrito.style.display = menuCarrito.style.display === "block" ? "none" : "block";
 }

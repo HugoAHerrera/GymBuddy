@@ -77,13 +77,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll('.boton-crear-rutina').forEach(button => {
         button.addEventListener('click', () => {
-            window.location.href = "rutina_personalizada_nueva.html";
+            window.location.href = "rutina_nueva.html";
+            window.open('/rutina-nueva', '_blank');
         });
-    });
-
-    const logoImage = document.getElementById('logotype');
-    logoImage.addEventListener('click', function () {
-        window.location.href = 'perfil.html';
     });
 });
 
@@ -197,10 +193,6 @@ function guardarSesion() {
     const tiempoTotal = (resulatdoTiempoTotalEjercicio + resulatdoTiempoTotalDescanso) * cantidadDeEjercicios;
     const fechaActual = new Date().toISOString().split('T')[0];
     const idRutina = document.title.replace('Rutina - ', '');
-    
-    console.log('Tiempo total:', tiempoTotal);
-    console.log('Fecha actual:', fechaActual);
-    console.log('ID Rutina:', idRutina);
 
     if (!tiempoTotal || !idRutina) {
         console.error('Datos insuficientes para guardar la sesión.');
@@ -227,3 +219,107 @@ function guardarSesion() {
         alert('Ocurrió un error al guardar la sesión.');
     });
 }
+
+// Cargar el header y el footer con fetch
+fetch('../HTML/header.html')
+.then(res => res.text())
+.then(html => {
+    document.getElementById('header-container').innerHTML = html;
+    const script = document.createElement('script');
+    script.src = '../JS/header.js';
+    script.defer = true;
+    document.body.appendChild(script);
+})
+fetch('../HTML/footer.html')
+.then(response => response.text())
+.then(data => document.getElementById('footer-container').innerHTML = data);
+
+const toggleButton = document.getElementById('boton-fijo');
+const toggleText = document.getElementById('toggle-text');
+const sidePanel = document.getElementById('div-chat');
+const center = document.querySelector('.center');
+
+toggleButton.addEventListener('click', function () {
+    if (sidePanel.classList.contains('hidden')) {
+        //Abrir el chat
+        document.getElementById('div-chat').style.display = 'flex';
+        sidePanel.classList.remove('hidden');
+        sidePanel.classList.add('visible');
+        center.style.flex = '2';
+        sidePanel.style.flex = '1';
+        toggleButton.classList.remove('abrir');
+        toggleButton.classList.add('cerrar');
+        toggleText.textContent = 'Cerrar chat';
+        center.classList.add('panel-open'); 
+    } else {
+        //Cerrar el chat
+        document.getElementById('div-chat').style.display = 'none';
+        sidePanel.classList.remove('visible');
+        sidePanel.classList.add('hidden');
+        center.style.flex = '1';
+        sidePanel.style.flex = '0';
+        toggleButton.classList.remove('cerrar');
+        toggleButton.classList.add('abrir');
+        toggleText.textContent = 'Abrir chat';
+        center.classList.remove('panel-open');
+    }
+});
+
+const chatMessages = document.getElementById('div-mensajes');
+const chatTextarea = document.getElementById('chat-textarea');
+const sendMessageButton = document.getElementById('send-message');
+
+function addMessage(content, type) {
+    const message = document.createElement('div');
+    message.className = `message ${type}`;
+    message.textContent = content;
+    chatMessages.appendChild(message);
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+sendMessageButton.addEventListener('click', async function () {
+    const messageContent = chatTextarea.value.trim();
+    if (messageContent) {
+        addMessage(messageContent, 'sent');
+        chatTextarea.value = '';
+
+        try {
+            const response = await fetch('/message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: messageContent })
+            });
+
+            const data = await response.json();
+            if (data.respuesta) {
+                addMessage(data.respuesta, 'received');
+            } else {
+                addMessage('No se pudo obtener una respuesta del servidor.', 'received');
+            }
+        } catch (error) {
+            console.error('Error al enviar el mensaje:', error);
+            addMessage('Hubo un error al comunicar con el servidor.', 'received');
+        }
+    }
+});
+
+chatTextarea.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessageButton.click();
+    }
+});
+
+document.body.addEventListener('click', (event) => {
+    if (event.target.matches('.btn-guia')) {
+        // Selecciona el h1 hermano anterior al botón
+        const h1Element = event.target.previousElementSibling;
+
+        // Obtén el texto después del "Ejercicio X: "
+        const rutinaNombre = h1Element.textContent.split(': ')[1];
+
+        // Abre la nueva ventana con el nombre del ejercicio
+        window.open(`/guia-ejercicios?id=${encodeURIComponent(rutinaNombre)}`, '_blank');
+    }
+});

@@ -101,22 +101,3 @@ main {
 #ver-mas:hover {
     background-color: #218838;
 }
-
-footer {
-    background-color: rgb(2, 126, 243);
-    color: rgb(196, 217, 237);
-    text-align: center;
-    padding: 10px;
-    width: 100%;
-}
-
-footer a {
-    color: white;
-    text-decoration: none;
-}
-
-footer a.footer-enlace:hover {
-    text-decoration: underline;
-    color: rgb(154, 233, 233);
-}
-

@@ -54,6 +54,17 @@ const databaseMethods = {
         });
     },
 
+    cambiarContraseña: async (user) => {
+        return new Promise((resolve, reject) => {
+            console.log()
+            const sql = 'UPDATE usuario SET contraseña = ? WHERE correo = ?';
+            connection.query(sql, [user.contraseña, user.correo], (err, result) => {
+                if (err) return reject(err);
+                resolve(result);
+            });
+        });
+    },
+
     comprobarCredenciales: async (email) => {
         return new Promise((resolve, reject) => {
             const sql = 'SELECT * FROM usuario WHERE correo = ?';
@@ -61,8 +72,20 @@ const databaseMethods = {
                 if (err) return reject(err);
                 resolve(results[0]);
             });
+        });},
+
+    obtenerUsuarioPorId: async (id) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT * FROM usuario WHERE id_usuario = ?';
+            connection.query(sql, [id], (err, results) => {
+                if (err) return reject(err);
+                if (results.length === 0) return resolve(null);
+                resolve(results[0]);
+            });
         });
     },
+
+
 
     obtenerRutinas: async () => {
         return new Promise((resolve, reject) => {
@@ -249,31 +272,28 @@ const databaseMethods = {
     },
 
     // GUÍA DE EJERCICIOS
-    obtenerDescripcionEjercicios: async (idUsuario) => {
+    obtenerDescripcionEjercicios: async (nombreEjercicio) => {
         return new Promise((resolve, reject) => {
-            const sql = 'SELECT * FROM ejercicio WHERE id_ejercicio = ?';
-            connection.query(sql, [idUsuario], (err, results) => {
+            const sql = 'SELECT * FROM ejercicio WHERE nombre_ejercicio = ?';
+            connection.query(sql, [nombreEjercicio], (err, results) => {
                 if (err) return reject(err);
     
-                // Si no hay resultados para ese usuario, retornar un error o un valor vacío.
                 if (results.length === 0) {
-                    return reject('Usuario no encontrado');
+                    return reject('Ejercicio no encontrado');
                 }
     
-                // Aquí asignas las columnas de la tabla 'usuario' a un objeto, por ejemplo:
-                const usuario = results[0];
+                const ejercicio = results[0];
                 const descripcion = {
-                    id_ejercicio: usuario.id_ejercicio,
-                    nombre_ejercicio: usuario.nombre_ejercicio,
-                    dificultad: usuario.dificultad,
-                    imagen: usuario.imagen,
-                    equipo_necesario: usuario.equipo_necesario,
-                    objetivo: usuario.objetivo,
-                    preparacion: usuario.preparacion,
-                    ejecucion: usuario.ejecucion,
-                    consejos_clave: usuario.consejos_clave,
-                    zona_principal: usuario.zona_principal
-                    // Puedes agregar más campos que tengas en la tabla de usuario
+                    id_ejercicio: ejercicio.id_ejercicio,
+                    nombre_ejercicio: ejercicio.nombre_ejercicio,
+                    dificultad: ejercicio.dificultad,
+                    imagen: ejercicio.imagen,
+                    equipo_necesario: ejercicio.equipo_necesario,
+                    objetivo: ejercicio.objetivo,
+                    preparacion: ejercicio.preparacion,
+                    ejecucion: ejercicio.ejecucion,
+                    consejos_clave: ejercicio.consejos_clave,
+                    zona_principal: ejercicio.zona_principal,
                 };
     
                 resolve(descripcion);
@@ -346,13 +366,11 @@ const databaseMethods = {
     // Usuario
     convertirBlobImagen: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            // Consulta SQL para obtener la imagen del usuario desde la base de datos
             const sql = 'SELECT imagenes FROM usuario WHERE id_usuario = ?';
     
-            // Ejecutar la consulta SQL con el idUsuario como parámetro
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) {
-                    return reject(err); // Si hay error, rechazamos la promesa
+                    return reject(err);
                 }
     
                 if (results.length === 0 || !results[0].imagenes) {
@@ -360,31 +378,26 @@ const databaseMethods = {
                 }
     
                 try {
-                    // Obtenemos el blob (almacenado como un Buffer en Node.js) de la consulta
                     const blob = results[0].imagenes;
     
-                    // Convertir el Buffer a Base64
                     const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
     
-                    // Resolvemos con la imagen en formato Base64
                     resolve(base64Image);
                 } catch (error) {
-                    reject(error); // Rechazamos si ocurre un error durante la conversión
+                    reject(error);
                 }
             });
         });
     },
 
     //Ejercicio
-    convertirBlobImagenEj: async (id_ejercicio) => {
+    convertirBlobImagenEj: async (nombre_ejercicio) => {
         return new Promise((resolve, reject) => {
-            // Consulta SQL para obtener la imagen del ejercicio desde la base de datos
-            const sql = 'SELECT imagen FROM ejercicio WHERE id_ejercicio = ?';
+            const sql = 'SELECT imagen FROM ejercicio WHERE nombre_ejercicio = ?';
     
-            // Ejecutar la consulta SQL con el id_ejercicio como parámetro
-            connection.query(sql, [id_ejercicio], (err, results) => {
+            connection.query(sql, [nombre_ejercicio], (err, results) => {
                 if (err) {
-                    return reject(err); // Si hay error, rechazamos la promesa
+                    return reject(err); 
                 }
     
                 if (results.length === 0) {
@@ -392,16 +405,13 @@ const databaseMethods = {
                 }
     
                 try {
-                    // Obtenemos el blob (almacenado como un Buffer en Node.js) de la consulta
-                    const blob = results[0].imagen; // Asegúrate de que 'imagen' es el nombre correcto de la columna
-    
-                    // Convertir el Buffer a Base64
+                    const blob = results[0].imagen;
+                    
                     const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
     
-                    // Resolvemos con la imagen en formato Base64
                     resolve(base64Image);
                 } catch (error) {
-                    reject(error); // Rechazamos si ocurre un error durante la conversión
+                    reject(error);
                 }
             });
         });
@@ -594,6 +604,7 @@ const databaseMethods = {
             });
         });
     },
+
 
 };
 

@@ -1,0 +1,95 @@
+.resaltar {
+    background-color: #8c00ff; /* Color de fondo diferente, por ejemplo, un naranja */
+    color: white; /* Texto en blanco */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.resaltar:hover {
+    background-color: #480188; /* Un naranja más oscuro al pasar el ratón */
+}
+
+.progreso-compra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    padding: 10px 0;
+}
+
+.etapa {
+    text-align: center;
+    flex: 1; /* Cada etapa ocupa el mismo espacio */
+}
+
+.etapa-icono {
+    font-size: 2rem; /* Ajusta el tamaño del icono */
+    margin-bottom: 5px; /* Espaciado debajo del icono */
+    border: 1px solid #003366; /* Borde azul oscuro */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 10px; /* Espaciado interno */
+    background-color: #f4f4f4; /* Fondo claro */
+    transition: background-color 0.3s ease; /* Efecto al pasar el ratón */
+}
+
+.etapa-icono:hover {
+    background-color: #3399cc; /* Cambia el color al pasar el ratón */
+    color: white; /* Texto blanco al pasar el ratón */
+}
+
+p {
+    margin-top: 5px; /* Espaciado entre el icono y el texto */
+    color: #003366; /* Color del texto */
+}
+/* MAIN */
+.container {
+    display: flex;
+    width: 80%;
+    max-width: 1200px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px auto;
+}
+
+.productos, .mensaje {
+    padding: 20px;
+    width: 50%;
+}
+
+.productos {
+    border-right: 1px solid #ddd;
+    margin-right: 5px;
+}
+
+.productos h2, .mensaje h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.productos ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.productos ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 1.1em;
+    color: #555;
+}
+
+.productos ul li:last-child {
+    border-bottom: none;
+}
+
+.mensaje p {
+    font-size: 1.2em;
+    color: #555;
+}
+

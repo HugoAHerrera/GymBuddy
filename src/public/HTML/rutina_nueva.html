@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galería de Ejercicios</title>
+  <meta name="description" content="Rutina Personalizada">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../CSS/rutina_personalizada_nueva.css">
+  <link rel="icon" href="../Imagenes/logo-inicio.png" type="image/x-icon">
+</head>
+<body>
+    <div id="header-container"></div>
+    <main>
+        <h1>Nueva Rutina</h1>
+
+        <div class="contenedor-boton" id="contenedor-guardar">
+            <button id="guardar" onclick="window.location.href='rutina.html'">Guardar</button>
+        </div>
+
+        <div class="contenedor" id="contenedor">
+            <!-- Ejercicios se agregarán aquí dinámicamente -->
+        </div>
+
+        <div class="contenedor-boton">
+            <button id="añadir-ejercicio">Añadir Ejercicio</button>
+        </div>
+    </main>
+
+    <!-- Ventana emergente (Modal) -->
+    <div id="ventanaEmergente" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar">&times;</span>
+            <h2>Añadir Nuevo Ejercicio</h2>
+            
+            <!-- Filtro para Zona a Ejercitar -->
+            <div class="contenedor-filtro">
+                <div class="filtro">
+                    <div class="custom-select">
+                        <div class="select-box" onclick="toggleDropdown('zona-dropdown')">
+                            <span class="select-text">Selecciona Zona a Ejercitar</span>
+                            <span class="arrow">&#9662;</span>
+                        </div>
+                        <div id="zona-dropdown" class="dropdown">
+                            <label><input type="checkbox" value="pecho"> Enrenamientos rápidos</label>
+                            <label><input type="checkbox" value="pecho"> Desafios</label>
+                            <label><input type="checkbox" value="brazo"> Pierna</label>
+                            <label><input type="checkbox" value="espalda"> Hombro </label>
+                            <label><input type="checkbox" value="gluteos"> Abdomen </label>
+                            <label><input type="checkbox" value="pecho"> Material</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Filtro para Dificultad -->
+                <div class="filtro" id="dificultad">
+                    <div class="custom-select">
+                        <div class="select-box" onclick="toggleDropdown('dificultad-dropdown')">
+                            <span class="select-text">Dificultad</span>
+                            <span class="arrow">&#9662;</span>
+                        </div>
+                        <div id="dificultad-dropdown" class="dropdown">
+                            <label><input type="checkbox" value="principiante"> Principiante</label>
+                            <label><input type="checkbox" value="avanzado"> Intermedio </label>
+                            <label><input type="checkbox" value="avanzado"> Avanzado</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <label for="imagen-ejercicio">Seleccionar Imagen:</label>
+            <input type="file" id="imagen-ejercicio" accept="image/*">
+
+            <button id="confirmar-ejercicio">Confirmar</button>
+            <button id="cancelar-ejercicio">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="../JS/rutina_personalizada.js"></script>
+</body>
+</html>

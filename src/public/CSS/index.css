@@ -194,6 +194,18 @@ body {
     color: #007BFF;
 }
 
+.cambio-contraseña {
+    margin-top: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #3682d3;
+}
+
+.cambio-contraseña:hover {
+    text-decoration: underline;
+    color: #007BFF;
+}
+
 
 footer {
     background-color: rgb(2, 126, 243);
