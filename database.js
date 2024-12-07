@@ -46,13 +46,22 @@ const databaseMethods = {
 
     registrarUsuario: async (user) => {
         return new Promise((resolve, reject) => {
-            const sql = 'INSERT INTO usuario (nombre_usuario, contraseña, correo) VALUES (?, ?, ?)';
-            connection.query(sql, [user.nombre_usuario, user.contraseña, user.correo], (err, result) => {
+            const sqlInsertarUsuario = 'INSERT INTO usuario (nombre_usuario, contraseña, correo) VALUES (?, ?, ?)';
+            
+            connection.query(sqlInsertarUsuario, [user.nombre_usuario, user.contraseña, user.correo], (err, result) => {
                 if (err) return reject(err);
-                resolve(result);
+                
+                const sqlPonerImagen = 'UPDATE usuario SET imagenes = (SELECT imagenes FROM imagen_default LIMIT 1) WHERE nombre_usuario = ?';
+                
+                connection.query(sqlPonerImagen, [user.nombre_usuario], (errUpdate, resultUpdate) => {
+                    if (errUpdate) return reject(errUpdate);
+                    
+                    resolve(resultUpdate);
+                });
             });
         });
     },
+    
 
     cambiarContraseña: async (user) => {
         return new Promise((resolve, reject) => {
