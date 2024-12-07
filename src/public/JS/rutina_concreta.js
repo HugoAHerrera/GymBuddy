@@ -77,7 +77,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.querySelectorAll('.boton-crear-rutina').forEach(button => {
         button.addEventListener('click', () => {
-            window.location.href = "rutina_personalizada_nueva.html";
+            window.location.href = "rutina_nueva.html";
+            window.open('/rutina-nueva', '_blank');
         });
     });
 
