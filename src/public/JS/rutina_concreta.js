@@ -314,3 +314,16 @@ chatTextarea.addEventListener('keypress', function (e) {
         sendMessageButton.click();
     }
 });
+
+document.body.addEventListener('click', (event) => {
+    if (event.target.matches('.btn-guia')) {
+        // Selecciona el h1 hermano anterior al botón
+        const h1Element = event.target.previousElementSibling;
+
+        // Obtén el texto después del "Ejercicio X: "
+        const rutinaNombre = h1Element.textContent.split(': ')[1];
+
+        // Abre la nueva ventana con el nombre del ejercicio
+        window.open(`/guia-ejercicios?id=${encodeURIComponent(rutinaNombre)}`, '_blank');
+    }
+});

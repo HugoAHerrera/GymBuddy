@@ -38,7 +38,7 @@ h1 {
 /* Información lateral del ejercicio */
 
 .info {
-    width: 40%;
+    width: 50%;
     display:inline-block;
     flex-direction: column;
     gap: 10px;
@@ -61,4 +61,10 @@ h1 {
 
  ol {
     padding-left: 2%;
+}
+
+.contenedor img {
+    height: auto; 
+    width: 30%;
+    object-fit: contain;
 }

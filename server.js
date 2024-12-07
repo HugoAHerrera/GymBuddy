@@ -245,20 +245,31 @@ app.get('/api/rutinas', async (req, res) => {
   }
 });
 
-app.get('/api/guia_ejercicios',async(req,res) => {
+app.get('/guia-ejercicios',async(req,res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/guia_ejercicios.html'));
 });
 
 app.post('/api/guia-ejercicios', async (req, res) => {
     try {
-        const guia = await database.obtenerDescripcionEjercicios(70);
-        console.log(guia);
+        const { nombre_ejercicio } = req.body;
+
+        if (!nombre_ejercicio) {
+            return res.status(400).json({ error: 'Nombre de ejercicio no proporcionado.' });
+        }
+
+        const guia = await database.obtenerDescripcionEjercicios(nombre_ejercicio);
+
+        if (!guia) {
+            return res.status(404).json({ error: 'Ejercicio no encontrado.' });
+        }
+
         res.status(200).json(guia);
     } catch (error) {
         console.error('Error al obtener la guía de ejercicios:', error);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
+
 
 app.post('/guardar-sesion', async (req, res) => {
     const { tiempo_total, fecha, nombre_rutina } = req.body;
@@ -279,8 +290,14 @@ app.post('/guardar-sesion', async (req, res) => {
 
 app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) => {
     try {
-        const imagenBase64 = await database.convertirBlobImagenEj(70);
+        const { nombre_ejercicio } = req.body;
 
+        if (!nombre_ejercicio) {
+            return res.status(400).json({ error: 'Nombre de ejercicio no proporcionado.' });
+        }
+
+        const imagenBase64 = await database.convertirBlobImagenEj(nombre_ejercicio);
+        
         if (!imagenBase64) {
             return res.status(404).json({ error: 'No se encontró una imagen para este usuario.' });
         }
@@ -291,6 +308,7 @@ app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) 
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
+
 
 app.get('/previewTerminosCondiciones', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/noUserTerminosCondiciones.html'));
