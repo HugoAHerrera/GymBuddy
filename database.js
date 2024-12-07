@@ -704,7 +704,7 @@ const databaseMethods = {
         });
     },
 
-    obtenerProductosComprados: async (idUsuario) => {
+    obtenerPedido: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
             SELECT tienda.nombreArticulo AS nombreProducto, tienda.descuentoArticulo AS descuento, tienda.precio AS precio
