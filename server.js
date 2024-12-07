@@ -5,6 +5,7 @@ const database = require('./database');
 const { encriptarContraseña, compararContraseña } = require('./encryptor');
 const session = require('express-session');
 const mysql = require('mysql2');
+const asistente = require('./asistente');
 
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() }); // Configuración básica para manejar multipart/form-data
@@ -691,3 +692,5 @@ app.get('/api/mi-usuario', async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
+
+app.post('/message', asistente.handleMessage);

@@ -11,51 +11,68 @@
 
     <div id="header-container"></div>
 
-    <div class="center">
-        <div class="Cabecera-rutina" style="visibility: hidden;">
-            <h1 id="rutina-titulo"></h1>
-            <div class="boton-empezar-rutina">Empezar Rutina</div>
-            <div class="boton-crear-rutina">Crear rutina</div>
-            <div class="boton-pausar-rutina" style="display: none;">Pausar Rutina</div>
+    <div class="center-container">
+        <div class="center">
+            <div class="Cabecera-rutina" style="visibility: hidden;">
+                <h1 id="rutina-titulo"></h1>
+                <div class="boton-empezar-rutina">Empezar Rutina</div>
+                <div class="boton-crear-rutina">Crear rutina</div>
+                <div class="boton-pausar-rutina" style="display: none;">Pausar Rutina</div>
+            </div>
+
+            <div class="tiempos-container" id="tiempos-container" style="visibility: hidden;">
+                <div class="tiempo-input">
+                    <label for="tiempo-ejercicio">Tiempo de ejercicio (segundos):</label>
+                    <input type="number" id="tiempo-ejercicio" value="60" min="5" step="1" />
+                </div>
+                <div class="tiempo-input">
+                    <label for="tiempo-descanso">Tiempo de descanso (segundos):</label>
+                    <input type="number" id="tiempo-descanso" value="15" min="5" step="1" />
+                </div>                
+            </div>
+            
+            <div id="mensaje-terminado" style="display: none; text-align: center; padding: 20px; background-color: #f2f2f2; border-radius: 10px;">
+                <h2 style="color: #4CAF50;">¡Has terminado la rutina!</h2>
+                <p style="font-size: 18px; color: #555;">¡Felicidades por completar todos los ejercicios! Ahora puedes descansar o comenzar otra rutina.</p>
+            </div>
+            <div id="contador-container" style="width: 80%; margin: 0 auto; text-align: center;">
+                <div id="contador" style="text-align: center; margin-bottom: 20px;"></div> 
+            
+                <div class="barra-progreso-container">
+                    <div class="barra-inner"></div>
+                </div>
+            
+                <div id="ejercicio-container" style="display: none;">
+                    <h1 id="ejercicio-titulo"></h1>
+                    <img id="ejercicio-imagen" src="" alt="Imagen del ejercicio">
+                </div>
+            </div>
+
+            <div class="div-ejercicios" id="div-ejercicios">
+                <!-- Los ejercicios se agregarán dinámicamente aquí -->
+            </div>        
+            <div id="loading" style="text-align: center; padding: 20px;">
+                <p>Cargando ejercicios...</p>
+            </div>
         </div>
 
-        <div class="tiempos-container" id="tiempos-container" style="visibility: hidden;">
-            <div class="tiempo-input">
-                <label for="tiempo-ejercicio">Tiempo de ejercicio (segundos):</label>
-                <input type="number" id="tiempo-ejercicio" value="60" min="5" />
+        <div id="div-chat" class="hidden">
+            <div id="cabecera-chat">
+                <h2>Chat</h2>
             </div>
-            <div class="tiempo-input">
-                <label for="tiempo-descanso">Tiempo de descanso (segundos):</label>
-                <input type="number" id="tiempo-descanso" value="15" min="5" />
-            </div>
-        </div>
-        
-        <div id="mensaje-terminado" style="display: none; text-align: center; padding: 20px; background-color: #f2f2f2; border-radius: 10px;">
-            <h2 style="color: #4CAF50;">¡Has terminado la rutina!</h2>
-            <p style="font-size: 18px; color: #555;">¡Felicidades por completar todos los ejercicios! Ahora puedes descansar o comenzar otra rutina.</p>
-        </div>
-        <div id="contador-container" style="width: 80%; margin: 0 auto; text-align: center;">
-            <div id="contador" style="text-align: center; margin-bottom: 20px;"></div> 
-        
-            <div class="barra-progreso-container">
-                <div class="barra-inner"></div>
-            </div>
-        
-            <div id="ejercicio-container" style="display: none;">
-                <h1 id="ejercicio-titulo"></h1>
-                <img id="ejercicio-imagen" src="" alt="Imagen del ejercicio">
+            <div id="div-mensajes"></div>
+            <div id="chat-input">
+                <textarea id="chat-textarea" placeholder="Escribe un mensaje..."></textarea>
+                <button id="send-message">Enviar</button>
             </div>
         </div>
-
-        <div class="div-ejercicios" id="div-ejercicios">
-            <!-- Los ejercicios se agregarán dinámicamente aquí -->
-        </div>        
-        <div id="loading" style="text-align: center; padding: 20px;">
-            <p>Cargando ejercicios...</p>
-        </div>
-
         
     </div>
+
+    <div id="boton-fijo" class="abrir">
+        <img id="chat-icon" src="../Imagenes/Chat.jpg" alt="Chat Icon" style="width: 50px; height: 50px;">
+        <p id="toggle-text">Abrir chat</p>
+    </div>    
     
     <div id="footer-container"></div>
 
