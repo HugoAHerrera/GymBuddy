@@ -22,8 +22,17 @@ btnCancelar.addEventListener('click', function() {
 
 // Confirmar el ejercicio y agregarlo al contenedor
 btnConfirmar.addEventListener('click', function() {
-    // Obtener el nombre del ejercicio seleccionado y la imagen
-    const nombreEjercicio = document.getElementById('ejercicio-nombre').value;
+    // Obtener los valores seleccionados de los filtros
+    const zonaEjercicio = Array.from(document.querySelectorAll('#zona-dropdown input:checked'))
+                                .map(checkbox => checkbox.value).join(', ');
+    const equipoNecesario = Array.from(document.querySelectorAll('#equipo-dropdown input:checked'))
+                                 .map(checkbox => checkbox.value).join(', ');
+    const objetivo = Array.from(document.querySelectorAll('#objetivo-dropdown input:checked'))
+                          .map(checkbox => checkbox.value).join(', ');
+    const dificultad = Array.from(document.querySelectorAll('#dificultad-dropdown input:checked'))
+                            .map(checkbox => checkbox.value).join(', ');
+
+    // Obtener la imagen seleccionada
     const archivoImagen = document.getElementById('imagen-ejercicio').files[0];
 
     // Crear un nuevo div de ejercicio
@@ -34,7 +43,7 @@ btnConfirmar.addEventListener('click', function() {
     nuevoEjercicio.innerHTML = `
         <img src="" alt="Sin imagen" width="64" height="64" class="imagen-ejercicio">
         <button class="seleccionar-imagen">Seleccionar Imagen</button>
-        <h1>${nombreEjercicio}</h1>
+        <h1>Ejercicio con zona: ${zonaEjercicio}, Equipo: ${equipoNecesario}, Objetivo: ${objetivo}, Dificultad: ${dificultad}</h1>
         <button class="eliminar">Eliminar</button>
     `;
 
@@ -58,3 +67,9 @@ btnConfirmar.addEventListener('click', function() {
     // Cerrar la ventana emergente
     modal.style.display = 'none';
 });
+
+// Función para manejar la apertura y cierre de los filtros
+function toggleDropdown(dropdownId) {
+    const dropdown = document.getElementById(dropdownId);
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}

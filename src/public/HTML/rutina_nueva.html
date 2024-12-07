@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -33,17 +32,41 @@
         <div class="modal-contenido">
             <span class="cerrar">&times;</span>
             <h2>Añadir Nuevo Ejercicio</h2>
-            <label for="ejercicio-nombre">Seleccione un ejercicio:</label><br>
-            <!-- Lista desplegable para elegir el nombre del ejercicio -->
-            <select id="ejercicio-nombre">
-                <option value="Flexión de Brazos">Flexión de Brazos</option>
-                <option value="Sentadillas">Sentadillas</option>
-                <option value="Plancha">Plancha</option>
-                <option value="Abdominales">Abdominales</option>
-                <option value="Burpees">Burpees</option>
-                <!-- Agregar más opciones aquí -->
-            </select>
-            <br>
+            
+            <!-- Filtro para Zona a Ejercitar -->
+            <div class="contenedor-filtro">
+                <div class="filtro">
+                    <div class="custom-select">
+                        <div class="select-box" onclick="toggleDropdown('zona-dropdown')">
+                            <span class="select-text">Selecciona Zona a Ejercitar</span>
+                            <span class="arrow">&#9662;</span>
+                        </div>
+                        <div id="zona-dropdown" class="dropdown">
+                            <label><input type="checkbox" value="pecho"> Enrenamientos rápidos</label>
+                            <label><input type="checkbox" value="pecho"> Desafios</label>
+                            <label><input type="checkbox" value="brazo"> Pierna</label>
+                            <label><input type="checkbox" value="espalda"> Hombro </label>
+                            <label><input type="checkbox" value="gluteos"> Abdomen </label>
+                            <label><input type="checkbox" value="pecho"> Material</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Filtro para Dificultad -->
+                <div class="filtro" id="dificultad">
+                    <div class="custom-select">
+                        <div class="select-box" onclick="toggleDropdown('dificultad-dropdown')">
+                            <span class="select-text">Dificultad</span>
+                            <span class="arrow">&#9662;</span>
+                        </div>
+                        <div id="dificultad-dropdown" class="dropdown">
+                            <label><input type="checkbox" value="principiante"> Principiante</label>
+                            <label><input type="checkbox" value="avanzado"> Intermedio </label>
+                            <label><input type="checkbox" value="avanzado"> Avanzado</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <label for="imagen-ejercicio">Seleccionar Imagen:</label>
             <input type="file" id="imagen-ejercicio" accept="image/*">
 
