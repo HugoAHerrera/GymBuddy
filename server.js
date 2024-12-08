@@ -432,7 +432,7 @@ app.get('/perfil', (req, res) => {
 
 app.get('/api/tiempoEjercicio', async (req, res) => {
     try {
-        const tiempo_lista = await database.obtenertiempoEjercicio(13);
+        const tiempo_lista = await database.obtenertiempoEjercicio(req.session.id);
         const tiempo = tiempo_lista[0].total_tiempo;
         res.json({
             tiempo: tiempo
@@ -477,14 +477,15 @@ app.post('/api/blob', upload.single('imagen'), async (req, res) => {
 app.post('/api/cambiarNombreUsuario', upload.single('imagen'), async (req, res) => {
     try {
         const { nombre_usuario, correo_usuario } = req.body;
+        console.log(nombre_usuario, correo_usuario)
         const imagen = req.file;
 
         const usuarioExistente = await database.comprobarUsuarioExistente(nombre_usuario);
         const correoExistente = await database.comprobarCorreoExistente(correo_usuario);
         console.log("a:",usuarioExistente,"b:",correoExistente)
         // Esta lógica es muy específica. Ajusta según tu necesidad.
-        if (usuarioExistente == false || correoExistente == false ){
-            return res.status(400).json({ error: 'Los campos Nombre Usuario y Mail Asociado son obligatorios' });
+        if ( nombre_usuario == "" || correo_usuario == ""){
+            return res.status(400).json({ error: 'Los campos Nombre Usuario y Mail Asociado son obligatorios 2' });
         }
         if (usuarioExistente && usuarioExistente.id !== req.session.id_usuario) {
             if (correoExistente && correoExistente.id !== req.session.id_usuario) {
