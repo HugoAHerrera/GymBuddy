@@ -58,14 +58,10 @@ body {
     transform: scale(1.1);
 }
 
-.center {
-    flex: 1;
-}
 /* Contenedor de metas y metas */
 .div-metas {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    flex: 1;
     gap: 40px;
     margin: 10px 50px;
     justify-content: center;

@@ -10,15 +10,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         const desafiosBBDD = await response.json();
         console.log(desafiosBBDD);
 
-        const desafiosCompletados = await fetch('/api/desafiosCompletados');
+        const desafiosCompletados = await fetch('/api/historialDesafiosCompletados');
         const claims = await desafiosCompletados.json();
-        //const fechas = [];
         fechasFormateadas = claims.map(item => {
             const fecha = new Date(item.fecha);
             const dia = fecha.getDate();
             const mes = fecha.getMonth() + 1;
             const anio = fecha.getFullYear();
-            return `${dia}/${mes}/${anio}`;
+            return `${anio}-${mes}-0${dia}`;
         });
         console.log(fechasFormateadas);
 
@@ -81,7 +80,6 @@ function crearNuevaMeta() {
         if (goalDescription !== '') {
             // Crear progreso de la meta
             const barContainer = document.createElement("span");
-            //barContainer.classList.add("progContainer");
             const textContainer = document.createElement("div");
             const textContainer_2 = document.createElement("div");
             textContainer_2.classList.add("textContainer");
@@ -250,25 +248,35 @@ function GoalDescription(progressContainer) {
 // METODO INCOMPLETO
 // - falta añadir la recompensa a los KC totales del user
 function RequestReward(KC) {
+    const lastClaim = fechasFormateadas.at(-1);
     if(fechasFormateadas.length > 0) {
-        if (fechasFormateadas.at(-1) < new Date().toISOString().split('T')[0]) {
-            console.log("Toca borrar las fechas de dia:", fechasFormateadas.at(-1), "o anteriores. Ya puedes reclamar.");
+        if (lastClaim < new Date().toISOString().split('T')[0]) {
+            console.log("Toca borrar las fechas de dia:", lastClaim, "o anteriores. Ya puedes reclamar.");
+            borrarFechaPreviasBBDD(fechasFormateadas.at(-1));
             fechasFormateadas.length = 0;   // vacio la lista
             fechasFormateadas.push(new Date().toISOString().split('T')[0]);
-                console.log(fechasFormateadas);
+            annadirFechaReclamacionBBDD(new Date().toISOString().split('T')[0]);
+            console.log(fechasFormateadas);
+            console.log(`Has reclamado ${KC}`);
         } else {
             if (fechasFormateadas.length >= 2) {
                 console.log("Ya has reclamado las maximas recompensas diarias");
             } else {
                 console.log("Puedes reclamar otra recompensa hoy");
                 fechasFormateadas.push(new Date().toISOString().split('T')[0]);
-                    console.log(fechasFormateadas);
+                annadirFechaReclamacionBBDD(new Date().toISOString().split('T')[0]);
+                console.log(fechasFormateadas);
+                console.log(`Has reclamado ${KC}`);
             }
         }
     }
-    else console.log("Parecia no ibas a cobrar pero si");
-    fechasFormateadas.push(new Date().toISOString().split('T')[0]);
+    else {
+        console.log("Parecia no ibas a cobrar pero si");
+        fechasFormateadas.push(new Date().toISOString().split('T')[0]);
+        annadirFechaReclamacionBBDD(new Date().toISOString().split('T')[0]);
         console.log(fechasFormateadas);
+        console.log(`Has reclamado ${KC}`);
+    }
 }
 
 function autoProgreso() {
@@ -287,7 +295,7 @@ function autoProgreso() {
                 actualizarProgresoBBDD(title.textContent, progressBar.value);
                 if (progressBar.value >= 100) {
                     RequestReward(KC.textContent.match(/\d+/)[0]);
-                    fechaDeComplecionMeta(new Date().toISOString().split('T')[0]);  // añadir a metas completadas para limitar las diarias
+                    //fechaDeComplecionMeta(new Date().toISOString().split('T')[0]);  // añadir a metas completadas para limitar las diarias
                     titulosMetas.splice(titulosMetas.indexOf(title.textContent), 1);
                     setTimeout(() => {
                         borrarMetaBBDD(title.textContent);
@@ -470,8 +478,8 @@ function actualizarProgresoBBDD(title, progreso) {
     });
 }
 
-function fechaDeComplecionMeta(date) {
-    const goalCompletion = {
+function annadirFechaReclamacionBBDD(date) {
+    const nuevaFecha = {
         fecha: date
     };
 
@@ -479,9 +487,29 @@ function fechaDeComplecionMeta(date) {
         url: '/api/fechaDesafioCompletado',
         method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(goalCompletion)
+        data: JSON.stringify(nuevaFecha)
     });
 }
+
+function borrarFechaPreviasBBDD(date) {
+
+    const [anio, mes, dia] = date.split('-');
+    // Regresamos un objeto Date con la hora configurada a 23:00:00
+    const fechaOriginal = new Date(Date.UTC(anio, mes - 1, dia - 1, 23, 0, 0, 0));
+
+    const fechaObsoleta = {
+        fecha: date //claims[2]
+    };
+    console.log(fechaObsoleta);
+
+    $.ajax({
+        url: '/api/fechasDesafiosABorrar',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(fechaObsoleta)
+    });
+}
+
 function mostrarMetaDesdeBBDD(desafio) {
     // Crear contenedor de la meta
     const nuevaMeta = document.createElement("div");
@@ -593,7 +621,6 @@ function mostrarMetaDesdeBBDD(desafio) {
     });
 }
 
-// Cargar el header y el footer con fetch
 fetch('../HTML/header.html')
 .then(res => res.text())
 .then(html => {

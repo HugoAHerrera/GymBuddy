@@ -344,6 +344,15 @@ const databaseMethods = {
             });
         });
     },
+    fechasABorrar: async (desafio) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'DELETE FROM desafiosreclamados WHERE fecha = ? and id_usuario = ?';
+            connection.query(sql, [desafio.fecha, desafio.id_usuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
     desafiosCompletados: async (desafio) => {
         return new Promise((resolve, reject) => {
             const sql = 'SELECT fecha FROM desafiosreclamados WHERE id_usuario = ?';

@@ -664,12 +664,28 @@ app.post('/api/fechaDesafioCompletado', async (req, res) => {
         res.status(500).json({ message: 'Error', error: error.message });
     }
 });
+app.post('/api/fechasDesafiosABorrar', async (req, res) => {
+    console.log("Fechas a borrar", req.body);
+    const { fecha } = req.body;
+    const id_usuario = req.session.id_usuario;
 
-app.get('/api/desafiosCompletados', async (req, res) => {
+    try {
+        await database.fechasABorrar({
+            fecha,
+            id_usuario
+        });
+        res.status(201).json({ message: 'Fechas borradas con éxito' });
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+    }
+});
+app.get('/api/historialDesafiosCompletados', async (req, res) => {
     const id_usuario = req.session.id_usuario;
     try {
         const fechas = await database.desafiosCompletados(id_usuario);
-        console.log("Fechas:", fechas);
+        console.log("Fechas del usuario:",id_usuario, fechas);
         res.json(fechas);
     }
     catch (error) {
