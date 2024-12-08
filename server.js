@@ -258,6 +258,25 @@ app.post('/api/guardar-rutina', async (req, res) => {
     }
 });
 
+app.post('/api/guardar-rutina-existente', async (req, res) => {
+    try {
+        const { rutina, id_rutina } = req.body; 
+        
+        const rutinaArray = rutina[0].split(', ');
+        
+        const nombreRutina = rutinaArray[0];
+        const ejercicios = rutinaArray.slice(1);
+        const idRutina = id_rutina;
+
+        const resultado = await database.actualizarRutina(nombreRutina, ejercicios, idRutina);
+
+        res.status(200).json({ message: 'Rutina guardada correctamente', data: resultado });
+    } catch (error) {
+        console.error('Error al guardar la rutina:', error);
+        res.status(500).json({ error: 'Error al guardar la rutina.' });
+    }
+});
+
 
 app.get('/desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
@@ -375,6 +394,19 @@ app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) 
     }
 });
 
+app.post('/api/obtenerIdRutina', upload.single('imagen'), async (req, res) => {
+    try {
+        const { nombre_rutina } = req.body;
+
+        const id_rutina = await database.obtenerIdRutina(nombre_rutina);
+        
+        res.json({ id_rutina });
+
+    } catch (error) {
+        console.error('Error al obtener id_rutina:', error);
+        res.status(500).json({ error: 'Hubo un error al obtener la rutina' });
+    }
+});
 
 app.get('/previewTerminosCondiciones', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/noUserTerminosCondiciones.html'));

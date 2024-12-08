@@ -1,17 +1,36 @@
-
-
 document.getElementById('añadir-ejercicio').addEventListener('click', function() {
     abrirVentanaEmergente();
 });
 
-document.getElementById('rutina-actualizada').addEventListener('click', function() {
+document.getElementById('rutina-actualizada').addEventListener('click', async function() {
     const nuevo_nombre_rutina = document.getElementById('rutina-titulo').innerText;
     const nuevos_ejercicios_rutina = Array.from(document.querySelectorAll('.ejercicio h1'))
-                .map(ejercicio => ejercicio.innerText.replace(/^Ejercicio \d+:\s*/, '').trim()); // Eliminar "Ejercicio X: "
+        .map(ejercicio => ejercicio.innerText.replace(/^Ejercicio \d+:\s*/, '').trim())
+        .join(', ');
 
+    const guardar = [nuevo_nombre_rutina + ", " + nuevos_ejercicios_rutina];
 
-    const guardar = [nuevo_nombre_rutina, ...nuevos_ejercicios_rutina];
-    console.log("[Nombre, Ej1, Ej2, etc.]:", guardar);
+    try {
+        const response = await fetch('/api/guardar-rutina-existente', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                rutina: guardar,
+                id_rutina: idRutina
+            })
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            window.location.href = 'rutina';
+        } else {
+            console.error("Error al guardar la rutina:", result.error);
+        }
+    } catch (error) {
+        console.error('Error de comunicación con el servidor:', error);
+    }
 });
 
 
@@ -144,6 +163,7 @@ const divEjercicios = document.getElementById('div-ejercicios');
 
 let rutinaCargada = false;
 
+let  idRutina;
 
 let valor;
 async function cargarRutina() {
@@ -162,6 +182,15 @@ async function cargarRutina() {
         const rutinaTitulo = document.getElementById('rutina-titulo');
         if (rutinaTitulo) {
             rutinaTitulo.textContent = `${rutinaNombre}`;
+            respuesta = await fetch('/api/obtenerIdRutina', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nombre_rutina: rutinaNombre }),
+            });
+            const data = await respuesta.json();
+            idRutina = data.id_rutina;
         }
 
         const divEjercicios = document.getElementById('div-ejercicios');
@@ -221,7 +250,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 // Cargar el header y el footer con fetch
-fetch('../HTML/header.html')
+/*fetch('../HTML/header.html')
 .then(res => res.text())
 .then(html => {
     document.getElementById('header-container').innerHTML = html;
@@ -229,7 +258,7 @@ fetch('../HTML/header.html')
     script.src = '../JS/header.js';
     script.defer = true;
     document.body.appendChild(script);
-})
+})*/
 fetch('../HTML/footer.html')
 .then(response => response.text())
 .then(data => document.getElementById('footer-container').innerHTML = data);

@@ -125,8 +125,42 @@ const databaseMethods = {
             });
         });
     },
-       
 
+    actualizarRutina: async (nombreRutina, ejercicios, idRutina) => {
+        return new Promise((resolve, reject) => {
+            // Actualización de nombre_rutina
+            const sql = 'UPDATE rutina SET nombre_rutina = ? WHERE id_rutina = ?';
+    
+            connection.query(sql, [nombreRutina, idRutina], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+    
+                // Construir la lista de ejercicios en formato adecuado
+                const ejercicioNames = ejercicios.map(ejercicio => `'${ejercicio}'`).join(", ");
+                
+                // Actualización de la lista de ejercicios
+                const sqlUpdate = `
+                    UPDATE rutina
+                    SET lista_ejercicios = (
+                        SELECT GROUP_CONCAT(id_ejercicio ORDER BY FIELD(nombre_ejercicio, ${ejercicioNames}))
+                        FROM ejercicio
+                        WHERE nombre_ejercicio IN (${ejercicioNames})
+                    )
+                    WHERE id_rutina = ?;
+                `;
+    
+                connection.query(sqlUpdate, [idRutina], (errUpdate, resultUpdate) => {
+                    if (errUpdate) {
+                        return reject(errUpdate);
+                    }
+    
+                    resolve(resultUpdate);
+                });
+            });
+        });
+    },
+    
     obtenerRutinas: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
@@ -481,6 +515,24 @@ const databaseMethods = {
             });
         });
     },
+
+    obtenerIdRutina: async (nombre_rutina) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT id_rutina FROM rutina WHERE nombre_rutina = ? AND categoria = "Tus rutinas creadas"';
+            
+            connection.query(sql, [nombre_rutina], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    if (results.length > 0) {
+                        resolve(results[0].id_rutina); 
+                    } else {
+                        reject('No se encontró la rutina'); 
+                    }
+                }
+            });
+        });
+    },      
 
     //Ejercicio
     convertirBlobImagenEj: async (nombre_ejercicio) => {
