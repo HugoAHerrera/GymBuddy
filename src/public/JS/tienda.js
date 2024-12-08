@@ -1,10 +1,9 @@
 let productosTodos = [];
-let indiceActual = 0; // Índice para controlar cuántos productos se muestran
+let indiceActual = 0;
 
 // Función para cargar los productos desde la base de datos
 async function cargarProductos() {
     try {
-        // Hacer una solicitud GET para obtener los productos
         const response = await fetch('/api/productos');
         
         if (!response.ok) {
@@ -12,8 +11,8 @@ async function cargarProductos() {
         }
         
         const productos = await response.json();
-        productosTodos = productos; // Guardamos los productos en la variable global
-        mostrarProductosIniciales(); // Mostrar los primeros productos
+        productosTodos = productos;
+        mostrarProductosIniciales();
     } catch (error) {
         console.error('Error al cargar los productos:', error);
     }
@@ -51,7 +50,7 @@ async function cargarOfertasActuales() {
         const seccionOfertasActuales = document.getElementById("ofertas-actuales");
 
         ofertas.forEach(producto => {
-            const tarjetaProducto = crearTarjetaProducto(producto); // Reutilizamos la función para crear tarjetas
+            const tarjetaProducto = crearTarjetaProducto(producto);
             seccionOfertasActuales.appendChild(tarjetaProducto);
         });
     } catch (error) {
@@ -139,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    cargarOfertasActuales(); // Llamada para "Ofertas Actuales"
+    cargarOfertasActuales();
 });
 
 

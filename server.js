@@ -773,7 +773,6 @@ app.get('/api/recuperarDinero', async (req, res) => {
     }
 });
 
-// Ruta para obtener productos del carrito
 app.get('/api/obtenerCarro', async (req, res) => {
     const idUsuario = req.session.id_usuario;
     console.log('idUsuario en backend:', idUsuario);
@@ -857,7 +856,7 @@ app.get('/api/mas-vendidos', async (req, res) => {
 
 app.get('/api/ofertas-actuales', async (req, res) => {
     try {
-        const ofertas = await database.obtenerOfertasActuales(); // Nueva función en database.js
+        const ofertas = await database.obtenerOfertasActuales();
         res.status(200).json(ofertas);
     } catch (error) {
         console.error('Error al obtener las ofertas actuales:', error);
