@@ -158,6 +158,24 @@ h2 {
     background-color: #005f8a;
 }
 
+#boton-imc {
+    width: 80%;               /* Hace que el botón ocupe el 60% del ancho disponible */
+    padding: 1% 0;  
+    margin-left: 7.5%; 
+    position: center;         /* Reduce el grosor del botón (espaciado arriba y abajo) */
+    font-size: 2vw;           /* Establece el tamaño de fuente en función del ancho de la ventana */
+    text-align: center;       /* Centra el texto dentro del botón */
+    cursor: pointer;         /* Cambia el cursor al pasar sobre el botón */
+    background-color: #4CAF50; /* Color de fondo */
+    color: white;             /* Color del texto */
+    border: none;             /* Quita los bordes */
+    border-radius: 5px;       /* Bordes redondeados */
+  }
+  
+  #boton-imc:hover {
+    background-color: #45a049; /* Color de fondo cuando se pasa el ratón */
+  }
+
 input[type="text"],
 input[type="email"],
 input[type="file"] {

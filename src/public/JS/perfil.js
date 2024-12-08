@@ -78,6 +78,17 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => {
             console.error('Error al cargar los datos del usuario:', error);
         });
+        fetch('/api/tiempoEjercicio')
+        .then(response => response.json())
+        .then(data2 => {
+            // Rellenamos el párrafo con los datos obtenidos
+            console.log("Entra:", data2)
+            document.getElementById('tiempo-ejercicio').innerText = data2.tiempo + " segundos";
+        })
+        .catch(error => {
+            console.error('Error al obtener los datos:', error);
+        });
+    
 });
 
 async function cargarImagenUsuario() {

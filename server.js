@@ -417,12 +417,30 @@ app.listen(PORT, async () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
+app.get('/IMC', (req,res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/imc.html'));
+})
+
 app.get('/perfil', (req, res) => {
     if (!req.session.id_usuario) {
         return res.status(400).send('ID de usuario no proporcionado');
     }
     console.log('Perfil:',req.session.id_usuario)
     res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
+});
+
+
+app.get('/api/tiempoEjercicio', async (req, res) => {
+    try {
+        const tiempo_lista = await database.obtenertiempoEjercicio(13);
+        const tiempo = tiempo_lista[0].total_tiempo;
+        res.json({
+            tiempo: tiempo
+        });
+    } catch (error) {
+        console.error('Error al obtener los datos del usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
 });
 
 app.post('/api/blob', upload.single('imagen'), async (req, res) => {

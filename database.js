@@ -502,7 +502,21 @@ const databaseMethods = {
         });
     },
 
-    // PERFIL
+    // 
+    obtenertiempoEjercicio: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT SUM(tiempo_total) AS total_tiempo FROM gymbuddy.sesion WHERE id_usuario = ?'
+            connection.query(sql, [idUsuario], (err, results) => {
+                    try {
+        
+                        resolve(results);
+                    } catch (error) {
+                        reject(error);
+                    }
+                });
+        });
+    },
+
     cambiarNombreUsuario: async (idUsuario, nuevoNombre) => {
         return new Promise((resolve, reject) => {
             // Asegúrate de que la columna a actualizar sea 'nombre_usuario' y que el valor 'nuevoNombre' se pase correctamente.
