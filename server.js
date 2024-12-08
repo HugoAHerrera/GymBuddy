@@ -729,6 +729,34 @@ app.get('/api/historialDesafiosCompletados', async (req, res) => {
         res.status(500).json({ message: 'Error', error: error.message });
     }
 });
+app.post('/api/annadirDineroDesafio', async (req, res) => {
+    console.log("Dinero añadido", req.body);
+    const { dinero } = req.body;
+    const id_usuario = req.session.id_usuario;
+    try {
+        await database.annadirDineroDesafio({
+            dinero,
+            id_usuario
+        });
+        res.status(201).json({ message: 'Dinero añadido con éxito' });
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+    }
+});
+app.get('/api/recuperarDinero', async (req, res) => {
+    const id_usuario = req.session.id_usuario;
+    try {
+        const dinero = await database.recuperarDinero(id_usuario);
+        console.log("Dinero del usuario:",id_usuario, dinero);
+        res.json(dinero)
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+    }
+});
 
 // Ruta para obtener productos del carrito
 app.get('/api/obtenerCarro', async (req, res) => {

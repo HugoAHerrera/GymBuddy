@@ -396,7 +396,24 @@ const databaseMethods = {
             });
         });
     },
-
+    annadirDineroDesafio: async (desafio) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'UPDATE usuario SET KC = ? WHERE id_usuario = ?';
+            connection.query(sql, [desafio.dinero, desafio.id_usuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+    recuperarDinero: async (desafio) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT KC FROM usuario WHERE id_usuario = ?';
+            connection.query(sql, [desafio], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
     // GUÍA DE EJERCICIOS
     obtenerDescripcionEjercicios: async (nombreEjercicio) => {
         return new Promise((resolve, reject) => {

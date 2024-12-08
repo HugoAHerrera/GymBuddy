@@ -4,11 +4,14 @@ var block_3 = 0;
 var cerrojo = 1;
 
 var fechasFormateadas = [];
+var dinero = 0;
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         const response = await fetch('/api/recuperarMetas');
         const desafiosBBDD = await response.json();
-        console.log(desafiosBBDD);
+
+        const result = await fetch('/api/recuperarDinero');
+        dinero = await result.json();
 
         const desafiosCompletados = await fetch('/api/historialDesafiosCompletados');
         const claims = await desafiosCompletados.json();
@@ -19,7 +22,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             const anio = fecha.getFullYear();
             return `${anio}-${mes}-0${dia}`;
         });
-        console.log(fechasFormateadas);
 
         if(desafiosBBDD.length > 0) {
             desafiosBBDD.forEach(desafio => {
@@ -34,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.querySelector(".oculto").addEventListener("click", CancelarBorrarMetas);
     }
     catch (error) {
-        console.error('Error al cargar las metas:', error);
+        console.error('Error al cargar los datos:', error);
     }
 });
 
@@ -244,7 +246,6 @@ function GoalDescription(progressContainer) {
         return desc.replace("Objetivo:", '');
     }
     else {
-        //alert("Es obligatorio poner una descripción.");
         Swal.fire({
                 title: "Es obligatorio poner una descripción.",
                 confirmButtonText: 'Okey',
@@ -263,31 +264,32 @@ function RequestReward(KC) {
     const lastClaim = fechasFormateadas.at(-1);
     if(fechasFormateadas.length > 0) {
         if (lastClaim < new Date().toISOString().split('T')[0]) {
-            console.log("Toca borrar las fechas de dia:", lastClaim, "o anteriores. Ya puedes reclamar.");
             borrarFechaPreviasBBDD(fechasFormateadas.at(-1));
             fechasFormateadas.length = 0;   // vacio la lista
             fechasFormateadas.push(new Date().toISOString().split('T')[0]);
             annadirFechaReclamacionBBDD(new Date().toISOString().split('T')[0]);
-            console.log(fechasFormateadas);
-            console.log(`Has reclamado ${KC}`);
+            annadirDinero(KC);
         } else {
             if (fechasFormateadas.length >= 2) {
-                console.log("Ya has reclamado las maximas recompensas diarias");
+                Swal.fire({
+                    title: "Ya has reclamado las maximas recompensas diarias. (2 máx.)",
+                    confirmButtonText: 'Joe',
+                    confirmButtonColor: '#3085d6',
+                    backdrop: true,
+                    allowOutsideClick: true,
+                    allowEscapeKey: true,
+                });
             } else {
-                console.log("Puedes reclamar otra recompensa hoy");
                 fechasFormateadas.push(new Date().toISOString().split('T')[0]);
                 annadirFechaReclamacionBBDD(new Date().toISOString().split('T')[0]);
-                console.log(fechasFormateadas);
-                console.log(`Has reclamado ${KC}`);
+                annadirDinero(KC);
             }
         }
     }
     else {
-        console.log("Parecia no ibas a cobrar pero si");
         fechasFormateadas.push(new Date().toISOString().split('T')[0]);
         annadirFechaReclamacionBBDD(new Date().toISOString().split('T')[0]);
-        console.log(fechasFormateadas);
-        console.log(`Has reclamado ${KC}`);
+        annadirDinero(KC);
     }
 }
 
@@ -313,7 +315,6 @@ function autoProgreso() {
                         borrarMetaBBDD(title.textContent);
                     }, 1000);
                     setTimeout(() => {
-                        console.log("Acualizando en la BBDD...");
                         actualizarMetasBBDD();
                     }, 2000);
 
@@ -504,21 +505,29 @@ function annadirFechaReclamacionBBDD(date) {
 }
 
 function borrarFechaPreviasBBDD(date) {
-
-    const [anio, mes, dia] = date.split('-');
-    // Regresamos un objeto Date con la hora configurada a 23:00:00
-    const fechaOriginal = new Date(Date.UTC(anio, mes - 1, dia - 1, 23, 0, 0, 0));
-
     const fechaObsoleta = {
-        fecha: date //claims[2]
+        fecha: date
     };
-    console.log(fechaObsoleta);
 
     $.ajax({
         url: '/api/fechasDesafiosABorrar',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(fechaObsoleta)
+    });
+}
+
+function annadirDinero(KC) {
+    dinero[0].KC += parseInt(KC);
+    const masCantidad = {
+        dinero: dinero[0].KC
+    };
+
+    $.ajax({
+        url: '/api/annadirDineroDesafio',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(masCantidad)
     });
 }
 
