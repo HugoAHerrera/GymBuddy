@@ -1,44 +1,143 @@
-/* Contenedor principal de contacto */
-.contact-container {
-    max-width: 600px;
-    margin: 30px auto;
-    padding: 20px;
-    background-color: rgb(188, 223, 255);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgb(2, 126, 243);
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.contact-container h2 {
-    color: black;
-    text-align: center;
+.required {
+    color: red;
+    font-size: 0.9em;
+}
+
+.optional {
+    color: green;
+    font-size: 0.9em;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 20px;
-    text-decoration: underline;
 }
 
-.contact-container label {
+.title {
+    font-size: 2.5rem;
     font-weight: bold;
-    color: black;
-    margin-top: 10px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 0;
 }
 
-.contact-container input,
-.contact-container textarea {
+.logo {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+}
+
+.center-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; 
+    width: 80%;
+    max-width: 600px;
+    height: 120%;
+    margin: auto; 
+    background-color: rgb(228, 237, 247); 
+    padding: 20px;
+    border-radius: 2%; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(188, 223, 255); 
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    box-sizing: border-box;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    padding: 10px;
-    margin-top: 5px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+#form-container{
+    width: 90%;
+    max-width: 90%;
+}
+
+input, select, textarea, button {
     margin-bottom: 15px;
-    border: 2px solid rgb(0, 104, 202);
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
     outline: none;
-    transition: border-color 0.3s ease;
+    border-color: rgb(204, 223, 244); 
+    box-shadow: 0 0 5px rgba(204, 223, 244, 0.5);
 }
 
-.contact-container input:focus,
-.contact-container textarea:focus {
-    border-color: rgb(0, 91, 175);
+textarea {
+    resize: none;
+    height: 100px;
 }
 
-.contact-container button {
-    background-color: rgb(blue);
+button {
+    background-color: rgb(188, 223, 255); 
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+button:hover {
+    background-color: rgb(204, 223, 244);
+}
+
+button:active {
+    transform: scale(0.95);
+    background-color: #e0e0e0;
+}
+
+#confirmation-message {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#footer-container{
+    min-width: 100%;
+    height: 10%;
 }

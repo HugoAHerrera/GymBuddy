@@ -867,6 +867,10 @@ app.get('/api/obtenerProductos', async (req, res) => {
     }
 });
 
+app.get('/soporteCliente', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/contacto.html'));
+});
+
 //No definido = error.html
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'src/public/HTML/error.html'));
