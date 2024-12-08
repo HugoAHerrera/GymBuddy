@@ -867,3 +867,7 @@ app.get('/api/obtenerProductos', async (req, res) => {
     }
 });
 
+//No definido = error.html
+app.use((req, res) => {
+    res.status(404).sendFile(path.join(__dirname, 'src/public/HTML/error.html'));
+});
