@@ -155,7 +155,8 @@ function crearNuevaMeta() {
         }
     }
     else {
-        Swal.fire({
+        if (titulosMetas.length > 9 && block_2 === 1){
+            Swal.fire({
                 title: `No puedes crear mas metas en este momento. (10 máx.)`,
                 confirmButtonText: 'Okey',
                 confirmButtonColor: '#3085d6',
@@ -163,6 +164,17 @@ function crearNuevaMeta() {
                 allowOutsideClick: true,
                 allowEscapeKey: true,
             });
+        }
+        else {
+            Swal.fire({
+                title: `No puedes crear metas mientras borras otras.`,
+                confirmButtonText: 'Okey',
+                confirmButtonColor: '#3085d6',
+                backdrop: true,
+                allowOutsideClick: true,
+                allowEscapeKey: true,
+            });
+        }
     }
 }
 
