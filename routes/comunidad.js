@@ -17,6 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 // Enviar mensaje a una comunidad
+// Enviar mensaje a una comunidad
 router.post('/', async (req, res) => {
     const { contenido, comunidad, id_emisor } = req.body;
     if (!contenido || !comunidad || !id_emisor) {
@@ -25,11 +26,16 @@ router.post('/', async (req, res) => {
 
     const fecha = new Date();
     const hora = fecha.toLocaleTimeString(); // Obtiene la hora actual
-    const fechaHoy = fecha.toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
+    const fechaHoy = fecha.toISOString().split('T')[0]; // Fecha en formato YYYY-MM-DD
 
     try {
-        const sql = 'INSERT INTO mensajes (id_emisor, contenido, receptor, hora, fecha) VALUES (?, ?, ?, ?, ?)';
-        await database.query(sql, [id_emisor, contenido, comunidad, hora, fechaHoy]);
+        await database.agregarMensaje({
+            id_emisor,
+            receptor: comunidad,
+            contenido,
+            hora,
+            fecha: fechaHoy
+        });
 
         res.status(200).json({ message: 'Mensaje enviado con éxito' });
     } catch (error) {
@@ -37,5 +43,6 @@ router.post('/', async (req, res) => {
         res.status(500).json({ error: 'Error al guardar el mensaje' });
     }
 });
+
 
 module.exports = router;

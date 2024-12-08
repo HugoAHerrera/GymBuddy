@@ -728,6 +728,22 @@ const databaseMethods = {
         });
     },
 
+    obtenerMensajesComunidad: async (comunidad) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT m.*, u.nombre_usuario 
+                FROM mensajes m
+                JOIN usuario u ON m.id_emisor = u.id_usuario
+                WHERE m.receptor = ?
+                ORDER BY m.fecha DESC, m.hora DESC
+            `;
+            connection.query(sql, [comunidad], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
 
 };
 
