@@ -102,9 +102,10 @@ input[type="number"] {
     border-radius: 5px;
 }
 
-#ejercicio-imagen{
-    height: auto;
-    width: 90%;
+#ejercicio-imagen {
+    height: 50%;
+    width: auto;
+    object-fit: cover;
 }
 
 .btn-guia {

@@ -256,7 +256,7 @@ const databaseMethods = {
         return new Promise((resolve, reject) => {
             // Consulta SQL parametrizada
             const sql = `
-                SELECT categoria, lista_ejercicios FROM rutina`;
+                SELECT categoria, lista_ejercicios FROM gymbuddy.rutina WHERE categoria != 'tus rutinas creadas';`;
             // Ejecutar la consulta SQL usando el conector de la base de datos (mysql2, por ejemplo)
             connection.query(sql, (err, results) => {
                 if (err) {
@@ -492,13 +492,15 @@ const databaseMethods = {
                     return reject(err); 
                 }
     
-                if (results.length === 0) {
-                    return reject(new Error('No se encontró ninguna imagen para este ejercicio.'));
+                if (results.length === 0 || !results[0].imagen) {
+                    // Si no se encuentra la imagen o la columna imagen es NULL, devolver la imagen por defecto
+                    return resolve('../Imagenes/curl_pesas.png');  // Ruta de la imagen por defecto
                 }
     
                 try {
                     const blob = results[0].imagen;
-                    
+    
+                    // Convertir el blob a base64
                     const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
     
                     resolve(base64Image);
@@ -507,9 +509,7 @@ const databaseMethods = {
                 }
             });
         });
-    },
-    
-    
+    },    
 
     obtenerDatosUsuario: async (idUsuario) => {
         return new Promise((resolve, reject) => {
@@ -713,7 +713,7 @@ const databaseMethods = {
         });
     },
 
-    obtenerProductosComprados: async (idUsuario) => {
+    obtenerPedido: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
             SELECT tienda.nombreArticulo AS nombreProducto, tienda.descuentoArticulo AS descuento, tienda.precio AS precio

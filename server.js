@@ -197,6 +197,10 @@ app.get('/rutina-concreta', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_concreta.html'));
 });
 
+app.get('/editar-rutina', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_editar.html'));
+});
+
 app.get('/rutina-nueva', (req,res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_nueva.html'));
 })
@@ -849,18 +853,17 @@ app.post('/api/pasarAPedido', async (req, res) => {
 });
 
 app.get('/api/obtenerProductos', async (req, res) => {
-    const idUsuario = req.session.id_usuario;
+    const idUsuario = req.session.id_usuario; // Obtener el ID del usuario desde la sesión
     if (!idUsuario) {
-        return res.status(401).json({ message: 'Usuario no autenticado' });
+        return res.status(401).json({ message: 'Usuario no autenticado.' }); // Asegúrate de manejar usuarios no autenticados
     }
     try {
-        const productos = await database.obtenerProductosComprados(idUsuario);
-        if (productos.length === 0) {
-            return res.status(404).json({ message: 'No se encontraron productos comprados.' });
-        }
-        res.json(productos);
+        const productos = await database.obtenerPedido(idUsuario);
+        console.log('Productos obtenidos:', productos);
+        res.json(productos); // Devolvemos los productos comprados como respuesta
     } catch (error) {
         console.error('Error al obtener productos:', error);
         res.status(500).json({ message: 'Error al obtener productos comprados.' });
     }
 });
+
