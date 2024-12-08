@@ -24,11 +24,14 @@
 
         <div class="progress-container">
             <!-- Contenedor de las gráficas en formato vertical -->
-
             <div class="chart-section-container">
                 <div class="chart-section" id="tiempo" onclick="expandChart('tiempo')">
-                    <h3>Tiempo</h3>
+                    <h3>TiempoXSesion</h3>
                     <canvas id="chart-tiempo"></canvas>
+                </div>
+                <div class="chart-section" id="rutina" onclick="expandChart('rutina')">
+                    <h3>Rutinas</h3>
+                    <canvas id="chart-rutinas"></canvas>
                 </div>
             </div>
         </div>
@@ -38,7 +41,7 @@
             <img src="../Imagenes/avatar.jpg" alt="Avatar del usuario" class="user-avatar">
             <div class="user-stats">
                 <p><strong>Sesiones Completadas:</strong> <span id="sesiones-completadas"></span></p>
-                <p><strong>Distancia recorrida:</strong> <span id="distancia-recorrida"></span> km</p>
+                <p><strong>Tiempo total:</strong> <span id="distancia-recorrida"></span> min</p>
                 <p><strong>Última sesión:</strong> <span id="ultima-sesion"></span></p>
             </div>
         </div>

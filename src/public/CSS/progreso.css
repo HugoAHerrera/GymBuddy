@@ -23,15 +23,25 @@ main {
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 10px;
-    padding: 15px;
+    padding: 25px; /* Aumenta el padding para dar más espacio a las gráficas */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease-in;
     cursor: pointer;
-    height: 150px;
+    height: 250px; /* Aumenta la altura del contenedor de la gráfica */
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative; /* Permite posicionar los elementos internos */
 }
+.chart-section h3 {
+    position: absolute; /* Posiciona el título de forma absoluta respecto al contenedor */
+    top: 10px; /* Ajusta la distancia desde la parte superior */
+    left: 10px; /* Mueve el título hacia la izquierda */
+    margin: 0; /* Elimina el margen por defecto */
+    font-size: 18px; /* Ajusta el tamaño de la fuente según lo necesites */
+    font-weight: bold; /* Puedes cambiar el peso de la fuente si lo deseas */
+}
+
 
 .user-info {
     flex: 1;
