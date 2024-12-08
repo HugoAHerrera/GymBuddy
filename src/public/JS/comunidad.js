@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUserId = null;
     let currentUserName = null;
 
-    // Obtener usuario actual
     async function getCurrentUser() {
         try {
             const response = await fetch('/api/mi-usuario');
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Cargar mensajes de la comunidad actual
     async function loadMessages(comunidad) {
         try {
             const response = await fetch(`/api/mensajes?comunidad=${encodeURIComponent(comunidad)}`);
@@ -40,15 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Renderizar los mensajes
     function renderMessages(messages) {
         chatMessages.innerHTML = '';
+
+        // Ordenar mensajes por fecha/hora ascendente sin tocar la BBDD
+        messages.sort((a, b) => {
+            const fechaA = new Date(a.fecha + ' ' + a.hora);
+            const fechaB = new Date(b.fecha + ' ' + b.hora);
+            return fechaA - fechaB;
+        });
 
         messages.forEach(msg => {
             const msgDiv = document.createElement('div');
             msgDiv.classList.add('message');
 
-            // Si el mensaje es del usuario actual, 'sent', si no 'received'
             if (msg.id_emisor === currentUserId) {
                 msgDiv.classList.add('sent');
             } else {
@@ -76,11 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages.appendChild(msgDiv);
         });
 
-        // Scroll al final
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Ya no hacemos scrollTop = scrollHeight, así no se baja la barra automáticamente
+        // chatMessages.scrollTop = chatMessages.scrollHeight;  // Eliminado
     }
 
-    // Enviar mensaje
     async function sendMessage() {
         const contenido = messageInput.value.trim();
         if (!contenido) return;
@@ -114,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Cambiar de comunidad al hacer clic
     communityList.addEventListener('click', (e) => {
         if (e.target.tagName === 'LI') {
             const lis = communityList.querySelectorAll('li');
@@ -138,14 +139,14 @@ document.addEventListener('DOMContentLoaded', () => {
         await getCurrentUser();
         loadMessages(currentCommunity);
 
-        // Actualizar mensajes cada segundo
+        // Se sigue actualizando cada segundo, si lo deseas
         setInterval(() => {
             loadMessages(currentCommunity);
         }, 1000);
     })();
 });
 
-// Cargar el header y el footer con fetch
+// Cargar el header y el footer
 fetch('../HTML/header.html')
 .then(res => res.text())
 .then(html => {
