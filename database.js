@@ -256,7 +256,7 @@ const databaseMethods = {
         return new Promise((resolve, reject) => {
             // Consulta SQL parametrizada
             const sql = `
-                SELECT categoria, lista_ejercicios FROM rutina`;
+                SELECT categoria, lista_ejercicios FROM gymbuddy.rutina WHERE categoria != 'tus rutinas creadas';`;
             // Ejecutar la consulta SQL usando el conector de la base de datos (mysql2, por ejemplo)
             connection.query(sql, (err, results) => {
                 if (err) {
