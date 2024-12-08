@@ -103,6 +103,13 @@ body {
     text-align: right;
 }
 
+/* Aquí ponemos la hora a la izquierda en los mensajes enviados */
+.sent .time {
+    left: 5px;
+    right: auto;
+    text-align: left;
+}
+
 /* Mensajes recibidos (otros usuarios) */
 .message.received {
     background: #ededed;

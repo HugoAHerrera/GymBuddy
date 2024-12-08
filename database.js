@@ -587,7 +587,7 @@ const databaseMethods = {
                 FROM mensajes m
                 JOIN usuario u ON m.id_emisor = u.id_usuario
                 WHERE m.receptor = ?
-                ORDER BY m.fecha ASC, m.hora ASC
+                ORDER BY m.fecha DESC , m.hora DESC 
             `;
             connection.query(sql, [receptor], (err, results) => {
                 if (err) return reject(err);

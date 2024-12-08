@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUserId = null;
     let currentUserName = null;
 
-    // Primero obtenemos el usuario actual
+    // Obtener usuario actual
     async function getCurrentUser() {
         try {
             const response = await fetch('/api/mi-usuario');
@@ -43,18 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Renderizar los mensajes
     function renderMessages(messages) {
         chatMessages.innerHTML = '';
-        // Asumimos que `messages` es un array de objetos con {id_mensaje, id_emisor, contenido, receptor, hora, fecha}
-        // Sería ideal que devuelvan también el nombre_usuario del emisor.
-        // Si no lo hace, tendremos que hacer una segunda petición.
-        // Aquí asumiremos que el endpoint actual solo devuelve mensajes.
-        // Si no incluye el nombre del usuario, tendremos que modificar el backend o hacer otra petición.
-        // Por ahora, supondré que el backend ya los devuelve con un JOIN que retorne 'nombre_usuario'.
 
         messages.forEach(msg => {
             const msgDiv = document.createElement('div');
             msgDiv.classList.add('message');
 
-            // Comprobar si el mensaje es del usuario actual
+            // Si el mensaje es del usuario actual, 'sent', si no 'received'
             if (msg.id_emisor === currentUserId) {
                 msgDiv.classList.add('sent');
             } else {
@@ -71,10 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const timeEl = document.createElement('div');
             timeEl.classList.add('time');
-            // Formatear fecha y hora si se requiere
-            const fecha = new Date(msg.fecha);
-            const hora = msg.hora;
-            timeEl.textContent = `${fecha.toLocaleDateString()} ${hora}`;
+            const fecha = new Date(msg.fecha + ' ' + msg.hora);
+            const horaFormateada = fecha.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+            timeEl.textContent = horaFormateada;
 
             msgDiv.appendChild(senderEl);
             msgDiv.appendChild(contentEl);
@@ -141,10 +134,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Inicializar
     (async function init() {
         await getCurrentUser();
         loadMessages(currentCommunity);
+
+        // Actualizar mensajes cada segundo
+        setInterval(() => {
+            loadMessages(currentCommunity);
+        }, 1000);
     })();
 });
 
