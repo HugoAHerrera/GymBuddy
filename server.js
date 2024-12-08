@@ -559,18 +559,15 @@ app.post('/api/descripcion', async (req, res) => {
 app.get('/api/sesiones', async (req, res) => {
     const { periodo } = req.query;
     const idUsuario = req.session.id_usuario;
-
     if (!idUsuario) {
         return res.status(400).json({ error: 'No se ha encontrado el id_usuario en la sesión' });
     }
-
     try {
         const sesiones = await database.obtenerSesiones(idUsuario, periodo);
         console.log(sesiones);
         res.json(sesiones);
     } catch (error) {
         console.error('Error al obtener sesiones:', error);
-
         if (error.message === 'Periodo no válido') {
             res.status(400).json({ error: 'El periodo especificado no es válido' });
         } else {
@@ -578,6 +575,24 @@ app.get('/api/sesiones', async (req, res) => {
         }
     }
 });
+
+app.get('/api/rutinasHechas', async (req, res) => {
+    const { periodo } = req.query;
+    const idUsuario = req.session.id_usuario;
+    console.log('idUsuario:', idUsuario);
+    if (!idUsuario) {
+        return res.status(400).json({ error: 'No se ha encontrado el id_usuario en la sesión' });
+    }
+    try {
+        const rutinasHechas = await database.obtenerRutinasSesiones(idUsuario, periodo);
+        console.log(rutinasHechas);
+        res.json(rutinasHechas);
+    } catch (error) {
+        console.error('Error al obtener rutinasHechas', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 
 app.get('/api/estadisticas/', async (req, res) => {
     const idUsuario = req.session.id_usuario;

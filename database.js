@@ -221,7 +221,6 @@ const databaseMethods = {
         return new Promise((resolve, reject) => {
             let sql = 'SELECT id_sesion, id_usuario, id_rutina, tiempo_total, fecha FROM sesion WHERE id_usuario = ?';
             let params = [idUsuario]; // Se pasa idUsuario como parámetro de la consulta
-
             // Filtrar por periodo si se especifica
             if (periodo) {
                 switch (periodo) {
@@ -257,7 +256,7 @@ const databaseMethods = {
                     idSesion: row.id_sesion,
                     idUsuario: row.id_usuario,
                     idRutina: row.id_rutina,
-                    tiempoTotal: row.tiempo_total,
+                    tiempo_total: row.tiempo_total,
                     fecha: row.fecha,
                 }));
 
@@ -266,7 +265,46 @@ const databaseMethods = {
         });
     },
 
+    obtenerRutinasSesiones: async (idUsuario, periodo = null) => {
+        return new Promise((resolve, reject) => {
+            let sql = 'SELECT rutina.id_rutina, rutina.nombre_rutina, COUNT(sesion.id_sesion) AS total_rutina FROM sesion INNER JOIN rutina ON sesion.id_rutina = rutina.id_rutina WHERE sesion.id_usuario = ? GROUP BY rutina.id_rutina, rutina.nombre_rutina';
+            let params = [idUsuario]; // Se pasa idUsuario como parámetro de la consulta
+            // Filtrar por periodo si se especifica
+            if (periodo) {
+                switch (periodo) {
+                    case 'semana':
+                        // Filtrar por la semana actual (de lunes a domingo)
+                        sql += ' AND sesion.fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE())) DAY ' +
+                            'AND sesion.fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY';
+                        break;
+                    case 'mes':
+                        // Filtrar por el mes actual (del primer día al último día del mes)
+                        sql += ' AND MONTH(sesion.fecha) = MONTH(CURDATE()) AND YEAR(sesion.fecha) = YEAR(CURDATE())';
+                        break;
+                    case 'año':
+                        // Filtrar por el año actual
+                        sql += ' AND YEAR(sesion.fecha) = YEAR(CURDATE())';
+                        break;
+                    case 'total':
+                        // Seleccionar todos los registros sin filtro adicional
+                        sql += ' AND sesion.fecha IS NOT NULL';
+                        break;
+                    default:
+                        return reject(new Error('Periodo no válido'));
+                }
+            }
+            // Ejecutar la consulta
+            connection.query(sql, params, (err, results) => {
+                if (err) return reject(err);
+                const rutinas = results.map(row => ({
+                    nombre_rutina: row.nombre_rutina,
+                    total_rutina: row.total_rutina
+                }));
 
+                resolve(rutinas);
+            });
+        });
+    },
 
     obtenerEstadisticasSesiones: async (idUsuario) => {
         console.log('idUsuario:', idUsuario);
