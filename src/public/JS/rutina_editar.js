@@ -4,6 +4,16 @@ document.getElementById('añadir-ejercicio').addEventListener('click', function(
     abrirVentanaEmergente();
 });
 
+document.getElementById('rutina-actualizada').addEventListener('click', function() {
+    const nuevo_nombre_rutina = document.getElementById('rutina-titulo').innerText;
+    const nuevos_ejercicios_rutina = Array.from(document.querySelectorAll('.ejercicio h1'))
+                .map(ejercicio => ejercicio.innerText.replace(/^Ejercicio \d+:\s*/, '').trim()); // Eliminar "Ejercicio X: "
+
+
+    const guardar = [nuevo_nombre_rutina, ...nuevos_ejercicios_rutina];
+    console.log("[Nombre, Ej1, Ej2, etc.]:", guardar);
+});
+
 
 // Abrir el modal
 function abrirVentanaEmergente() {
@@ -151,7 +161,7 @@ async function cargarRutina() {
 
         const rutinaTitulo = document.getElementById('rutina-titulo');
         if (rutinaTitulo) {
-            rutinaTitulo.textContent = `Rutina de ${rutinaNombre}`;
+            rutinaTitulo.textContent = `${rutinaNombre}`;
         }
 
         const divEjercicios = document.getElementById('div-ejercicios');
@@ -267,7 +277,9 @@ document.body.addEventListener('click', (event) => {
             // Reindexar los ejercicios restantes
             [...contenedor.children].forEach((ejercicioDiv, newIndex) => {
                 const h1Element = ejercicioDiv.querySelector('h1');
+                const imagen = ejercicioDiv.querySelector("img");
                 // Actualizar el índice de cada ejercicio
+                imagen.alt = `Ejercicio ${newIndex + 1}`;
                 h1Element.textContent = `Ejercicio ${newIndex + 1}: ${h1Element.textContent.split(': ')[1]}`;
             });
         }
@@ -275,7 +287,7 @@ document.body.addEventListener('click', (event) => {
 });
 
 // Función para agregar un nuevo ejercicio
-function confirmarEjercicio() {
+async function confirmarEjercicio() {
     const contenedor = document.getElementById("div-ejercicios");
 
     // Obtener el ejercicio seleccionado
@@ -289,8 +301,26 @@ function confirmarEjercicio() {
     const ejercicio = document.createElement("div");
     ejercicio.classList.add("ejercicio");
 
+    const respuesta = await fetch('/api/blobAImagenEjercicio', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+            body: JSON.stringify({ nombre_ejercicio: `${ejercicioSeleccionado.querySelector('h2').textContent}` }),
+    });
+
+    if (!respuesta.ok) {
+        throw new Error('No se pudo cargar la imagen del ejercicio');
+    }
+
+    const datos = await respuesta.json();
+
+    if (!datos.imagen) {
+        console.error('No se recibió una imagen válida.');
+    }
     // Crear la imagen del ejercicio
     const imagen = document.createElement("img");
+    imagen.src = `${datos.imagen}`;
     imagen.alt = `Ejercicio ${contenedor.children.length + 1}`;  // Asignar el nuevo índice
     imagen.classList.add("imagen_ejercicio");
 
