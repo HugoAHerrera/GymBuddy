@@ -770,6 +770,26 @@ app.get('/api/productos', async (req, res) => {
     }
 });
 
+app.get('/api/mas-vendidos', async (req, res) => {
+    try {
+        const masVendidos = await database.obtenerMasVendidos();
+        res.status(200).json(masVendidos);
+    } catch (error) {
+        console.error('Error al obtener los productos más vendidos:', error);
+        res.status(500).json({ message: 'Error al obtener los productos más vendidos' });
+    }
+});
+
+app.get('/api/ofertas-actuales', async (req, res) => {
+    try {
+        const ofertas = await database.obtenerOfertasActuales(); // Nueva función en database.js
+        res.status(200).json(ofertas);
+    } catch (error) {
+        console.error('Error al obtener las ofertas actuales:', error);
+        res.status(500).json({ message: 'Error al obtener las ofertas actuales' });
+    }
+});
+
 app.post('/api/guardarDatosTarjeta', async (req, res) => {
     const { numero_tarjeta, fecha_caducidad, CVV } = req.body;
     const idUsuario = req.session.id_usuario;

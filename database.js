@@ -691,7 +691,6 @@ const databaseMethods = {
         });
     },
     
-
     obtenerProductos: async () => {
         return new Promise((resolve, reject) => {
             const sql = 'SELECT * FROM tienda';
@@ -702,6 +701,34 @@ const databaseMethods = {
         });
     },
 
+    obtenerMasVendidos: async () => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT * 
+                FROM tienda
+                ORDER BY unidadesVendidas DESC
+                LIMIT 3`;
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    obtenerOfertasActuales: async () => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT * 
+                FROM tienda
+                ORDER BY descuentoArticulo DESC
+                LIMIT 3`;
+            connection.query(sql, (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+    
     // Función para guardar los datos de la tarjeta en la base de datos
     guardarDatosTarjeta: async (idUsuario, numeroTarjeta, fechaCaducidad, CVV) => {
         return new Promise((resolve, reject) => {
@@ -716,11 +743,10 @@ const databaseMethods = {
     obtenerPedido: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
-            SELECT tienda.nombreArticulo AS nombreProducto, tienda.descuentoArticulo AS descuento, tienda.precio AS precio
-            FROM pedido
-            JOIN tienda ON pedido.idArticulo = tienda.idArticulo
-            WHERE pedido.id_usuario = ?;
-        `;
+                SELECT tienda.nombreArticulo AS nombreProducto, tienda.descuentoArticulo AS descuento, tienda.precio AS precio
+                FROM pedido
+                JOIN tienda ON pedido.idArticulo = tienda.idArticulo
+                WHERE pedido.id_usuario = ?;`;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
