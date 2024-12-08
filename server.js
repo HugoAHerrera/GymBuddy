@@ -258,6 +258,25 @@ app.post('/api/guardar-rutina', async (req, res) => {
     }
 });
 
+app.post('/api/guardar-rutina-existente', async (req, res) => {
+    try {
+        const { rutina, id_rutina } = req.body; 
+        
+        const rutinaArray = rutina[0].split(', ');
+        
+        const nombreRutina = rutinaArray[0];
+        const ejercicios = rutinaArray.slice(1);
+        const idRutina = id_rutina;
+
+        const resultado = await database.actualizarRutina(nombreRutina, ejercicios, idRutina);
+
+        res.status(200).json({ message: 'Rutina guardada correctamente', data: resultado });
+    } catch (error) {
+        console.error('Error al guardar la rutina:', error);
+        res.status(500).json({ error: 'Error al guardar la rutina.' });
+    }
+});
+
 
 app.get('/desafios', (req, res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/MetasPersonales.html'));
@@ -375,6 +394,19 @@ app.post('/api/blobAImagenEjercicio', upload.single('imagen'), async (req, res) 
     }
 });
 
+app.post('/api/obtenerIdRutina', upload.single('imagen'), async (req, res) => {
+    try {
+        const { nombre_rutina } = req.body;
+
+        const id_rutina = await database.obtenerIdRutina(nombre_rutina);
+        
+        res.json({ id_rutina });
+
+    } catch (error) {
+        console.error('Error al obtener id_rutina:', error);
+        res.status(500).json({ error: 'Hubo un error al obtener la rutina' });
+    }
+});
 
 app.get('/previewTerminosCondiciones', (req, res) => {
     res.sendFile(path.join(__dirname, 'src/public/HTML/noUserTerminosCondiciones.html'));
@@ -527,18 +559,15 @@ app.post('/api/descripcion', async (req, res) => {
 app.get('/api/sesiones', async (req, res) => {
     const { periodo } = req.query;
     const idUsuario = req.session.id_usuario;
-
     if (!idUsuario) {
         return res.status(400).json({ error: 'No se ha encontrado el id_usuario en la sesión' });
     }
-
     try {
         const sesiones = await database.obtenerSesiones(idUsuario, periodo);
         console.log(sesiones);
         res.json(sesiones);
     } catch (error) {
         console.error('Error al obtener sesiones:', error);
-
         if (error.message === 'Periodo no válido') {
             res.status(400).json({ error: 'El periodo especificado no es válido' });
         } else {
@@ -546,6 +575,24 @@ app.get('/api/sesiones', async (req, res) => {
         }
     }
 });
+
+app.get('/api/rutinasHechas', async (req, res) => {
+    const { periodo } = req.query;
+    const idUsuario = req.session.id_usuario;
+    console.log('idUsuario:', idUsuario);
+    if (!idUsuario) {
+        return res.status(400).json({ error: 'No se ha encontrado el id_usuario en la sesión' });
+    }
+    try {
+        const rutinasHechas = await database.obtenerRutinasSesiones(idUsuario, periodo);
+        console.log(rutinasHechas);
+        res.json(rutinasHechas);
+    } catch (error) {
+        console.error('Error al obtener rutinasHechas', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 
 app.get('/api/estadisticas/', async (req, res) => {
     const idUsuario = req.session.id_usuario;
@@ -691,6 +738,34 @@ app.get('/api/historialDesafiosCompletados', async (req, res) => {
         const fechas = await database.desafiosCompletados(id_usuario);
         console.log("Fechas del usuario:",id_usuario, fechas);
         res.json(fechas);
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+    }
+});
+app.post('/api/annadirDineroDesafio', async (req, res) => {
+    console.log("Dinero añadido", req.body);
+    const { dinero } = req.body;
+    const id_usuario = req.session.id_usuario;
+    try {
+        await database.annadirDineroDesafio({
+            dinero,
+            id_usuario
+        });
+        res.status(201).json({ message: 'Dinero añadido con éxito' });
+    }
+    catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Error', error: error.message });
+    }
+});
+app.get('/api/recuperarDinero', async (req, res) => {
+    const id_usuario = req.session.id_usuario;
+    try {
+        const dinero = await database.recuperarDinero(id_usuario);
+        console.log("Dinero del usuario:",id_usuario, dinero);
+        res.json(dinero)
     }
     catch (error) {
         console.error('Error:', error);
@@ -885,6 +960,10 @@ app.get('/api/obtenerProductos', async (req, res) => {
         console.error('Error al obtener productos:', error);
         res.status(500).json({ message: 'Error al obtener productos comprados.' });
     }
+});
+
+app.get('/soporteCliente', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/contacto.html'));
 });
 
 //No definido = error.html

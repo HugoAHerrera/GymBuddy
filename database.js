@@ -125,8 +125,42 @@ const databaseMethods = {
             });
         });
     },
-       
 
+    actualizarRutina: async (nombreRutina, ejercicios, idRutina) => {
+        return new Promise((resolve, reject) => {
+            // Actualización de nombre_rutina
+            const sql = 'UPDATE rutina SET nombre_rutina = ? WHERE id_rutina = ?';
+    
+            connection.query(sql, [nombreRutina, idRutina], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+    
+                // Construir la lista de ejercicios en formato adecuado
+                const ejercicioNames = ejercicios.map(ejercicio => `'${ejercicio}'`).join(", ");
+                
+                // Actualización de la lista de ejercicios
+                const sqlUpdate = `
+                    UPDATE rutina
+                    SET lista_ejercicios = (
+                        SELECT GROUP_CONCAT(id_ejercicio ORDER BY FIELD(nombre_ejercicio, ${ejercicioNames}))
+                        FROM ejercicio
+                        WHERE nombre_ejercicio IN (${ejercicioNames})
+                    )
+                    WHERE id_rutina = ?;
+                `;
+    
+                connection.query(sqlUpdate, [idRutina], (errUpdate, resultUpdate) => {
+                    if (errUpdate) {
+                        return reject(errUpdate);
+                    }
+    
+                    resolve(resultUpdate);
+                });
+            });
+        });
+    },
+    
     obtenerRutinas: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
@@ -185,9 +219,8 @@ const databaseMethods = {
 
     obtenerSesiones: async (idUsuario, periodo = null) => {
         return new Promise((resolve, reject) => {
-            let sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kg, fecha FROM sesion WHERE id_usuario = ?';
+            let sql = 'SELECT id_sesion, id_usuario, id_rutina, tiempo_total, fecha FROM sesion WHERE id_usuario = ?';
             let params = [idUsuario]; // Se pasa idUsuario como parámetro de la consulta
-
             // Filtrar por periodo si se especifica
             if (periodo) {
                 switch (periodo) {
@@ -220,11 +253,10 @@ const databaseMethods = {
                 if (err) return reject(err);
 
                 const sesiones = results.map(row => ({
-                    tiempo: row.tiempo_ejecucion,
-                    repeticiones: row.repeticiones,
-                    sets: row.sets,
-                    kilometros: row.kilometros,
-                    kg: row.kg,
+                    idSesion: row.id_sesion,
+                    idUsuario: row.id_usuario,
+                    idRutina: row.id_rutina,
+                    tiempo_total: row.tiempo_total,
                     fecha: row.fecha,
                 }));
 
@@ -233,18 +265,58 @@ const databaseMethods = {
         });
     },
 
+    obtenerRutinasSesiones: async (idUsuario, periodo = null) => {
+        return new Promise((resolve, reject) => {
+            let sql = 'SELECT rutina.id_rutina, rutina.nombre_rutina, COUNT(sesion.id_sesion) AS total_rutina FROM sesion INNER JOIN rutina ON sesion.id_rutina = rutina.id_rutina WHERE sesion.id_usuario = ? GROUP BY rutina.id_rutina, rutina.nombre_rutina';
+            let params = [idUsuario]; // Se pasa idUsuario como parámetro de la consulta
+            // Filtrar por periodo si se especifica
+            if (periodo) {
+                switch (periodo) {
+                    case 'semana':
+                        // Filtrar por la semana actual (de lunes a domingo)
+                        sql += ' AND sesion.fecha >= CURDATE() - INTERVAL (WEEKDAY(CURDATE())) DAY ' +
+                            'AND sesion.fecha < CURDATE() + INTERVAL (6 - WEEKDAY(CURDATE())) DAY';
+                        break;
+                    case 'mes':
+                        // Filtrar por el mes actual (del primer día al último día del mes)
+                        sql += ' AND MONTH(sesion.fecha) = MONTH(CURDATE()) AND YEAR(sesion.fecha) = YEAR(CURDATE())';
+                        break;
+                    case 'año':
+                        // Filtrar por el año actual
+                        sql += ' AND YEAR(sesion.fecha) = YEAR(CURDATE())';
+                        break;
+                    case 'total':
+                        // Seleccionar todos los registros sin filtro adicional
+                        sql += ' AND sesion.fecha IS NOT NULL';
+                        break;
+                    default:
+                        return reject(new Error('Periodo no válido'));
+                }
+            }
+            // Ejecutar la consulta
+            connection.query(sql, params, (err, results) => {
+                if (err) return reject(err);
+                const rutinas = results.map(row => ({
+                    nombre_rutina: row.nombre_rutina,
+                    total_rutina: row.total_rutina
+                }));
+
+                resolve(rutinas);
+            });
+        });
+    },
 
     obtenerEstadisticasSesiones: async (idUsuario) => {
         console.log('idUsuario:', idUsuario);
         return new Promise((resolve, reject) => {
             // Consulta SQL para obtener las estadísticas filtrando por id_usuario
-            const sql = 'SELECT COUNT(*) AS sesiones_completadas, SUM(kilometros) AS distancia_recorrida, MAX(fecha) AS ultima_sesion FROM sesion WHERE id_usuario = ?';
+            const sql = 'SELECT COUNT(*) AS sesiones_completadas, SUM(tiempo_total) AS tiempoTotal, MAX(fecha) AS ultima_sesion FROM sesion WHERE id_usuario = ?';
             connection.query(sql, [idUsuario], (err, results) => {  // Se pasa el idUsuario como parámetro
                 if (err) return reject(err);
 
                 const estadisticas = {
                     sesionesCompletadas: results[0].sesiones_completadas || 0,
-                    distanciaRecorrida: parseFloat(results[0].distancia_recorrida || 0),
+                    distanciaRecorrida: parseFloat(results[0].tiempoTotal || 0),
                     ultimaSesion: results[0].ultima_sesion || 'Nunca',
                 };
                 resolve(estadisticas);
@@ -362,7 +434,24 @@ const databaseMethods = {
             });
         });
     },
-
+    annadirDineroDesafio: async (desafio) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'UPDATE usuario SET KC = ? WHERE id_usuario = ?';
+            connection.query(sql, [desafio.dinero, desafio.id_usuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+    recuperarDinero: async (desafio) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT KC FROM usuario WHERE id_usuario = ?';
+            connection.query(sql, [desafio], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
     // GUÍA DE EJERCICIOS
     obtenerDescripcionEjercicios: async (nombreEjercicio) => {
         return new Promise((resolve, reject) => {
@@ -482,6 +571,24 @@ const databaseMethods = {
         });
     },
 
+    obtenerIdRutina: async (nombre_rutina) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT id_rutina FROM rutina WHERE nombre_rutina = ? AND categoria = "Tus rutinas creadas"';
+            
+            connection.query(sql, [nombre_rutina], (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    if (results.length > 0) {
+                        resolve(results[0].id_rutina); 
+                    } else {
+                        reject('No se encontró la rutina'); 
+                    }
+                }
+            });
+        });
+    },      
+
     //Ejercicio
     convertirBlobImagenEj: async (nombre_ejercicio) => {
         return new Promise((resolve, reject) => {
@@ -587,7 +694,7 @@ const databaseMethods = {
                 FROM mensajes m
                 JOIN usuario u ON m.id_emisor = u.id_usuario
                 WHERE m.receptor = ?
-                ORDER BY m.fecha ASC, m.hora ASC
+                ORDER BY m.fecha DESC , m.hora DESC 
             `;
             connection.query(sql, [receptor], (err, results) => {
                 if (err) return reject(err);
@@ -748,6 +855,22 @@ const databaseMethods = {
                 JOIN tienda ON pedido.idArticulo = tienda.idArticulo
                 WHERE pedido.id_usuario = ?;`;
             connection.query(sql, [idUsuario], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    obtenerMensajesComunidad: async (comunidad) => {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT m.*, u.nombre_usuario 
+                FROM mensajes m
+                JOIN usuario u ON m.id_emisor = u.id_usuario
+                WHERE m.receptor = ?
+                ORDER BY m.fecha DESC, m.hora DESC
+            `;
+            connection.query(sql, [comunidad], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
