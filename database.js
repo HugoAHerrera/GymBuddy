@@ -219,7 +219,7 @@ const databaseMethods = {
 
     obtenerSesiones: async (idUsuario, periodo = null) => {
         return new Promise((resolve, reject) => {
-            let sql = 'SELECT tiempo_ejecucion, repeticiones, sets, kilometros, kg, fecha FROM sesion WHERE id_usuario = ?';
+            let sql = 'SELECT id_sesion, id_usuario, id_rutina, tiempo_total, fecha FROM sesion WHERE id_usuario = ?';
             let params = [idUsuario]; // Se pasa idUsuario como parámetro de la consulta
 
             // Filtrar por periodo si se especifica
@@ -254,11 +254,10 @@ const databaseMethods = {
                 if (err) return reject(err);
 
                 const sesiones = results.map(row => ({
-                    tiempo: row.tiempo_ejecucion,
-                    repeticiones: row.repeticiones,
-                    sets: row.sets,
-                    kilometros: row.kilometros,
-                    kg: row.kg,
+                    idSesion: row.id_sesion,
+                    idUsuario: row.id_usuario,
+                    idRutina: row.id_rutina,
+                    tiempoTotal: row.tiempo_total,
                     fecha: row.fecha,
                 }));
 
@@ -268,17 +267,18 @@ const databaseMethods = {
     },
 
 
+
     obtenerEstadisticasSesiones: async (idUsuario) => {
         console.log('idUsuario:', idUsuario);
         return new Promise((resolve, reject) => {
             // Consulta SQL para obtener las estadísticas filtrando por id_usuario
-            const sql = 'SELECT COUNT(*) AS sesiones_completadas, SUM(kilometros) AS distancia_recorrida, MAX(fecha) AS ultima_sesion FROM sesion WHERE id_usuario = ?';
+            const sql = 'SELECT COUNT(*) AS sesiones_completadas, SUM(tiempo_total) AS tiempoTotal, MAX(fecha) AS ultima_sesion FROM sesion WHERE id_usuario = ?';
             connection.query(sql, [idUsuario], (err, results) => {  // Se pasa el idUsuario como parámetro
                 if (err) return reject(err);
 
                 const estadisticas = {
                     sesionesCompletadas: results[0].sesiones_completadas || 0,
-                    distanciaRecorrida: parseFloat(results[0].distancia_recorrida || 0),
+                    distanciaRecorrida: parseFloat(results[0].tiempoTotal || 0),
                     ultimaSesion: results[0].ultima_sesion || 'Nunca',
                 };
                 resolve(estadisticas);
