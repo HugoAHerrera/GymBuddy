@@ -6,41 +6,87 @@
   <meta name="description" content="Rutina Personalizada">
   <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="../CSS/rutina_concreta.css">
+  <link rel="stylesheet" href="../CSS/rutina_editar.css">
   <link rel="icon" href="../Imagenes/logo-inicio.png" type="image/x-icon">
 </head>
 <body>
+    <main>
+        <div id="header-container"></div>
 
-    <div id="header-container"></div>
+        <div class="center-container">
+            <div class="center">
+                <div class="Cabecera-rutina" style="visibility: hidden;">
+                    <h1 id="rutina-titulo" contenteditable="true"></h1>
+                    <button class="boton-crear-rutina" id="rutina-actualizada" onclick="window.location.href='rutina'">Guardar</button>
+                    <button class="boton-crear-rutina" onclick="window.location.href='rutina-nueva'">Nueva Rutina</button>
+                </div>
+                <div id="contador-container" style="width: 80%; margin: 0 auto; text-align: center;">
+                    <div id="ejercicio-container" style="display: none;">
+                        <h1 id="ejercicio-titulo"></h1>
+                        <img id="ejercicio-imagen" src="" alt="Imagen del ejercicio">
+                    </div>
+                </div>
 
-    <div class="center-container">
-        <div class="center">
-            <div class="Cabecera-rutina" style="visibility: hidden;">
-                <h1 id="rutina-titulo"></h1>
-                <button class="boton-crear-rutina" onclick="window.location.href='rutina-nueva'">Guardar</button>
-                <button class="boton-crear-rutina" onclick="window.location.href='rutina-nueva'">Nueva Rutina</button>
-                <div class="boton-pausar-rutina" style="display: none;">Pausar Rutina</div>
+                <div class="div-ejercicios" id="div-ejercicios">
+                    <!-- Los ejercicios se agregarán dinámicamente aquí -->
+                </div>        
+                <div id="loading" style="text-align: center; padding: 20px;">
+                    <p>Cargando ejercicios...</p>
+                </div>
             </div>
-            <div id="contador-container" style="width: 80%; margin: 0 auto; text-align: center;">
-                <div id="ejercicio-container" style="display: none;">
-                    <h1 id="ejercicio-titulo"></h1>
-                    <img id="ejercicio-imagen" src="" alt="Imagen del ejercicio">
+        </div>
+        <div class="contenedor-boton">
+            <button id="añadir-ejercicio">Añadir Ejercicio</button>
+        </div>
+    </main>
+    <!-- Ventana emergente (Modal) -->
+    <div id="ventanaEmergente" class="modal" style="display: none;">
+        <div class="modal-contenido">
+            <span class="cerrar" onclick="cerrarVentanaEmergente()">&times;</span>
+            <h2>Añadir Nuevo Ejercicio</h2>
+
+            <!-- Filtro para Zona a Ejercitar -->
+            <div class="contenedor-filtro">
+                <div class="filtro">
+                    <div class="custom-select">
+                        <div class="select-box" onclick="toggleDropdown('zona-dropdown')">
+                            <span class="select-text">Selecciona Zona a Ejercitar</span>
+                            <span class="arrow">&#9662;</span>
+                        </div>
+                        <div id="zona-dropdown" class="dropdown">
+                            <label><input type="checkbox" value="Entrenamientos rápidos"> Entrenamientos rápidos</label>
+                            <label><input type="checkbox" value="Desafíos"> Desafíos</label>
+                            <label><input type="checkbox" value="Pierna"> Pierna</label>
+                            <label><input type="checkbox" value="Hombro"> Hombro</label>
+                            <label><input type="checkbox" value="Abdomen"> Abdomen</label>
+                            <label><input type="checkbox" value="Material"> Material</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtro de Dificultad -->
+                <div class="filtro" id="dificultad">
+                    <div class="custom-select">
+                        <div class="select-box" onclick="toggleDropdown('dificultad-dropdown')">
+                            <span class="select-text">Dificultad</span>
+                            <span class="arrow">&#9662;</span>
+                        </div>
+                        <div id="dificultad-dropdown" class="dropdown">
+                            <label><input type="checkbox" value="Principiante"> Principiante</label>
+                            <label><input type="checkbox" value="Intermedia"> Intermedia</label>
+                            <label><input type="checkbox" value="Avanzada"> Avanzada</label>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="div-ejercicios" id="div-ejercicios">
-                <!-- Los ejercicios se agregarán dinámicamente aquí -->
-            </div>        
-            <div id="loading" style="text-align: center; padding: 20px;">
-                <p>Cargando ejercicios...</p>
-            </div>
+            <!-- Área donde se mostrarán los ejercicios -->
+            <div id="ejercicios-lista"></div>
+
+            <button id="confirmar-ejercicio" onclick="confirmarEjercicio()">Confirmar</button>
+            <button id="cancelar-ejercicio" onclick="cerrarVentanaEmergente()">Cancelar</button>
         </div>
     </div>
-
-    <div id="boton-fijo" class="abrir">
-        <img id="chat-icon" src="../Imagenes/Chat.jpg" alt="Chat Icon" style="width: 50px; height: 50px;">
-        <p id="toggle-text">Abrir chat</p>
-    </div>    
     
     <div id="footer-container"></div>
 

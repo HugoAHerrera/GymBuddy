@@ -1,27 +1,23 @@
-document.getElementById("contact-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-    const name = document.getElementById("name").value;
-    document.getElementById("response-message").textContent = `Gracias, ${name}. Hemos recibido tu mensaje.`;
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const logoImage = document.getElementById('logotype');
-    
-    logoImage.addEventListener('click', function() {
-        window.location.href = 'perfil.html';
-    });
-  });
-
-// Cargar el header y el footer con fetch
-fetch('../HTML/header.html')
-.then(res => res.text())
-.then(html => {
-    document.getElementById('header-container').innerHTML = html;
-    const script = document.createElement('script');
-    script.src = '../JS/header.js';
-    script.defer = true;
-    document.body.appendChild(script);
-})
 fetch('../HTML/footer.html')
 .then(response => response.text())
 .then(data => document.getElementById('footer-container').innerHTML = data);
+
+document.getElementById('contact-form').addEventListener('submit', function (event) {
+    event.preventDefault(); 
+
+    const email = document.getElementById('email').value.trim();
+    const username = document.getElementById('username').value.trim();
+    const category = document.getElementById('category').value;
+
+    if (!email || !username || !category) {
+        alert('Por favor, completa todos los campos obligatorios.');
+        return; 
+    }
+
+    const confirmationMessage = document.getElementById('confirmation-message');
+    confirmationMessage.style.display = 'block';
+
+    setTimeout(() => {
+        confirmationMessage.style.display = 'none';
+    }, 3000);
+});

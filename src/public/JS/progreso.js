@@ -1,6 +1,7 @@
 let chartDistanciaMaxima;
 let chartPesoMaximo;
 let chartDuracionSesion;
+let chartTiempo;
 
 function expandChart(chartId) {
     const charts = document.querySelectorAll('.chart-section');
@@ -55,33 +56,18 @@ async function obtenerEstadisticas() {
 
 // Función para transformar los datos en arrays
 function transformarDatosParaGraficas(data) {
-    const tiempoEjecucion = [];
-    const repeticiones = [];
-    const sets = [];
-    const kilometros = [];
-    const kg = [];
+    const tiempoRutina = [];
     const fechas = [];
 
     data.forEach(sesion => {
-        tiempoEjecucion.push(sesion.tiempo); // Guardar en minutos
-        repeticiones.push(sesion.repeticiones);
-        sets.push(sesion.sets);
-
-        // Reemplazar comas por puntos y convertir a números
-        kilometros.push(parseFloat(sesion.kilometros.toString().replace(',', '.')));
-        kg.push(parseFloat(sesion.kg.toString().replace(',', '.')));
-
+        tiempoRutina.push(sesion.tiempo_total); // Guardar en minutos
         // Reformatear las fechas con Day.js al formato 'DD-MM-YYYY'
         const fechaFormateada = dayjs(sesion.fecha).format('DD-MM-YYYY');
         fechas.push(fechaFormateada);
     });
 
     return {
-        tiempoEjecucion,
-        repeticiones,
-        sets,
-        kilometros,
-        kg,
+        tiempoRutina,
         fechas
     };
 }
@@ -89,18 +75,17 @@ function transformarDatosParaGraficas(data) {
 
 // Función para actualizar las gráficas
 function actualizarGraficas(sesiones) {
-    const ctxDistanciaMaxima = document.getElementById('chart-distancia-maxima').getContext('2d');
-    const ctxPesoMaximo = document.getElementById('chart-peso-maximo').getContext('2d');
+    const ctxTiempo = document.getElementById('chart-tiempo').getContext('2d');
 
     // Inicializa los gráficos y guárdalos en las variables globales
-    chartDistanciaMaxima = new Chart(ctxDistanciaMaxima, {
+    chartTiempo = new Chart(ctxTiempo, {
         type: 'line',
         data: {
             labels: sesiones.fechas,
             datasets: [{
-                label: 'Distancia Maxima (km)',
-                data: sesiones.kilometros,
-                borderColor: 'rgba(75, 192, 192, 1)',
+                label: 'Tiempo de Rutina (min)',
+                data: sesiones.tiempoRutina,
+                borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1,
                 fill: false
             }]
@@ -110,47 +95,12 @@ function actualizarGraficas(sesiones) {
                 y: {
                     beginAtZero: true,
                     min: 0,
-                    max: Math.max(...sesiones.kilometros) + 5,
-                    stepSize: 2,
-                    ticks: {
-                        callback: function (value) {
-                            return value.toFixed(1);
-                        }
-                    }
+                    max: Math.max(...sesiones.tiempoRutina) + 5,
+                    stepSize: 10
                 }
             }
         }
     });
-
-    chartPesoMaximo = new Chart(ctxPesoMaximo, {
-        type: 'line',
-        data: {
-            labels: sesiones.fechas,
-            datasets: [{
-                label: 'Peso Maximo (kg)',
-                data: sesiones.kg,
-                borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 1,
-                fill: false
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    min: 0,
-                    max: Math.max(...sesiones.kg) + 5,
-                    stepSize: 2,
-                    ticks: {
-                        callback: function (value) {
-                            return value.toFixed(1);
-                        }
-                    }
-                }
-            }
-        }
-    });
-
 }
 
 
@@ -176,8 +126,7 @@ async function filterData(period) {
         const response = await fetch(`/api/sesiones?periodo=${period}`);
         const data = await response.json();
         // Si las fechas ya están formateadas y los valores están correctos, no se debe modificar nada
-        updateChart(chartDistanciaMaxima, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.kilometros));
-        updateChart(chartPesoMaximo, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.kg));
+        updateChart(chartTiempo, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.tiempo_total));
     } catch (error) {
         console.error('Error al filtrar datos:', error);
     }

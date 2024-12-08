@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentUserId = null;
     let currentUserName = null;
 
-    // Primero obtenemos el usuario actual
     async function getCurrentUser() {
         try {
             const response = await fetch('/api/mi-usuario');
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Cargar mensajes de la comunidad actual
     async function loadMessages(comunidad) {
         try {
             const response = await fetch(`/api/mensajes?comunidad=${encodeURIComponent(comunidad)}`);
@@ -40,21 +38,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Renderizar los mensajes
     function renderMessages(messages) {
         chatMessages.innerHTML = '';
-        // Asumimos que `messages` es un array de objetos con {id_mensaje, id_emisor, contenido, receptor, hora, fecha}
-        // Sería ideal que devuelvan también el nombre_usuario del emisor.
-        // Si no lo hace, tendremos que hacer una segunda petición.
-        // Aquí asumiremos que el endpoint actual solo devuelve mensajes.
-        // Si no incluye el nombre del usuario, tendremos que modificar el backend o hacer otra petición.
-        // Por ahora, supondré que el backend ya los devuelve con un JOIN que retorne 'nombre_usuario'.
+
+        // Ordenar mensajes por fecha/hora ascendente sin tocar la BBDD
+        messages.sort((a, b) => {
+            const fechaA = new Date(a.fecha + ' ' + a.hora);
+            const fechaB = new Date(b.fecha + ' ' + b.hora);
+            return fechaA - fechaB;
+        });
 
         messages.forEach(msg => {
             const msgDiv = document.createElement('div');
             msgDiv.classList.add('message');
 
-            // Comprobar si el mensaje es del usuario actual
             if (msg.id_emisor === currentUserId) {
                 msgDiv.classList.add('sent');
             } else {
@@ -71,10 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const timeEl = document.createElement('div');
             timeEl.classList.add('time');
-            // Formatear fecha y hora si se requiere
-            const fecha = new Date(msg.fecha);
-            const hora = msg.hora;
-            timeEl.textContent = `${fecha.toLocaleDateString()} ${hora}`;
+            const fecha = new Date(msg.fecha + ' ' + msg.hora);
+            const horaFormateada = fecha.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+            timeEl.textContent = horaFormateada;
 
             msgDiv.appendChild(senderEl);
             msgDiv.appendChild(contentEl);
@@ -83,11 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages.appendChild(msgDiv);
         });
 
-        // Scroll al final
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        // Ya no hacemos scrollTop = scrollHeight, así no se baja la barra automáticamente
+        // chatMessages.scrollTop = chatMessages.scrollHeight;  // Eliminado
     }
 
-    // Enviar mensaje
     async function sendMessage() {
         const contenido = messageInput.value.trim();
         if (!contenido) return;
@@ -121,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Cambiar de comunidad al hacer clic
     communityList.addEventListener('click', (e) => {
         if (e.target.tagName === 'LI') {
             const lis = communityList.querySelectorAll('li');
@@ -141,14 +135,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Inicializar
     (async function init() {
         await getCurrentUser();
         loadMessages(currentCommunity);
+
+        // Se sigue actualizando cada segundo, si lo deseas
+        setInterval(() => {
+            loadMessages(currentCommunity);
+        }, 1000);
     })();
 });
 
-// Cargar el header y el footer con fetch
+// Cargar el header y el footer
 fetch('../HTML/header.html')
 .then(res => res.text())
 .then(html => {

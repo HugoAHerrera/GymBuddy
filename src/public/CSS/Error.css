@@ -1,22 +1,29 @@
 body {
     display: flex;
     justify-content: center;
+    align-items: center;
     background-color: #FCFDF7;
-    height: 800px;
+    height: 100vh;
+    margin: 0;
 }
 
 #container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; 
+    width: 100%;
+    box-sizing: border-box; 
 }
 
 #warning_image {
-    height: 500px;
+    height: 40%; 
+    width: auto; 
     background-color: #FCFDF7;
 }
 
 #bench_press_image {
-    height: 500px;
+    height: 60%;
+    width: auto; 
 }
