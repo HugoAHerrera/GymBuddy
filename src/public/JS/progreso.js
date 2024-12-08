@@ -1,41 +1,45 @@
-let chartTiempo = null;
-let chartRutinas = null;
+let chartTiempo;
+let chartRutinas;
 
 function expandChart(chartId) {
     const charts = document.querySelectorAll('.chart-section');
+    // Cerrar todos los gráficos antes de abrir el seleccionado
     charts.forEach(chart => {
         if (chart.id !== chartId) {
             chart.style.height = "150px";
         }
     });
+    // Abrir o cerrar el gráfico seleccionado
     const selectedChart = document.getElementById(chartId);
-    if (selectedChart.style.height === "300px") {
-        selectedChart.style.height = "150px";
+    // Si el gráfico está abierto, ciérralo; si está cerrado, ábrelo
+    if (selectedChart.style.height === "400px") {
+        selectedChart.style.height = "200px";
     } else {
-        selectedChart.style.height = "300px";
+        selectedChart.style.height = "400px";
     }
 }
 
-// Función para obtener los datos desde el backend
+// Función para obtener los datos de sesiones (Tiempo por sesión)
 async function obtenerDatosSesiones() {
     try {
         const response = await fetch('/api/sesiones');
         const data = await response.json();
         console.log('Datos de sesiones:', data);
         const sesiones = transformarDatosParaGraficas(data);
-        actualizarGraficas(sesiones);
+        actualizarGraficoTiempo(sesiones); // Actualiza el gráfico de tiempo por sesión
     } catch (error) {
         console.error('Error al obtener los datos de sesiones:', error);
     }
 }
 
-async function obtenerRutinasHechas(){
+// Función para obtener los datos de rutinas hechas
+async function obtenerRutinasHechas() {
     try {
         const response = await fetch('/api/rutinasHechas');
-        const data = await response.json();
-        console.log('Rutinas hechas:', data);
-        const sesiones = transformarDatosParaGraficas(data);
-        actualizarGraficas(sesiones);
+        const datos = await response.json();
+        console.log('Rutinas hechas:', datos);
+        const sesiones = transformarDatosParaGraficas(datos);
+        actualizarGraficoRutinas(sesiones); // Actualiza el gráfico de rutinas
     } catch (error) {
         console.error('Error al obtener las rutinas:', error);
     }
@@ -84,26 +88,28 @@ function transformarDatosParaGraficas(data) {
     };
 }
 
-function actualizarGraficas(sesiones) {
+// Función para actualizar el gráfico de tiempo por sesión
+function actualizarGraficoTiempo(sesiones) {
     const ctxTiempo = document.getElementById('chart-tiempo').getContext('2d');
-    const ctxRutinas = document.getElementById('chart-rutinas').getContext('2d');
-
-    // Si los gráficos ya existen, simplemente actualízalos
     if (chartTiempo) {
         chartTiempo.data.labels = sesiones.fechas;
         chartTiempo.data.datasets[0].data = sesiones.tiempoRutina;
-        chartTiempo.update(); // Actualiza el gráfico
+        chartTiempo.update();
     } else {
-        // Gráfico de barras: Tiempo por sesión
         chartTiempo = new Chart(ctxTiempo, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: sesiones.fechas,
                 datasets: [{
-                    label: 'Tiempo de Rutina (min)',
+                    label: 'Tiempo de Sesión (min)',
                     data: sesiones.tiempoRutina,
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
+                    borderColor: 'rgba(75, 192, 192, 1)', // Color vibrante para la línea
+                    borderWidth: 3,
+                    tension: 0.4, // Para hacer la línea más suave
+                    pointBackgroundColor: 'rgba(75, 192, 192, 0.8)', // Color de los puntos
+                    pointRadius: 5, // Tamaño de los puntos
+                    fill: true, // Rellenar bajo la línea
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)' // Degradado suave bajo la línea
                 }]
             },
             options: {
@@ -111,30 +117,78 @@ function actualizarGraficas(sesiones) {
                     y: {
                         beginAtZero: true,
                         min: 0,
-                        max: Math.max(...sesiones.tiempoRutina) + 5,
-                        stepSize: 10
+                        max: Math.max(...sesiones.tiempoRutina) + 20,
+                        stepSize: 20,
+                        ticks: {
+                            font: {
+                                size: 14,
+                                family: 'Arial, sans-serif'
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 14,
+                                family: 'Arial, sans-serif'
+                            }
+                        }
                     }
+                },
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                },
+                elements: {
+                    line: {
+                        borderWidth: 3
+                    },
+                    point: {
+                        radius: 5,
+                        hoverRadius: 8
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
                 }
             }
         });
     }
+}
 
-    // Si el gráfico de rutinas ya existe, simplemente actualízalo
+// Función para actualizar el gráfico de rutinas
+function actualizarGraficoRutinas(sesiones) {
+    const ctxRutinas = document.getElementById('chart-rutinas').getContext('2d');
     if (chartRutinas) {
         chartRutinas.data.labels = sesiones.nombresRutina;
         chartRutinas.data.datasets[0].data = sesiones.cantidades;
-        chartRutinas.update(); // Actualiza el gráfico
+        chartRutinas.update();
     } else {
-        // Gráfico de pastel: Cantidad de rutinas
         chartRutinas = new Chart(ctxRutinas, {
             type: 'pie',
             data: {
-                labels: sesiones.nombresRutina, // Nombres de las rutinas
+                labels: sesiones.nombresRutina,
                 datasets: [{
-                    label: 'Cantidad de Rutinas:',
-                    data: sesiones.cantidades, // Cantidad de veces que se hizo cada rutina
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
+                    label: 'Cantidad de Rutinas',
+                    data: sesiones.cantidades,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ], // Colores para cada segmento
+                    borderColor: 'rgba(255, 255, 255, 1)', // Color del borde de los segmentos
+                    borderWidth: 2
                 }]
             },
             options: {
@@ -142,12 +196,30 @@ function actualizarGraficas(sesiones) {
                 plugins: {
                     legend: {
                         position: 'top',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
                     },
-                },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                const label = tooltipItem.label || '';
+                                const value = tooltipItem.raw || 0;
+                                const total = tooltipItem.chart.data.datasets[0].data.reduce((acc, val) => acc + val, 0);
+                                const percentage = ((value / total) * 100).toFixed(2);
+                                return `${label}: ${value} (${percentage}%)`; // Mostrar porcentaje
+                            }
+                        }
+                    }
+                }
             }
         });
     }
 }
+
+
 
 
 
@@ -171,15 +243,38 @@ function updateChart(chart, labels, data) {
 
 async function filterData(period) {
     try {
-        const response = await fetch(`/api/sesiones?periodo=${period}`);
-        const data = await response.json();
-        // Si las fechas ya están formateadas y los valores están correctos, no se debe modificar nada
-        updateChart(chartTiempo, data.map(row => dayjs(row.fecha).format('DD-MM-YYYY')), data.map(row => row.tiempo_total));
-        updateChart(chartRutinas, data.map(row => row.nombre_rutina), data.map(row => row.total_rutina));
+        // Llamada para obtener las sesiones
+        const responseSesiones = await fetch(`/api/sesiones?periodo=${period}`);
+        const dataSesiones = await responseSesiones.json();
+
+        // Llamada para obtener las rutinas hechas
+        const responseRutinas = await fetch(`/api/rutinasHechas?periodo=${period}`);
+        const dataRutinas = await responseRutinas.json();
+
+        // Actualiza el gráfico de Tiempo por sesión
+        updateChart(chartTiempo,
+            dataSesiones.map(row => dayjs(row.fecha).format('DD-MM-YYYY')),
+            dataSesiones.map(row => row.tiempo_total)
+        );
+
+        // Actualiza el gráfico de Rutinas
+        const rutinasData = dataRutinas.map(row => ({
+            nombre: row.nombre_rutina,  // Asegúrate de que esta propiedad exista
+            total: row.total_rutina     // Y que esta también esté presente
+        }));
+
+        updateChart(chartRutinas,
+            rutinasData.map(rutina => rutina.nombre),
+            rutinasData.map(rutina => rutina.total)
+        );
+
     } catch (error) {
         console.error('Error al filtrar datos:', error);
     }
 }
+
+
+
 
 // Cargar el header y el footer con fetch
 fetch('../HTML/header.html')
