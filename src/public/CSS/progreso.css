@@ -27,7 +27,7 @@ main {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease-in;
     cursor: pointer;
-    height: 250px; /* Aumenta la altura del contenedor de la gráfica */
+    height: 400px; /* Ajusta la altura de los contenedores de las gráficas */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,7 +41,6 @@ main {
     font-size: 18px; /* Ajusta el tamaño de la fuente según lo necesites */
     font-weight: bold; /* Puedes cambiar el peso de la fuente si lo deseas */
 }
-
 
 .user-info {
     flex: 1;

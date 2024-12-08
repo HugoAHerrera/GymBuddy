@@ -26,7 +26,8 @@ async function obtenerDatosSesiones() {
         const data = await response.json();
         console.log('Datos de sesiones:', data);
         const sesiones = transformarDatosParaGraficas(data);
-        actualizarGraficoTiempo(sesiones); // Actualiza el gráfico de tiempo por sesión
+        actualizarGraficoTiempo(sesiones);
+
     } catch (error) {
         console.error('Error al obtener los datos de sesiones:', error);
     }
@@ -39,7 +40,7 @@ async function obtenerRutinasHechas() {
         const datos = await response.json();
         console.log('Rutinas hechas:', datos);
         const sesiones = transformarDatosParaGraficas(datos);
-        actualizarGraficoRutinas(sesiones); // Actualiza el gráfico de rutinas
+        actualizarGraficoRutinas(sesiones);
     } catch (error) {
         console.error('Error al obtener las rutinas:', error);
     }
@@ -101,7 +102,7 @@ function actualizarGraficoTiempo(sesiones) {
             data: {
                 labels: sesiones.fechas,
                 datasets: [{
-                    label: 'Tiempo de Sesión (min)',
+                    label: 'Tiempo de Sesión (sec)',
                     data: sesiones.tiempoRutina,
                     borderColor: 'rgba(75, 192, 192, 1)', // Color vibrante para la línea
                     borderWidth: 3,
@@ -171,6 +172,7 @@ function actualizarGraficoRutinas(sesiones) {
         chartRutinas.data.labels = sesiones.nombresRutina;
         chartRutinas.data.datasets[0].data = sesiones.cantidades;
         chartRutinas.update();
+        chartRutinas.resize();  // Redimensiona el gráfico
     } else {
         chartRutinas = new Chart(ctxRutinas, {
             type: 'pie',
@@ -186,8 +188,8 @@ function actualizarGraficoRutinas(sesiones) {
                         'rgba(75, 192, 192, 0.6)',
                         'rgba(153, 102, 255, 0.6)',
                         'rgba(255, 159, 64, 0.6)'
-                    ], // Colores para cada segmento
-                    borderColor: 'rgba(255, 255, 255, 1)', // Color del borde de los segmentos
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 1)',
                     borderWidth: 2
                 }]
             },
@@ -209,15 +211,17 @@ function actualizarGraficoRutinas(sesiones) {
                                 const value = tooltipItem.raw || 0;
                                 const total = tooltipItem.chart.data.datasets[0].data.reduce((acc, val) => acc + val, 0);
                                 const percentage = ((value / total) * 100).toFixed(2);
-                                return `${label}: ${value} (${percentage}%)`; // Mostrar porcentaje
+                                return `${label}: ${value} (${percentage}%)`;
                             }
                         }
                     }
                 }
             }
         });
+        chartRutinas.resize();  // Redimensiona el gráfico al crearlo
     }
 }
+
 
 
 
