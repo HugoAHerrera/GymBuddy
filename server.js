@@ -444,8 +444,10 @@ app.get('/perfil', (req, res) => {
 
 app.get('/api/tiempoEjercicio', async (req, res) => {
     try {
-        const tiempo_lista = await database.obtenertiempoEjercicio(req.session.id);
+        const tiempo_lista = await database.obtenertiempoEjercicio(req.session.id_usuario);
+        console.log("T:",tiempo_lista)
         const tiempo = tiempo_lista[0].total_tiempo;
+        console.log("A:",tiempo)
         res.json({
             tiempo: tiempo
         });
