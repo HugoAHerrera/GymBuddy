@@ -34,13 +34,14 @@ async function actualizarCarrito() {
 
             productos.forEach(producto => {
                 const precioConDescuento = producto.precio * (1 - producto.descuentoArticulo); // Calculamos el precio con descuento
+                const descuentoPorcentaje = producto.descuentoArticulo * 100; // Convertir el descuento a porcentaje
                 contenedorProducto.innerHTML += `
                 <div class="producto">
                     <img src="${producto.imagenArticulo}" alt="Imagen de: ${producto.nombreArticulo}">
                     <h2>${producto.nombreArticulo}</h2>
                     <p class="precio">Precio: $${producto.precio.toFixed(2)}</p>
                     <p class="precioDescuento">Precio con descuento: $${precioConDescuento.toFixed(2)}</p>
-                    <p class="descripcion">Descuento: ${producto.descuentoArticulo}%</p>
+                    <p class="descripcion">Descuento: ${descuentoPorcentaje.toFixed(2)}%</p>
                 </div>
                 `;
             });
@@ -49,6 +50,7 @@ async function actualizarCarrito() {
         console.error('Error al actualizar el carrito:', error);
     }
 }
+
 
 // Llamar a la función cuando la página cargue
 document.addEventListener('DOMContentLoaded', actualizarCarrito);
@@ -69,33 +71,45 @@ document.getElementById('seguir-comprando').addEventListener('click', function()
 
 document.getElementById('proceder-pago').addEventListener('click', async function () {
     try {
-        // Comprobar si el carrito está vacío antes de proceder
         const contenedorProducto = document.querySelector('.producto');
         const productos = contenedorProducto.querySelectorAll('.producto');
 
         if (productos.length === 0) {
-            alert('No tienes ningún producto en el carrito para proceder al pago.');
-            return; // Detener la acción si no hay productos en el carrito
+            mostrarAlerta('No tienes ningún producto en el carrito para proceder al pago.', 'error');
+            return;
         }
 
-        // Paso 1: Pasar la información del carrito a pedido en la base de datos
         const response = await fetch('/api/pasarAPedido', { method: 'POST' });
 
         if (!response.ok) {
             throw new Error(`Error al procesar el pedido: ${response.status} ${response.statusText}`);
         }
 
-        // Paso 2: Vaciar el carrito después de crear el pedido
-       await fetch('/api/vacioCarro', { method: 'DELETE' });
-
-        // Si todo va bien, mostrar éxito y redirigir
-        alert('Pedido realizado correctamente.');
-        window.location.href = '/pagar'; // Redirige a la página de pago
+        mostrarAlerta('Pedido realizado correctamente. Redirigiendo al pago...', 'success');
+        setTimeout(() => {
+            window.location.href = '/pagar';
+        }, 3000); // Redirige después de 3 segundos
     } catch (err) {
         console.error(err);
-        alert(`Hubo un problema: ${err.message}`);
+        mostrarAlerta(`Hubo un problema: ${err.message}`, 'error');
     }
 });
+
+// Función para mostrar alertas personalizadas
+function mostrarAlerta(mensaje, tipo) {
+    const alerta = document.createElement('div');
+    alerta.className = `alert ${tipo}`;
+    alerta.innerHTML = `
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        ${mensaje}
+    `;
+    document.body.appendChild(alerta);
+
+    setTimeout(() => {
+        alerta.style.display = 'none';
+    }, 5000); // Desaparece después de 5 segundos
+}
+
 
 
 

@@ -1,6 +1,17 @@
+/* General */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* Fondo neutro */
+    color: #333;
+}
+
+/* Botones destacados */
 .resaltar {
-    background-color: #8c00ff; /* Color de fondo diferente, por ejemplo, un naranja */
-    color: white; /* Texto en blanco */
+    background-color: #6f42c1; /* Morado elegante */
+    color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
@@ -9,9 +20,10 @@
 }
 
 .resaltar:hover {
-    background-color: #480188; /* Un naranja más oscuro al pasar el ratón */
+    background-color: #5a3396;
 }
 
+/* Progreso de compra */
 .progreso-compra {
     display: flex;
     justify-content: space-between;
@@ -22,44 +34,45 @@
 
 .etapa {
     text-align: center;
-    flex: 1; /* Cada etapa ocupa el mismo espacio */
+    flex: 1;
 }
 
 .etapa-icono {
-    font-size: 2rem; /* Ajusta el tamaño del icono */
-    margin-bottom: 5px; /* Espaciado debajo del icono */
-    border: 1px solid #003366; /* Borde azul oscuro */
-    border-radius: 10px; /* Bordes redondeados */
-    padding: 10px; /* Espaciado interno */
-    background-color: #f4f4f4; /* Fondo claro */
-    transition: background-color 0.3s ease; /* Efecto al pasar el ratón */
+    font-size: 2rem;
+    margin-bottom: 5px;
+    border: 1px solid #007bff;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #e9ecef;
+    transition: background-color 0.3s ease;
 }
 
 .etapa-icono:hover {
-    background-color: #3399cc; /* Cambia el color al pasar el ratón */
-    color: white; /* Texto blanco al pasar el ratón */
+    background-color: #007bff;
+    color: white;
 }
 
-p {
-    margin-top: 5px; /* Espaciado entre el icono y el texto */
-    color: #003366; /* Color del texto */
+.etapa p {
+    margin-top: 5px;
+    color: #007bff;
 }
-/* MAIN */
+
+/* Sección de pago */
 .payment-section {
     display: flex;
+    flex-wrap: wrap; /* Permitir que los elementos se adapten en pantallas pequeñas */
     justify-content: space-between;
     margin: 20px;
+    gap: 20px; /* Espacio entre contenedores */
 }
 
 .payment-methods {
     background-color: #fff;
     padding: 20px;
-    margin-left: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 60%;
-    display: flex;
-    flex-direction: column;
+    flex: 1 1 60%; /* Asegurar un ancho proporcional */
+    min-width: 300px;
 }
 
 .payment-method {
@@ -71,7 +84,7 @@ p {
 }
 
 .payment-method:hover {
-    background-color: #f9f9f9;
+    background-color: #f8f9fa;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -83,12 +96,13 @@ p {
 
 .payment-details input {
     display: block;
-    width: 100%;
+    width: calc(100% - 20px); /* Ajuste dinámico al contenedor */
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1em;
+    box-sizing: border-box; /* Incluir padding y border en el ancho */
     transition: border-color 0.3s ease;
 }
 
@@ -97,19 +111,18 @@ p {
     outline: none;
 }
 
+/* Resumen del carrito */
 .cart-summary-container {
-    background-color: #f4f4f4;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 35%;
-}
-
-#cart-summary {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex: 1 1 35%; /* Asegurar un ancho proporcional */
+    min-width: 300px;
+}
+
+#cart-summary {
+    padding: 20px;
 }
 
 #cart-summary h2 {
@@ -121,6 +134,7 @@ p {
 #cart-summary ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 #cart-summary ul li {
@@ -134,7 +148,7 @@ p {
     border-bottom: none;
     font-weight: bold;
     color: #333;
-    background-color: #f9f9f9;
+    background-color: #f8f9f9;
     padding: 15px;
     border-radius: 5px;
 }
@@ -156,4 +170,5 @@ p {
 #pay-button:hover {
     background-color: #0056b3;
 }
+
 
