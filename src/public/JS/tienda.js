@@ -187,15 +187,10 @@ async function añadirAlCarrito(idArticulo, nombreProducto, precio) {
         if (response.ok) {
             const data = await response.json();
             alert(`El producto "${nombreProducto}" ha sido añadido al carrito.`);
-
-            // Actualizamos el carrito visualmente
-            const scriptHeader = document.querySelector("script[src='../JS/header.js']");
-            if (scriptHeader) {
-                // Invocamos la función actualizarCarrito que está en header.js
-                if (typeof window.actualizarCarrito === 'function') {
-                    window.actualizarCarrito();
-                }
-            }
+            // Incrementamos el contador del carrito
+            let contadorCarrito = parseInt(document.getElementById('contador-carrito').textContent) || 0;
+            contadorCarrito += 1;
+            document.getElementById('contador-carrito').textContent = contadorCarrito;
         } else {
             alert('Error al añadir el producto al carrito.');
         }
@@ -204,7 +199,6 @@ async function añadirAlCarrito(idArticulo, nombreProducto, precio) {
         alert('Error al añadir el producto al carrito.');
     }
 }
-
 
 // Cargar el header y el footer con fetch
 fetch('../HTML/header.html')
