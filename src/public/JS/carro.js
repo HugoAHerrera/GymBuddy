@@ -24,7 +24,6 @@ async function actualizarCarrito() {
             if (procederPagoBtn) {
                 procederPagoBtn.disabled = true;  // Deshabilitar el botón de pago si no hay productos
             }
-
         } else {
             // Habilitar el botón de pago
             const procederPagoBtn = document.getElementById('proceder-pago');
@@ -35,13 +34,21 @@ async function actualizarCarrito() {
             productos.forEach(producto => {
                 const precioConDescuento = producto.precio * (1 - producto.descuentoArticulo); // Calculamos el precio con descuento
                 const descuentoPorcentaje = producto.descuentoArticulo * 100; // Convertir el descuento a porcentaje
+
+                // Convertir el Buffer en Blob y luego en URL
+                const byteArray = new Uint8Array(producto.imagenArticulo.data); // Crear un array de bytes
+                const blob = new Blob([byteArray], { type: 'image/png' }); // Crear un Blob con el tipo MIME correcto
+                const imagenURL = URL.createObjectURL(blob); // Crear una URL de objeto para la imagen
+
+                // Añadir el producto al contenedor
                 contenedorProducto.innerHTML += `
                 <div class="producto">
-                    <img src="${producto.imagenArticulo}" alt="Imagen de: ${producto.nombreArticulo}">
+                    <img src="${imagenURL}" alt="Imagen de: ${producto.nombreArticulo}">
                     <h2>${producto.nombreArticulo}</h2>
                     <p class="precio">Precio: $${producto.precio.toFixed(2)}</p>
                     <p class="precioDescuento">Precio con descuento: $${precioConDescuento.toFixed(2)}</p>
                     <p class="descripcion">Descuento: ${descuentoPorcentaje.toFixed(2)}%</p>
+                    <p class="cantidad">Cantidad: ${producto.cantidad}</p>
                 </div>
                 `;
             });
@@ -50,6 +57,8 @@ async function actualizarCarrito() {
         console.error('Error al actualizar el carrito:', error);
     }
 }
+
+
 
 
 // Llamar a la función cuando la página cargue

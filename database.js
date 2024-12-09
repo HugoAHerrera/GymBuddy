@@ -809,7 +809,7 @@ const databaseMethods = {
     // Función para obtener los productos del carrito desde la base de datos
     obtenerProductosCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo FROM carro JOIN tienda ON carro.idArticulo = tienda.idArticulo WHERE carro.id_usuario = ?`;
+            const sql = `SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo, cantidad FROM carro JOIN tienda ON carro.idArticulo = tienda.idArticulo WHERE carro.id_usuario = ?`;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
@@ -820,8 +820,8 @@ const databaseMethods = {
     pasarAPedido: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
-                INSERT INTO pedido (id_usuario, idArticulo)
-                SELECT id_usuario, idArticulo
+                INSERT INTO pedido (id_usuario, idArticulo, cantidad)
+                SELECT id_usuario, idArticulo, cantidad
                 FROM carro
                 WHERE id_usuario = ?;
             `;
@@ -927,7 +927,7 @@ const databaseMethods = {
     obtenerPedido: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT tienda.nombreArticulo AS nombreProducto, tienda.descuentoArticulo AS descuento, tienda.precio AS precio
+                SELECT tienda.nombreArticulo AS nombreProducto, tienda.descuentoArticulo AS descuento, tienda.precio AS precio, cantidad
                 FROM pedido
                 JOIN tienda ON pedido.idArticulo = tienda.idArticulo
                 WHERE pedido.id_usuario = ?;`;

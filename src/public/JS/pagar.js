@@ -117,11 +117,12 @@ async function actualizarCarrito() {
 
             // Agregar productos a la lista
             productos.forEach((producto) => {
-                const precioConDescuento = producto.precio * (1 - producto.descuentoArticulo); // Calcular precio final
-                total += precioConDescuento; // Sumar al total
+                const precioConDescuento = producto.precio * (1 - producto.descuentoArticulo); // Calcular precio con descuento
+                const subtotal = precioConDescuento * producto.cantidad; // Multiplicar por la cantidad
+                total += subtotal; // Sumar al total
 
                 const li = document.createElement('li'); // Crear un elemento de lista
-                li.textContent = `${producto.nombreArticulo}: $${precioConDescuento.toFixed(2)}`;
+                li.textContent = `${producto.nombreArticulo} x ${producto.cantidad}: $${subtotal.toFixed(2)}`;
                 ul.appendChild(li); // Agregar el producto a la lista
             });
 
@@ -134,6 +135,7 @@ async function actualizarCarrito() {
         console.error('Error al actualizar el carrito:', error);
     }
 }
+
 
 
 
