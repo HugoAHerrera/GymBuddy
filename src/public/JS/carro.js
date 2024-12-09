@@ -45,9 +45,9 @@ async function actualizarCarrito() {
                 <div class="producto">
                     <img src="${imagenURL}" alt="Imagen de: ${producto.nombreArticulo}">
                     <h2>${producto.nombreArticulo}</h2>
-                    <p class="precio">Precio: $${producto.precio.toFixed(2)}</p>
-                    <p class="precioDescuento">Precio con descuento: $${precioConDescuento.toFixed(2)}</p>
-                    <p class="descripcion">Descuento: ${descuentoPorcentaje.toFixed(2)}%</p>
+                    <p class="precio">Precio: ${producto.precio.toFixed(2)} KC</p>
+                    <p class="precioDescuento">Precio con descuento: ${precioConDescuento.toFixed(2)} KC</p>
+                    <p class="descripcion">Descuento: ${descuentoPorcentaje.toFixed(2)} %</p>
                     <p class="cantidad">Cantidad: ${producto.cantidad}</p>
                 </div>
                 `;

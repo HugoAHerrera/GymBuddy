@@ -28,11 +28,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             const li = document.createElement('li');
             li.innerHTML = `
                 <strong>${producto.nombreProducto}</strong> - 
-                Precio original: $${producto.precio.toFixed(2)} 
+                Precio original: ${producto.precio.toFixed(2)} KC
                 ${producto.descuento > 0 ? `(Descuento: ${(producto.descuento * 100).toFixed(0)}%)` : ''}
                 <br>
                 <strong>Cantidad:</strong> ${producto.cantidad}
-                <strong>Precio final:</strong> $${precioxcantidad.toFixed(2)}
+                <strong>Precio final:</strong> ${precioxcantidad.toFixed(2)} KC
             `;
             ul.appendChild(li);
         });

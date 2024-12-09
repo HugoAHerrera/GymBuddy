@@ -11,53 +11,53 @@
 <body>
 
 <div id="header-container"></div>
+<main>
+    <div class="progreso-compra">
+        <div class="etapa text-center">
+            <p>Carrito</p>
+            <i class="bi bi-cart-fill" style="font-size: 2rem;"></i>
+        </div>
+        <div class="etapa text-center">
+            <p>Pago</p>
+            <i class="bi bi-credit-card-fill" style="font-size: 2rem; color: rgb(223,190,80);"></i>
+        </div>
+        <div class="etapa text-center">
+            <p>Obtener producto</p>
+            <i class="bi bi-box-fill" style="font-size: 2rem;"></i>
+        </div>
+    </div>
 
-<div class="progreso-compra">
-    <div class="etapa text-center">
-        <p>Carrito</p>
-        <i class="bi bi-cart-fill" style="font-size: 2rem;"></i>
-    </div>
-    <div class="etapa text-center">
-        <p>Pago</p>
-        <i class="bi bi-credit-card-fill" style="font-size: 2rem; color: rgb(223,190,80);"></i>
-    </div>
-    <div class="etapa text-center">
-        <p>Obtener producto</p>
-        <i class="bi bi-box-fill" style="font-size: 2rem;"></i>
-    </div>
-</div>
+    <!-- Métodos de Pago -->
+    <div class="payment-section">
+        <div class="payment-methods">
+            <h3>Seleccione su Método de Pago</h3>
+            <div class="payment-method">
+                <h4>Tarjeta de Crédito</h4>
+                <div class="payment-details">
+                    <input type="text" id="card-number" placeholder="Número de tarjeta">
+                    <input type="text" id="card-holder-name" placeholder="Nombre en la tarjeta">
+                    <input type="text" id="expiration-date" placeholder="MM/YY">
+                    <input type="text" id="cvv" placeholder="CVV">
+                </div>
+            </div>
+            <!-- Otros métodos de pago omitidos para brevedad -->
+        </div>
 
-<!-- Métodos de Pago -->
-<div class="payment-section">
-    <div class="payment-methods">
-        <h3>Seleccione su Método de Pago</h3>
-        <div class="payment-method">
-            <h4>Tarjeta de Crédito</h4>
-            <div class="payment-details">
-                <input type="text" id="card-number" placeholder="Número de tarjeta">
-                <input type="text" id="card-holder-name" placeholder="Nombre en la tarjeta">
-                <input type="text" id="expiration-date" placeholder="MM/YY">
-                <input type="text" id="cvv" placeholder="CVV">
+
+        <div class="cart-summary-container">
+            <div id="cart-summary">
+                <h2>Resumen del Carrito</h2>
+                <!-- Lista de productos, se actualizará dinámicamente con JavaScript -->
+                <ul>
+                    <!-- Estos elementos serán reemplazados dinámicamente por JavaScript -->
+                    <li>No tienes ningún producto en el carrito.</li>
+                </ul>
+                <!-- Botón para proceder al pago -->
+                <button id="pay-button" disabled>Pagar</button>
             </div>
         </div>
-        <!-- Otros métodos de pago omitidos para brevedad -->
     </div>
-
-
-    <div class="cart-summary-container">
-        <div id="cart-summary">
-            <h2>Resumen del Carrito</h2>
-            <!-- Lista de productos, se actualizará dinámicamente con JavaScript -->
-            <ul>
-                <!-- Estos elementos serán reemplazados dinámicamente por JavaScript -->
-                <li>No tienes ningún producto en el carrito.</li>
-            </ul>
-            <!-- Botón para proceder al pago -->
-            <button id="pay-button" disabled>Pagar</button>
-        </div>
-    </div>
-</div>
-
+</main>
 
 <div id="footer-container"></div>
 
