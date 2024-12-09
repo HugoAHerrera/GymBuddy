@@ -330,6 +330,17 @@ app.get('/api/rutinas', async (req, res) => {
     }
 });
 
+app.get('/api/rutPersonalizada', async (req, res) => {
+    try {
+        const idUsuario = req.session.id_usuario;
+        const rutinas = await database.obtenerRutinasPersonales(idUsuario);
+        res.json(rutinas);
+    } catch (error) {
+        console.error('Error al obtener rutinas:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 app.get('/guia-ejercicios',async(req,res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/guia_ejercicios.html'));
 });

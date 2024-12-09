@@ -185,8 +185,20 @@ const databaseMethods = {
                 resolve(rutinas);
             });
         });
-    }
-    ,
+    },
+
+    obtenerRutinasPersonales: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT nombre_rutina FROM rutina WHERE id_usuario = ? OR id_usuario IS NULL AND personalizada = 1`;
+            
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+    },
 
     obtenerEjercicios: async (rutinaNombre) => {
         return new Promise((resolve, reject) => {
