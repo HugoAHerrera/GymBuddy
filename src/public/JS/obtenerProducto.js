@@ -17,7 +17,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         productos.forEach((producto) => {
             // Calcular el precio final con descuento
+            console.log(':', producto.cantidad);
+            console.log(':', producto.precio);
+            console.log(':', producto.descuento);
+            console.log(':', producto.nombreProducto);
             const precioFinal = producto.precio * (1 - producto.descuento);
+            const precioxcantidad = precioFinal * producto.cantidad; // Multiplicar por la cantidad
 
             // Crear un elemento de lista para cada producto
             const li = document.createElement('li');
@@ -26,7 +31,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 Precio original: $${producto.precio.toFixed(2)} 
                 ${producto.descuento > 0 ? `(Descuento: ${(producto.descuento * 100).toFixed(0)}%)` : ''}
                 <br>
-                <strong>Precio final:</strong> $${precioFinal.toFixed(2)}
+                <strong>Cantidad:</strong> ${producto.cantidad}
+                <strong>Precio final:</strong> $${precioxcantidad.toFixed(2)}
             `;
             ul.appendChild(li);
         });
