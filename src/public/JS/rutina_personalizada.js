@@ -69,8 +69,43 @@ function toggleDropdown(id) {
     const dropdown = document.getElementById(id);
     dropdown.classList.toggle("show");
 }
+
+
+document.body.addEventListener('click', (event) => {
+    if (event.target.matches('.btn-guia')) {
+        const h1Element = event.target.previousElementSibling;
+        const rutinaNombre = h1Element.textContent.split(': ')[1];
+        window.open(`/guia-ejercicios?id=${encodeURIComponent(rutinaNombre)}`, '_blank');
+    }
+
+    if (event.target.matches('.eliminar')) {
+        // Encuentra el contenedor del ejercicio a partir del botón
+        const ejercicioDiv = event.target.closest('.ejercicio');
+        const contenedor = document.getElementById("contenedor");
+
+        // Encuentra el índice del ejercicio eliminado
+        const index = [...contenedor.children].indexOf(ejercicioDiv);
+
+        // Confirma antes de eliminar (opcional)
+        const confirmar = confirm('¿Estás seguro de que deseas eliminar este ejercicio?');
+        if (confirmar && ejercicioDiv) {
+            // Elimina del DOM
+            ejercicioDiv.remove();
+
+            // Reindexar los ejercicios restantes
+            [...contenedor.children].forEach((ejercicioDiv, newIndex) => {
+                const h1Element = ejercicioDiv.querySelector('h1');
+                const imagen = ejercicioDiv.querySelector("img");
+                // Actualizar el índice de cada ejercicio
+                imagen.alt = `Ejercicio ${newIndex + 1}`;
+                h1Element.textContent = `Ejercicio ${newIndex + 1}: ${h1Element.textContent.split(': ')[1]}`;
+            });
+        }
+    }
+});
+
 // Confirmar ejercicio y agregarlo al contenedor
-function confirmarEjercicio() {
+async function confirmarEjercicio() {
     const contenedor = document.getElementById("contenedor");
 
     // Obtener el ejercicio seleccionado
@@ -80,33 +115,57 @@ function confirmarEjercicio() {
         return;
     }
 
-    // Crear un nuevo ejercicio en el contenedor
+    // Crear un nuevo div para el ejercicio
     const ejercicio = document.createElement("div");
-    ejercicio.classList.add("ejercicio");  // Aseguramos que el div tenga la clase 'ejercicio'
+    ejercicio.classList.add("ejercicio");
 
-    // Crear solo el título del ejercicio (sin prefijo "Nombre: ")
-    const titulo = document.createElement("h1");
-    titulo.textContent = ejercicioSeleccionado.querySelector('h2').textContent; // Solo el nombre del ejercicio
-
-    // Crear el botón de eliminar ejercicio
-    const botonEliminar = document.createElement("button");
-    botonEliminar.textContent = "Eliminar ejercicio";
-    botonEliminar.classList.add("boton-eliminar");
-    
-    // Agregar un evento para eliminar el ejercicio
-    botonEliminar.addEventListener("click", function() {
-        contenedor.removeChild(ejercicio); // Eliminar el ejercicio del contenedor
+    const respuesta = await fetch('/api/blobAImagenEjercicio', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+            body: JSON.stringify({ nombre_ejercicio: `${ejercicioSeleccionado.querySelector('h2').textContent}` }),
     });
 
-    // Añadir el título y el botón de eliminar al ejercicio
-    ejercicio.appendChild(titulo);
-    ejercicio.appendChild(botonEliminar);
+    if (!respuesta.ok) {
+        throw new Error('No se pudo cargar la imagen del ejercicio');
+    }
 
+    const datos = await respuesta.json();
+
+    if (!datos.imagen) {
+        console.error('No se recibió una imagen válida.');
+    }
+    // Crear la imagen del ejercicio
+    const imagen = document.createElement("img");
+    imagen.src = `${datos.imagen}`;
+    imagen.alt = `Ejercicio ${contenedor.children.length + 1}`;  // Asignar el nuevo índice
+    imagen.classList.add("imagen_ejercicio");
+
+    // Crear el título del ejercicio con el índice
+    const titulo = document.createElement("h1");
+    titulo.textContent = `Ejercicio ${contenedor.children.length + 1}: ${ejercicioSeleccionado.querySelector('h2').textContent}`;
+
+    // Crear los botones
+    const botonGuia = document.createElement("button");
+    botonGuia.textContent = "Ver Guía";
+    botonGuia.classList.add("btn-guia");
+
+    const botonEliminar = document.createElement("button");
+    botonEliminar.textContent = "Eliminar";
+    botonEliminar.classList.add("eliminar");
+
+    // Añadir el ejercicio al contenedor
+    ejercicio.appendChild(imagen);
+    ejercicio.appendChild(titulo);
+    ejercicio.appendChild(botonGuia);
+    ejercicio.appendChild(botonEliminar);
     contenedor.appendChild(ejercicio);
 
-    // Cerrar el modal de filtros
+    // Cerrar el modal de filtros (si corresponde)
     cerrarVentanaEmergente();
 }
+
 
 // Función para obtener los valores seleccionados en un filtro
 function obtenerValoresSeleccionados(id) {
