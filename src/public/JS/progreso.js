@@ -24,7 +24,6 @@ async function obtenerDatosSesiones() {
     try {
         const response = await fetch('/api/sesiones');
         const data = await response.json();
-        console.log('Datos de sesiones:', data);
         const sesiones = transformarDatosParaGraficas(data);
         actualizarGraficoTiempo(sesiones);
 
@@ -38,7 +37,6 @@ async function obtenerRutinasHechas() {
     try {
         const response = await fetch('/api/rutinasHechas');
         const datos = await response.json();
-        console.log('Rutinas hechas:', datos);
         const sesiones = transformarDatosParaGraficas(datos);
         actualizarGraficoRutinas(sesiones);
     } catch (error) {
@@ -76,10 +74,6 @@ function transformarDatosParaGraficas(data) {
         nombresRutina.push(sesion.nombre_rutina); // Almacena el nombre de la rutina
         cantidades.push(sesion.total_rutina); // Almacena la cantidad de veces que se hizo
     });
-    console.log('Tiempo de rutina:', tiempoRutina);
-    console.log('Fechas:', fechas);
-    console.log('Nombres de rutina:', nombresRutina);
-    console.log('Cantidades:', cantidades);
 
     return {
         tiempoRutina,

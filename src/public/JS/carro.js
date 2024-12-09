@@ -1,14 +1,14 @@
 async function actualizarCarrito() {
     try {
         const response = await fetch('/api/obtenerCarro');
-        console.log('Respuesta de la API:', response); // Verificar la respuesta completa de la API
+        //console.log('Respuesta de la API:', response); // Verificar la respuesta completa de la API
 
         if (!response.ok) {
             throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
         }
 
         const productos = await response.json();
-        console.log('Productos recibidos desde la API:', productos); // Verificar los productos recibidos
+        //console.log('Productos recibidos desde la API:', productos); // Verificar los productos recibidos
 
         // Obtener el contenedor de productos (el div con la clase 'producto')
         const contenedorProducto = document.querySelector('.producto');
@@ -16,7 +16,7 @@ async function actualizarCarrito() {
 
         // Verificar si productos está vacío o no
         if (productos.length === 0) {
-            console.log('El carrito está vacío');
+            //console.log('El carrito está vacío');
             contenedorProducto.innerHTML = `<p>No tienes ningún producto en el carrito.</p>`;  // Mensaje de carrito vacío
 
             // Deshabilitar el botón de pago

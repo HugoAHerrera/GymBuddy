@@ -84,14 +84,12 @@ async function actualizarCarrito() {
     try {
         // Solicitud a la API para obtener los productos en el carrito
         const response = await fetch('/api/obtenerCarro');
-        console.log('Respuesta de la API:', response);
 
         if (!response.ok) {
             throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
         }
 
         const productos = await response.json();
-        console.log('Productos recibidos desde la API:', productos);
 
         // Referencia al contenedor del resumen del carrito
         const resumenCarrito = document.getElementById('cart-summary');
@@ -100,7 +98,6 @@ async function actualizarCarrito() {
         let total = 0; // Inicializar el total
 
         if (productos.length === 0) {
-            console.log('El carrito está vacío');
             ul.innerHTML = `<li>No tienes ningún producto en el carrito.</li>`; // Mensaje de carrito vacío
 
             // Deshabilitar el botón de pago

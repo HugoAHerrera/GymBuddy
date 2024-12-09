@@ -1,6 +1,5 @@
 async function cargarImagenUsuario() {
     try {
-        console.log("Entra cargar Imagen");
 
         // Hacer una solicitud al endpoint que devuelve la imagen
         const respuesta = await fetch('/api/blobAImagen', {
@@ -37,7 +36,6 @@ async function cargarImagenUsuario() {
         imgElemento.style.backgroundSize = 'cover';  // Ajusta el tamaño del fondo para cubrir el elemento
         imgElemento.style.backgroundPosition = 'center';  // Centra la imagen dentro del elemento
 
-        console.log("Imagen de fondo cargada");
 
     } catch (error) {
         console.error('Error al cargar la imagen:', error);
