@@ -1,13 +1,22 @@
 document.getElementById("guardar-cambios").addEventListener("click", function () {
+
     const nuevoNombreUsuario = document.getElementById("nombre-usuario").value;
     const nuevoCorreoUsuario = document.getElementById("email-usuario").value;
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    cargarImagenUsuario()
+    // Verificas si el correo es válido
+    if (!emailRegex.test(nuevoCorreoUsuario)) {
+        // Si el correo no es válido, pones un mensaje de error en el párrafo
+        document.getElementById("mensaje-confirmacion").innerText = "Introduzca un correo o un nombre de usuario válidos.";
+        return;
+    }
     const imagen = document.getElementById("inputImagen").files[0]; // Obtener el archivo de imagen
-
+    cargarImagenUsuario()
     const formData = new FormData();
     formData.append("nombre_usuario", nuevoNombreUsuario);
     formData.append("correo_usuario", nuevoCorreoUsuario);
     formData.append("imagen", imagen); // Agregar la imagen al FormData
-
+    cargarImagenUsuario()
     async function cargarImagenUsuario() {
         try {
             // Hacer una solicitud al endpoint que devuelve la imagen
@@ -78,6 +87,20 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => {
             console.error('Error al cargar los datos del usuario:', error);
         });
+        fetch('/api/tiempoEjercicio')
+        .then(response => response.json())
+        .then(data2 => {
+            console.log(data2.tiempo)
+            if(data2.tiempo == null){
+                document.getElementById('tiempo-ejercicio').innerText = "No se han registrado tus datos";
+            } else {
+                document.getElementById('tiempo-ejercicio').innerText = data2.tiempo + " segundos";
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener los datos:', error);
+        });
+    
 });
 
 async function cargarImagenUsuario() {

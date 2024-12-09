@@ -15,7 +15,8 @@
         <aside class="sidebar">
             <ul>
                 <li><a href="#perfil">Perfil</a></li>
-                <li><a href="#estadísticasDeportivas">Estadísticas deportivas</a></li>
+                <li><a href="#tu-actividad">Tu Actividad</a></li>
+                <li><a href="#imc">IMC</a></li>
             </ul>
         </aside>
 
@@ -47,38 +48,18 @@
                     </div>
                 </div>
             </div>
-                
-                <div class="actividad-section">
-                    <h2>Tu Actividad:</h2>
-                    <div class="actividad-info">
-                        <div class="actividad-item">
-                            <h3>Tiempo total en la aplicación:</h3>
-                            <p>5 horas y 34 minutos</p>
-                        </div>
-                
-                        <div class="actividad-item">
-                            <h3>Veces que abriste la aplicación:</h3>
-                            <p>45 veces este mes</p>
-                        </div>
-                
-                        <div class="actividad-item">
-                            <h3>Frecuencia diaria promedio:</h3>
-                            <p>3.2 veces por día</p>
-                        </div>
-                
-                        <div class="actividad-item">
-                            <h3>Sesión más larga registrada:</h3>
-                            <p>1 hora y 15 minutos</p>
-                        </div>
-                
-                        <div class="actividad-item">
-                            <h3>Progreso semanal:</h3>
-                            <div class="actividad-progreso">
-                                <div class="actividad-barra" style="width: 70%;"></div>
-                            </div>
-                        </div>
+            <div id="tu-actividad" class="actividad-section">
+                <h2>Tu Actividad:</h2>
+                <div class="actividad-info">
+                    <div class="actividad-item">
+                        <h3>Tiempo dedicado a la actividad física</h3>
+                        <p id="tiempo-ejercicio"></p>
                     </div>
                 </div>
+            </div>
+            <div class="IMC">
+                <button class="guardar-btn" id="boton-imc" onclick="window.location.href='IMC'">Calcula tu IMC</button>
+            </div>
         </section>
     </main>
 

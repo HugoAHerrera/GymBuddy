@@ -185,8 +185,20 @@ const databaseMethods = {
                 resolve(rutinas);
             });
         });
-    }
-    ,
+    },
+
+    obtenerRutinasPersonales: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT nombre_rutina FROM rutina WHERE id_usuario = ? OR id_usuario IS NULL AND personalizada = 1`;
+            
+            connection.query(sql, [idUsuario], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+    },
 
     obtenerEjercicios: async (rutinaNombre) => {
         return new Promise((resolve, reject) => {
@@ -525,6 +537,21 @@ const databaseMethods = {
     
 
     // PERFIL
+    // 
+    obtenertiempoEjercicio: async (idUsuario) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT SUM(tiempo_total) AS total_tiempo FROM gymbuddy.sesion WHERE id_usuario = ?'
+            connection.query(sql, [idUsuario], (err, results) => {
+                    try {
+        
+                        resolve(results);
+                    } catch (error) {
+                        reject(error);
+                    }
+                });
+        });
+    },
+
     cambiarNombreUsuario: async (idUsuario, nuevoNombre) => {
         return new Promise((resolve, reject) => {
             // Asegúrate de que la columna a actualizar sea 'nombre_usuario' y que el valor 'nuevoNombre' se pase correctamente.

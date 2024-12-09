@@ -1,5 +1,7 @@
 
-body {
+body { /* Esto ocultará cualquier contenido que se desborde */
+    width: 100vw;      /* Asegura que el ancho sea el 100% de la ventana */
+    height: 100vh;     /* Asegura que la altura sea el 100% de la ventana */
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     color: #333;
@@ -7,6 +9,12 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.center{
+    align-items: center;
+    width: 80%;
+    margin-left: 15%;
 }
 
 
@@ -139,6 +147,7 @@ body {
     flex-direction: column; 
     align-items: center;
     visibility: hidden;
+    margin-left:15%;
     opacity: 0;
     transition: opacity 0.5s, visibility 0s linear 0.5s;
 }
@@ -163,7 +172,6 @@ body {
 }
 
 .center-container {
-    margin-left: 20%;
     display: flex;
     width: 100%;
     transition: width 0.3s ease;
@@ -287,6 +295,39 @@ input[type="text"], input[type="file"] {
     transform: scale(1.05);
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
+
+/* footer.css */
+html, body {
+    height: 100%; /* Asegura que el html y body ocupen toda la altura de la ventana */
+    margin: 0; /* Elimina márgenes predeterminados */
+    z-index: 100; /* Asegura que el footer tenga un valor alto de z-index y esté encima de otros elementos */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura de la ventana */
+    z-index: 100; /* Asegura que el footer tenga un valor alto de z-index y esté encima de otros elementos */
+}
+
+.content {
+    flex-grow: 1; /* Esto hace que el contenido crezca y empuje el footer hacia abajo */
+    z-index: 100; /* Asegura que el footer tenga un valor alto de z-index y esté encima de otros elementos */
+}
+
+
+footer a {
+    color: white;
+    text-decoration: none;
+    z-index: 100; /* Asegura que el footer tenga un valor alto de z-index y esté encima de otros elementos */
+}
+
+footer a.footer-enlace:hover {
+    text-decoration: underline;
+    color: rgb(154, 233, 233);
+    z-index: 100; /* Asegura que el footer tenga un valor alto de z-index y esté encima de otros elementos */
+}
+
 
 .ejercicios h2 {
     margin: 0;

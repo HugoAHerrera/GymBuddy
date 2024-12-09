@@ -12,16 +12,22 @@
 <body>
     <div id="header-container"></div>
     <main>
-        <h1 id="titulo-rutina" contenteditable="true">Nueva Rutina</h1>
+        <div id="contenedores">
+            <h1 id="titulo-rutina" contenteditable="true">Nueva Rutina</h1>
+            
+            <div id="contenedor-botones">
+                <div id="contenedor-guardar">
+                    <button id="guardar">Guardar</button>
+                </div>
+                <div id="contenedor-cancelar" onclick="window.location.href='rutina'">
+                    <button id="cancelar">Cancelar</button>
+                </div>
+            </div>
         
-
-        <div class="contenedor-boton" id="contenedor-guardar">
-            <button id="guardar">Guardar</button>
+            <div id="mensaje-advertencia">
+            </div>
         </div>
-
-        <div id="mensaje-advertencia">
-            No se puede crear la rutina. No hay ejercicios disponibles.
-        </div>
+        
         <div class="contenedor" id="contenedor">
             <!-- Ejercicios se agregarán aquí dinámicamente -->
         </div>

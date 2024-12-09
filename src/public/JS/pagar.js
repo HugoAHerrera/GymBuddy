@@ -8,20 +8,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Validación básica
         if (!cardNumber || !expirationDate || !cvv) {
-            alert('Por favor, complete todos los campos de la tarjeta.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campos incompletos',
+                text: 'Por favor, complete todos los campos de la tarjeta.',
+            });
             return;
         }
 
-        /*
-        // Validación del número de tarjeta (Algoritmo de Luhn)
-        if (!isValidCardNumber(cardNumber)) {
-            alert('Número de tarjeta inválido.');
-            return;
-        }
-        */
         // Confirmación
-        const confirmation = confirm('¿Desea guardar estos datos?');
-        if (!confirmation) {
+        const confirmation = await Swal.fire({
+            title: '¿Desea guardar estos datos?',
+            text: "Asegúrese de que los datos ingresados son correctos.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar',
+        });
+
+        if (!confirmation.isConfirmed) {
+            // Paso 2: Vaciar el carrito después de crear el pedido
+            await fetch('/api/vacioCarro', { method: 'DELETE' });
             window.location.href = '/obtenerProducto';
             return;
         }
@@ -43,47 +50,96 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const data = await response.json();
             if (response.ok) {
-                alert('Datos guardados correctamente.');
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: 'Datos guardados correctamente.',
+                });
+                // Paso 2: Vaciar el carrito después de crear el pedido
+                await fetch('/api/vacioCarro', { method: 'DELETE' });
                 window.location.href = '/obtenerProducto';
             } else {
                 console.error(data.message);
-                alert('Error: ' + data.message);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message,
+                });
             }
         } catch (error) {
             console.error('Error al guardar los datos de la tarjeta:', error);
-            alert('Hubo un error al guardar los datos.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Hubo un error',
+                text: 'Hubo un problema al guardar los datos.',
+            });
         } finally {
             payButton.disabled = false; // Rehabilita el botón
         }
     });
-/*
-    // Valida un número de tarjeta con el Algoritmo de Luhn
-    function isValidCardNumber(number) {
-        let sum = 0;
-        let shouldDouble = false;
+});
 
-        for (let i = number.length - 1; i >= 0; i--) {
-            let digit = parseInt(number[i], 10);
 
-            if (shouldDouble) {
-                digit *= 2;
-                if (digit > 9) digit -= 9;
-            }
+async function actualizarCarrito() {
+    try {
+        // Solicitud a la API para obtener los productos en el carrito
+        const response = await fetch('/api/obtenerCarro');
+        console.log('Respuesta de la API:', response);
 
-            sum += digit;
-            shouldDouble = !shouldDouble;
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
         }
 
-        return sum % 10 === 0;
-    }
+        const productos = await response.json();
+        console.log('Productos recibidos desde la API:', productos);
 
- */
-});
+        // Referencia al contenedor del resumen del carrito
+        const resumenCarrito = document.getElementById('cart-summary');
+        const ul = resumenCarrito.querySelector('ul'); // Obtener la lista de productos
+        ul.innerHTML = ''; // Limpiar el contenido actual de la lista
+        let total = 0; // Inicializar el total
+
+        if (productos.length === 0) {
+            console.log('El carrito está vacío');
+            ul.innerHTML = `<li>No tienes ningún producto en el carrito.</li>`; // Mensaje de carrito vacío
+
+            // Deshabilitar el botón de pago
+            const payButton = document.getElementById('pay-button');
+            if (payButton) {
+                payButton.disabled = true;
+            }
+        } else {
+            // Habilitar el botón de pago
+            const payButton = document.getElementById('pay-button');
+            if (payButton) {
+                payButton.disabled = false;
+            }
+
+            // Agregar productos a la lista
+            productos.forEach((producto) => {
+                const precioConDescuento = producto.precio * (1 - producto.descuentoArticulo); // Calcular precio final
+                total += precioConDescuento; // Sumar al total
+
+                const li = document.createElement('li'); // Crear un elemento de lista
+                li.textContent = `${producto.nombreArticulo}: $${precioConDescuento.toFixed(2)}`;
+                ul.appendChild(li); // Agregar el producto a la lista
+            });
+
+            // Agregar el total al final de la lista
+            const liTotal = document.createElement('li');
+            liTotal.innerHTML = `<strong>Total:</strong> $${total.toFixed(2)}`;
+            ul.appendChild(liTotal);
+        }
+    } catch (error) {
+        console.error('Error al actualizar el carrito:', error);
+    }
+}
+
 
 
 document.addEventListener('DOMContentLoaded', function() {
     const logoImage = document.getElementById('logotype');
-    
+    actualizarCarrito()
     logoImage.addEventListener('click', function() {
         window.location.href = 'perfil.html';
     });

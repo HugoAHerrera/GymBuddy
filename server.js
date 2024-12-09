@@ -331,6 +331,17 @@ app.get('/api/rutinas', async (req, res) => {
     }
 });
 
+app.get('/api/rutPersonalizada', async (req, res) => {
+    try {
+        const idUsuario = req.session.id_usuario;
+        const rutinas = await database.obtenerRutinasPersonales(idUsuario);
+        res.json(rutinas);
+    } catch (error) {
+        console.error('Error al obtener rutinas:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
 app.get('/guia-ejercicios',async(req,res) => {
     res.sendFile(path.join(__dirname, '/src/public/HTML/guia_ejercicios.html'));
 });
@@ -418,12 +429,30 @@ app.listen(PORT, async () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
+app.get('/IMC', (req,res) => {
+    res.sendFile(path.join(__dirname, 'src/public/HTML/imc.html'));
+})
+
 app.get('/perfil', (req, res) => {
     if (!req.session.id_usuario) {
         return res.status(400).send('ID de usuario no proporcionado');
     }
     console.log('Perfil:',req.session.id_usuario)
     res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
+});
+
+
+app.get('/api/tiempoEjercicio', async (req, res) => {
+    try {
+        const tiempo_lista = await database.obtenertiempoEjercicio(req.session.id);
+        const tiempo = tiempo_lista[0].total_tiempo;
+        res.json({
+            tiempo: tiempo
+        });
+    } catch (error) {
+        console.error('Error al obtener los datos del usuario:', error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
 });
 
 app.post('/api/blob', upload.single('imagen'), async (req, res) => {
@@ -460,14 +489,15 @@ app.post('/api/blob', upload.single('imagen'), async (req, res) => {
 app.post('/api/cambiarNombreUsuario', upload.single('imagen'), async (req, res) => {
     try {
         const { nombre_usuario, correo_usuario } = req.body;
+        console.log(nombre_usuario, correo_usuario)
         const imagen = req.file;
 
         const usuarioExistente = await database.comprobarUsuarioExistente(nombre_usuario);
         const correoExistente = await database.comprobarCorreoExistente(correo_usuario);
         console.log("a:",usuarioExistente,"b:",correoExistente)
         // Esta lógica es muy específica. Ajusta según tu necesidad.
-        if (usuarioExistente == false || correoExistente == false ){
-            return res.status(400).json({ error: 'Los campos Nombre Usuario y Mail Asociado son obligatorios' });
+        if ( nombre_usuario == "" || correo_usuario == ""){
+            return res.status(400).json({ error: 'Los campos Nombre Usuario y Mail Asociado son obligatorios 2' });
         }
         if (usuarioExistente && usuarioExistente.id !== req.session.id_usuario) {
             if (correoExistente && correoExistente.id !== req.session.id_usuario) {

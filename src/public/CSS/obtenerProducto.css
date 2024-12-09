@@ -72,24 +72,44 @@ p {
     color: #333;
 }
 
+.mensaje p {
+    font-size: 1.2em;
+    color: #555;
+}
+
+.productos-lista {
+    max-height: 150px; /* Reducimos la altura para forzar el scroll */
+    overflow-y: auto; /* Habilita scroll solo cuando sea necesario */
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+
+
 .productos ul {
-    list-style-type: none;
+    list-style-type: none; /* Elimina los puntos de la lista */
     padding: 0;
+    margin: 0;
 }
 
 .productos ul li {
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Línea divisoria entre productos */
     font-size: 1.1em;
     color: #555;
 }
 
 .productos ul li:last-child {
-    border-bottom: none;
+    border-bottom: none; /* Elimina la línea del último producto */
 }
 
-.mensaje p {
-    font-size: 1.2em;
-    color: #555;
+.productos ul li:hover {
+    background-color: #f0f0f0; /* Fondo más claro al pasar el ratón */
+    transition: background-color 0.3s ease; /* Efecto de transición */
 }
+
 

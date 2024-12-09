@@ -277,6 +277,36 @@ async function filterData(period) {
     }
 }
 
+async function cargarImagenUsuario() {
+    try {
+        // Hacer una solicitud al endpoint que devuelve la imagen
+        const respuesta = await fetch('/api/blobAImagen', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include' // Para enviar cookies de sesión
+        });
+
+        if (!respuesta.ok) {
+            throw new Error('No se pudo cargar la imagen del usuario');
+        }
+
+        const datos = await respuesta.json();
+
+        if (!datos.imagen) {
+            console.error('No se recibió una imagen válida.');
+            return;
+        }
+
+        // Asignar la imagen al elemento <img> usando el ID
+        const imgElemento = document.getElementById('imagenes-perfil');
+        imgElemento.src = datos.imagen; // datos.imagen es el Base64 devuelto por la API
+    } catch (error) {
+        console.error('Error al cargar la imagen:', error);
+    }
+}
+cargarImagenUsuario()
 
 
 
