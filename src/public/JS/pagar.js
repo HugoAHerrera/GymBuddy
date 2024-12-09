@@ -119,13 +119,13 @@ async function actualizarCarrito() {
                 total += subtotal; // Sumar al total
 
                 const li = document.createElement('li'); // Crear un elemento de lista
-                li.textContent = `${producto.nombreArticulo} x ${producto.cantidad}: $${subtotal.toFixed(2)}`;
+                li.textContent = `${producto.nombreArticulo} x ${producto.cantidad}: ${subtotal.toFixed(2)} KC`;
                 ul.appendChild(li); // Agregar el producto a la lista
             });
 
             // Agregar el total al final de la lista
             const liTotal = document.createElement('li');
-            liTotal.innerHTML = `<strong>Total:</strong> $${total.toFixed(2)}`;
+            liTotal.innerHTML = `<strong>Total:</strong> ${total.toFixed(2)} KC`;
             ul.appendChild(liTotal);
         }
     } catch (error) {
