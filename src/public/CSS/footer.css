@@ -1,17 +1,17 @@
-/* footer.css */
+/* inicio.css */
 html, body {
-    height: 100%; /* Asegura que el html y body ocupen toda la altura de la ventana */
+    height: 100%; /* Asegura que html y body ocupen toda la altura de la ventana */
     margin: 0; /* Elimina márgenes predeterminados */
 }
 
 body {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Apila los elementos de arriba hacia abajo */
     min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura de la ventana */
 }
 
-.content {
-    flex-grow: 1; /* Esto hace que el contenido crezca y empuje el footer hacia abajo */
+main {
+    flex-grow: 1; /* Hace que el main crezca y ocupe el espacio disponible */
 }
 
 footer {
@@ -21,17 +21,17 @@ footer {
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
-    margin-top: auto; /* Esto asegura que el footer se empuje al final del contenido */
     position: relative; /* Necesario para que z-index funcione */
-    z-index: 100; /* Asegura que el footer tenga un valor alto de z-index y esté encima de otros elementos */
+    z-index: 100; /* Asegura que el footer esté por encima de otros elementos */
 }
 
 footer a {
     color: white;
     text-decoration: none;
+    transition: color 0.3s ease, text-decoration 0.3s ease; /* Para suavizar el cambio de color y subrayado */
 }
 
 footer a.footer-enlace:hover {
     text-decoration: underline;
-    color: rgb(154, 233, 233);
+    color: rgb(154, 233, 233); /* El color del enlace al pasar el cursor */
 }
