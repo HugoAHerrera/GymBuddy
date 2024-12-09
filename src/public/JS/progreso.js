@@ -50,12 +50,13 @@ async function obtenerEstadisticas() {
         const response = await fetch(`/api/estadisticas`);
         const data = await response.json();
         const sesionesCompletadas = data.sesionesCompletadas || 0;
-        const distanciaRecorrida = data.distanciaRecorrida || 0;
-        const ultimaSesion = data.ultimaSesion || 'Nunca';
+        const distanciaRecorrida = data.distanciaRecorrida.toFixed(1) || 0;
+        const ultimaSesion = dayjs(data.ultimaSesion).format('DD-MM-YYYY') || 'Nunca';
+
         // Actualizar el DOM con los datos
         document.getElementById('sesiones-completadas').innerText = sesionesCompletadas;
-        document.getElementById('distancia-recorrida').innerText = distanciaRecorrida.toFixed(1); // Para un decimal
-        document.getElementById('ultima-sesion').innerText = dayjs(ultimaSesion).format('DD-MM-YYYY');
+        document.getElementById('distancia-recorrida').innerText = distanciaRecorrida;
+        document.getElementById('ultima-sesion').innerText = ultimaSesion;
     } catch (error) {
         console.error('Error al obtener estadísticas del usuario:', error);
     }

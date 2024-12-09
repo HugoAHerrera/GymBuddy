@@ -122,7 +122,6 @@ app.post('/api/login', async (req, res) => {
     }
 
     req.session.id_usuario = user.id_usuario;
-    console.log('id:',req.session.id_usuario)
 
     res.status(200).json({ message: 'Inicio de sesión exitoso', user });
   } catch (error) {
@@ -437,7 +436,6 @@ app.get('/perfil', (req, res) => {
     if (!req.session.id_usuario) {
         return res.status(400).send('ID de usuario no proporcionado');
     }
-    console.log('Perfil:',req.session.id_usuario)
     res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
 });
 
@@ -445,9 +443,7 @@ app.get('/perfil', (req, res) => {
 app.get('/api/tiempoEjercicio', async (req, res) => {
     try {
         const tiempo_lista = await database.obtenertiempoEjercicio(req.session.id_usuario);
-        console.log("T:",tiempo_lista)
         const tiempo = tiempo_lista[0].total_tiempo;
-        console.log("A:",tiempo)
         res.json({
             tiempo: tiempo
         });
@@ -491,12 +487,10 @@ app.post('/api/blob', upload.single('imagen'), async (req, res) => {
 app.post('/api/cambiarNombreUsuario', upload.single('imagen'), async (req, res) => {
     try {
         const { nombre_usuario, correo_usuario } = req.body;
-        console.log(nombre_usuario, correo_usuario)
         const imagen = req.file;
 
         const usuarioExistente = await database.comprobarUsuarioExistente(nombre_usuario);
         const correoExistente = await database.comprobarCorreoExistente(correo_usuario);
-        console.log("a:",usuarioExistente,"b:",correoExistente)
         // Esta lógica es muy específica. Ajusta según tu necesidad.
         if ( nombre_usuario == "" || correo_usuario == ""){
             return res.status(400).json({ error: 'Los campos Nombre Usuario y Mail Asociado son obligatorios 2' });
@@ -581,7 +575,6 @@ app.post('/api/descripcion', async (req, res) => {
     const { idUsuario } = req.body;
     try {
         const descripcionUsuario = await database.obtenerDescripcionUsuario(idUsuario);
-        console.log('Descripción del usuario obtenida correctamente');
         res.json({ message: 'Descripción del usuario obtenida correctamente', descripcionUsuario });
     } catch (error) {
         console.error('Error al obtener la descripción del usuario:', error);
@@ -597,7 +590,6 @@ app.get('/api/sesiones', async (req, res) => {
     }
     try {
         const sesiones = await database.obtenerSesiones(idUsuario, periodo);
-        console.log(sesiones);
         res.json(sesiones);
     } catch (error) {
         console.error('Error al obtener sesiones:', error);
@@ -612,13 +604,11 @@ app.get('/api/sesiones', async (req, res) => {
 app.get('/api/rutinasHechas', async (req, res) => {
     const { periodo } = req.query;
     const idUsuario = req.session.id_usuario;
-    console.log('idUsuario:', idUsuario);
     if (!idUsuario) {
         return res.status(400).json({ error: 'No se ha encontrado el id_usuario en la sesión' });
     }
     try {
         const rutinasHechas = await database.obtenerRutinasSesiones(idUsuario, periodo);
-        console.log(rutinasHechas);
         res.json(rutinasHechas);
     } catch (error) {
         console.error('Error al obtener rutinasHechas', error);
@@ -629,14 +619,12 @@ app.get('/api/rutinasHechas', async (req, res) => {
 
 app.get('/api/estadisticas/', async (req, res) => {
     const idUsuario = req.session.id_usuario;
-    console.log('idUsuario:', idUsuario);
     if (!idUsuario) {
         return res.status(400).json({ error: 'No se ha encontrado el id_usuario en la sesión' });
     }
 
     try {
         const estadisticas = await database.obtenerEstadisticasSesiones(idUsuario);
-        console.log(estadisticas);
         res.json(estadisticas);
     } catch (error) {
         console.error('Error al obtener estadísticas', error);
@@ -646,7 +634,6 @@ app.get('/api/estadisticas/', async (req, res) => {
 
 // Rutas para desafíos
 app.post('/api/guardarMeta', async (req, res) => {
-    console.log("Datos recibidos:", req.body);
     const id_usuario = req.session.id_usuario;
     const { titulo, desc, recompensa } = req.body;
 
@@ -673,7 +660,6 @@ app.post('/api/borrarMeta', async (req, res) => {
     const titulo = req.body;
     try {
         await database.borrarMeta(titulo);
-        console.log(titulo, "borrado con exito.");
         res.status(201).json({ message: 'Desafio borrado con éxito' });
     }
     catch (error) {
@@ -683,7 +669,6 @@ app.post('/api/borrarMeta', async (req, res) => {
 });
 
 app.post('/api/actualizarNumeroMetas', async (req, res) => {
-    console.log("Titulos con descripcion recibidos:", req.body);
     const { antiguoTitulo, nuevoTitulo } = req.body;
 
     try {
@@ -692,7 +677,6 @@ app.post('/api/actualizarNumeroMetas', async (req, res) => {
                 antiguoTitulo: antiguoTitulo[i],
                 nuevoTitulo: nuevoTitulo[i]
             });
-            console.log(antiguoTitulo[i], " actualizado con éxito a", nuevoTitulo[i]);
         }
         res.status(201).json({message: 'Desafios actualizados con éxito'});
     }
@@ -703,7 +687,6 @@ app.post('/api/actualizarNumeroMetas', async (req, res) => {
 });
 
 app.post('/api/actualizarProgreso', async (req, res) => {
-    console.log("Progreso recibido:", req.body);
     const { titulo, porcentage } = req.body;
     try {
         await database.actualizarProgreso({
@@ -722,7 +705,7 @@ app.get('/api/recuperarMetas', async (req, res) => {
     const id_usuario = req.session.id_usuario;
     try {
         const infoDesafios = await database.obtenerDesafios(id_usuario);
-        console.log("Datos obtenidos de la BBDD", infoDesafios);
+        
         res.json(infoDesafios);
     }
     catch (error) {
@@ -732,7 +715,6 @@ app.get('/api/recuperarMetas', async (req, res) => {
 });
 
 app.post('/api/fechaDesafioCompletado', async (req, res) => {
-    console.log("Fecha de complecion", req.body);
     const { fecha } = req.body;
     const id_usuario = req.session.id_usuario;
 
@@ -749,7 +731,6 @@ app.post('/api/fechaDesafioCompletado', async (req, res) => {
     }
 });
 app.post('/api/fechasDesafiosABorrar', async (req, res) => {
-    console.log("Fechas a borrar", req.body);
     const { fecha } = req.body;
     const id_usuario = req.session.id_usuario;
 
@@ -769,7 +750,6 @@ app.get('/api/historialDesafiosCompletados', async (req, res) => {
     const id_usuario = req.session.id_usuario;
     try {
         const fechas = await database.desafiosCompletados(id_usuario);
-        console.log("Fechas del usuario:",id_usuario, fechas);
         res.json(fechas);
     }
     catch (error) {
@@ -778,7 +758,6 @@ app.get('/api/historialDesafiosCompletados', async (req, res) => {
     }
 });
 app.post('/api/annadirDineroDesafio', async (req, res) => {
-    console.log("Dinero añadido", req.body);
     const { dinero } = req.body;
     const id_usuario = req.session.id_usuario;
     try {
@@ -797,7 +776,6 @@ app.get('/api/recuperarDinero', async (req, res) => {
     const id_usuario = req.session.id_usuario;
     try {
         const dinero = await database.recuperarDinero(id_usuario);
-        console.log("Dinero del usuario:",id_usuario, dinero);
         res.json(dinero)
     }
     catch (error) {
@@ -808,14 +786,12 @@ app.get('/api/recuperarDinero', async (req, res) => {
 
 app.get('/api/obtenerCarro', async (req, res) => {
     const idUsuario = req.session.id_usuario;
-    console.log('idUsuario en backend:', idUsuario);
     if (!idUsuario) {
         return res.status(400).json({ error: 'El id_usuario no está disponible' });
     }
 
     try {
         const productos = await database.obtenerProductosCarro(idUsuario);
-        console.log('Productos obtenidos desde la base de datos:', productos);
         res.json(productos);
     } catch (error) {
         console.error('Error al obtener productos del carrito:', error);
@@ -998,7 +974,6 @@ app.get('/api/obtenerProductos', async (req, res) => {
     }
     try {
         const productos = await database.obtenerPedido(idUsuario);
-        console.log('Productos obtenidos:', productos);
         res.json(productos); // Devolvemos los productos comprados como respuesta
     } catch (error) {
         console.error('Error al obtener productos:', error);

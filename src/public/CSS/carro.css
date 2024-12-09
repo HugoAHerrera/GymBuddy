@@ -50,15 +50,17 @@ p {
 /* Contenedor principal */
 .contenedor {
     display: flex;
-    justify-content: space-between; /* Asegura un buen espaciado entre secciones */
-    gap: 20px; /* Espaciado entre elementos hijos */
+    justify-content: space-between; /* Espaciado entre columnas */
+    align-items: flex-start; /* Alinea los elementos en la parte superior */
+    gap: 20px; /* Espaciado entre las columnas */
     margin-left: 10%;
     margin-right: 10%;
 }
 
+
 /* Producto */
 .producto {
-    flex: 1; /* Ocupa más espacio que el resumen */
+    flex: 2; /* Ocupa más espacio relativo que el resumen */
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
@@ -99,16 +101,17 @@ p {
 
 /* Resumen de la compra */
 .resumen-compra {
-    flex: 1; /* Ocupa menos espacio */
-    max-width: 350px; /* Ajusta el tamaño máximo */
+    flex-shrink: 0; /* Evita que crezca en altura */
+    max-width: 350px; /* Limita el ancho máximo */
     padding: 20px;
     border: 1px solid #ccc;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: column; /* Organiza los elementos verticalmente */
-    justify-content: space-between; /* Espaciado adecuado */
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch; /* Mantiene el ancho total */
 }
 
 .resumen-compra h3 {
