@@ -101,7 +101,15 @@ function crearTarjetaProducto(producto) {
     // Imagen del producto
     const imagenProducto = document.createElement("div");
     imagenProducto.classList.add("imagen-producto");
-    imagenProducto.textContent = "Imagen de Producto"; 
+
+    const img = document.createElement("img");
+    if (producto.imagenBase64) {
+        img.src = producto.imagenBase64; // Usar la imagen extraída de la base de datos en formato base64
+        img.alt = `Imagen de ${producto.nombreArticulo}`;
+    } else {
+        console.error(`El producto "${producto.nombreArticulo}" no tiene una imagen asignada.`);
+    }
+    imagenProducto.appendChild(img);
 
     // Nombre del producto
     const nombreProducto = document.createElement("div");
@@ -111,7 +119,7 @@ function crearTarjetaProducto(producto) {
     // Precio del producto
     const precioProducto = document.createElement("div");
     precioProducto.classList.add("precio-producto");
-    precioProducto.textContent = `${producto.precio} €`;
+    precioProducto.textContent = `${producto.precio} KC`;
 
     // Botón de "Comprar"
     const botonComprar = document.createElement("button");

@@ -37,6 +37,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
     // Solo necesitamos el buffer (contenido binario) para la columna `imagen`
     database.añadirFotoEjercicio(id,file.buffer);
+    //database.añadirFotoArticulo(id,file.buffer);
 });
 
 app.post('/api/usuario-existe', async (req, res) => {
@@ -837,16 +838,24 @@ app.delete('/api/eliminarDelCarro', async (req, res) => {
 app.get('/api/productos', async (req, res) => {
     try {
         const productos = await database.obtenerProductos();
-        res.status(200).json(productos);
+        for (let producto of productos) {
+            const imagenBase64 = await database.convertirBlobImagenArticulo(producto.idArticulo);
+            producto.imagenBase64 = imagenBase64;
+        }
+        res.json(productos);
     } catch (error) {
-        console.error('Error al obtener productos:', error);
-        res.status(500).json({ message: 'Error al obtener productos' });
+        console.error("Error al cargar los productos:", error);
+        res.status(500).json({ error: 'Error interno al cargar los productos' });
     }
 });
 
 app.get('/api/mas-vendidos', async (req, res) => {
     try {
         const masVendidos = await database.obtenerMasVendidos();
+        for (let producto of masVendidos) {
+            const imagenBase64 = await database.convertirBlobImagenArticulo(producto.idArticulo);
+            producto.imagenBase64 = imagenBase64;
+        }
         res.status(200).json(masVendidos);
     } catch (error) {
         console.error('Error al obtener los productos más vendidos:', error);
@@ -857,6 +866,10 @@ app.get('/api/mas-vendidos', async (req, res) => {
 app.get('/api/ofertas-actuales', async (req, res) => {
     try {
         const ofertas = await database.obtenerOfertasActuales();
+        for (let producto of ofertas) {
+            const imagenBase64 = await database.convertirBlobImagenArticulo(producto.idArticulo);
+            producto.imagenBase64 = imagenBase64;
+        }
         res.status(200).json(ofertas);
     } catch (error) {
         console.error('Error al obtener las ofertas actuales:', error);

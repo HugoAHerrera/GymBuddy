@@ -65,10 +65,12 @@ main {
     display: none;
 }
 
-.imagen-producto {
-    background-color: #f0f0f0;
-    padding: 40px 0;
-    margin-bottom: 10px;
+.imagen-producto img {
+    width: 100%;
+    height: auto;
+    max-width: 150px;
+    max-height: 150px;
+    object-fit: cover;
 }
 
 .precio-producto {

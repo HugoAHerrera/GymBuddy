@@ -502,6 +502,28 @@ const databaseMethods = {
         });
     },
 
+    //Articulo
+    añadirFotoArticulo: async (idArticulo, blob) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'UPDATE tienda SET imagenArticulo = ? WHERE idArticulo = ?';
+            
+            connection.query(sql, [blob, idArticulo], (err, result) => {
+                if (err) {
+                    console.error('Error al actualizar la base de datos:', err);
+                    return reject('Error al actualizar la imagen.');
+                }
+    
+                // Verifica si se actualizó alguna fila
+                if (result.affectedRows === 0) {
+                    return reject('No se encontró el artículo con el ID proporcionado.');
+                }
+    
+                resolve('Imagen actualizada exitosamente.');
+            });
+        });
+    },
+    
+
     // PERFIL
     cambiarNombreUsuario: async (idUsuario, nuevoNombre) => {
         return new Promise((resolve, reject) => {
@@ -616,7 +638,35 @@ const databaseMethods = {
                 }
             });
         });
-    },    
+    },
+    
+    convertirBlobImagenArticulo: async (idArticulo) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT imagenArticulo FROM tienda WHERE idArticulo = ?';
+    
+            connection.query(sql, [idArticulo], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+    
+                // Si no hay resultados o la columna `imagenArticulo` es NULL
+                if (results.length === 0 || !results[0].imagenArticulo) {
+                    return resolve(null); // No devolvemos una imagen por defecto
+                }
+    
+                try {
+                    const blob = results[0].imagenArticulo;
+    
+                    // Convertimos el blob a base64
+                    const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
+    
+                    resolve(base64Image);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
+    },
 
     obtenerDatosUsuario: async (idUsuario) => {
         return new Promise((resolve, reject) => {
