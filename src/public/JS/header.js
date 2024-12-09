@@ -42,10 +42,9 @@ async function cargarImagenUsuario() {
     }
 }
 
-// Ejecutar la función al cargar la página o en el momento adecuado
+// Cargas iniciales
 cargarImagenUsuario();
-
-
+cargarCarritoDesdeServidor();
 
 // Todo lo relacionado con el carrito del header
 let contadorCarrito = 0;  // Número total de productos
@@ -55,6 +54,141 @@ let carrito = [];  // Lista de productos en el carrito
 function desplegarCarrito() {
     const menuCarrito = document.getElementById("menu-carrito");
     menuCarrito.style.display = menuCarrito.style.display === "block" ? "none" : "block";
+}
+
+
+// Función para cargar los productos del carrito desde el servidor
+async function cargarCarritoDesdeServidor() {
+    try {
+        const respuesta = await fetch('/api/obtenerCarro', {
+            method: 'GET',
+            credentials: 'include',
+        });
+
+        if (!respuesta.ok) {
+            throw new Error('Error al obtener productos del carrito');
+        }
+
+        const productos = await respuesta.json();
+
+        // Actualizar el carrito con los productos obtenidos
+        carrito = productos.map(producto => ({
+            id: producto.idArticulo,
+            nombre: producto.nombreArticulo,
+            precio: producto.precio,
+            descuento: producto.descuentoArticulo,
+            cantidad: producto.cantidad
+        }));
+
+        // Actualizar el contador del carrito
+        contadorCarrito = carrito.reduce((total, producto) => total + producto.cantidad, 0);
+        document.getElementById("contador-carrito").textContent = contadorCarrito;
+    } catch (error) {
+        console.error('Error al cargar el carrito desde el servidor:', error);
+    }
+}
+
+// Función para desplegar el carrito
+async function desplegarCarrito() {
+    const menuCarrito = document.getElementById("menu-carrito");
+    const isCurrentlyVisible = menuCarrito.style.display === "block";
+
+    if (!isCurrentlyVisible) {
+        await cargarCarritoDesdeServidor();
+        actualizarListaCarrito();
+    }
+
+    menuCarrito.style.display = isCurrentlyVisible ? "none" : "block";
+}
+
+// Función para actualizar la lista de artículos en el carrito
+function actualizarListaCarrito() {
+    const listaCarrito = document.getElementById("lista-carrito");
+    listaCarrito.innerHTML = "";
+
+    if (carrito.length === 0) {
+        const mensajeVacio = document.createElement("li");
+        mensajeVacio.textContent = "Tu carrito está vacío.";
+        listaCarrito.appendChild(mensajeVacio);
+    } else {
+        const fragment = document.createDocumentFragment();
+
+        carrito.forEach((producto) => {
+            const itemCarrito = document.createElement("li");
+
+            const detallesProducto = document.createElement("div");
+            detallesProducto.textContent = `${producto.nombre} - ${producto.precio} KC (x${producto.cantidad})`;
+
+            const idArticuloElemento = document.createElement("span");
+            idArticuloElemento.classList.add("idArticulo");
+            idArticuloElemento.style.display = "none";
+            idArticuloElemento.textContent = producto.id;
+
+            const botonEliminar = document.createElement("button");
+            botonEliminar.textContent = "Eliminar";
+            botonEliminar.className = "boton-eliminar";
+            botonEliminar.onclick = () => {
+                eliminarProductoDelCarrito(producto.id);
+            };
+
+            itemCarrito.appendChild(detallesProducto);
+            itemCarrito.appendChild(idArticuloElemento);
+            itemCarrito.appendChild(botonEliminar);
+
+            fragment.appendChild(itemCarrito);
+        });
+
+        listaCarrito.appendChild(fragment);
+    }
+}
+
+async function eliminarProductoDelCarrito(idArticulo) {
+    try {
+        // Encontrar el producto en el carrito utilizando el idArticulo
+        const productoAEliminar = carrito.find(producto => producto.id === idArticulo);
+
+        if (!productoAEliminar) {
+            console.error('Producto no encontrado en el carrito');
+            return;
+        }
+
+        console.log(`Producto encontrado: ${productoAEliminar.nombre}, ID: ${productoAEliminar.id}`);
+
+        // Realizar solicitud al servidor para eliminar el producto
+        const respuesta = await fetch('/api/eliminarDelCarro', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                idArticulo: productoAEliminar.id,
+            }),
+        });
+
+        // Verificar si la respuesta es exitosa
+        if (!respuesta.ok) {
+            const errorData = await respuesta.json();
+            console.error('Error al eliminar producto del carrito:', errorData);
+            alert(errorData.message || 'No se pudo eliminar el producto. Intenta de nuevo más tarde.');
+            return;
+        }
+
+        console.log(`Producto eliminado del carrito, ID: ${idArticulo}`);
+
+        // Eliminar localmente si la solicitud fue exitosa
+        carrito = carrito.filter(producto => producto.id !== idArticulo);
+
+        // Recalcular el contador
+        contadorCarrito = carrito.reduce((total, producto) => total + producto.cantidad, 0);
+        document.getElementById("contador-carrito").textContent = contadorCarrito;
+
+        // Actualizar la lista visible del carrito
+        actualizarListaCarrito();
+    } catch (error) {
+        console.error('Error al intentar eliminar el producto del carrito:', error);
+        alert('No se pudo eliminar el producto. Intenta de nuevo más tarde.');
+    }
 }
 
 // Función para proceder a la compra
