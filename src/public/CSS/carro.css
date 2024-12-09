@@ -1,4 +1,4 @@
-
+/* Botón de destacar */
 .resaltar {
     background-color: #8c00ff;
     color: white;
@@ -13,6 +13,7 @@
     background-color: #480188;
 }
 
+/* Barra de progreso */
 .progreso-compra {
     display: flex;
     justify-content: space-between;
@@ -23,7 +24,7 @@
 
 .etapa {
     text-align: center;
-    flex: 1; /* Cada etapa ocupa el mismo espacio */
+    flex: 1;
 }
 
 .etapa-icono {
@@ -46,24 +47,23 @@ p {
     color: #003366;
 }
 
-
+/* Contenedor principal */
 .contenedor {
     display: flex;
-    margin: 20px 0;
+    justify-content: space-between; /* Asegura un buen espaciado entre secciones */
+    gap: 20px; /* Espaciado entre elementos hijos */
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
+/* Producto */
 .producto {
-    width: 65%;
+    flex: 1; /* Ocupa más espacio que el resumen */
     background-color: #fff;
-    margin-left: 200px;
-    margin-right: 50px;
-    margin-top: 20px;  /* Espacio arriba */
-    margin-bottom: 20px;  /* Espacio abajo */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 
 .producto h2 {
     margin-top: 10px;
@@ -99,14 +99,23 @@ p {
 
 /* Resumen de la compra */
 .resumen-compra {
-    width: 300px;
+    flex: 1; /* Ocupa menos espacio */
+    max-width: 350px; /* Ajusta el tamaño máximo */
     padding: 20px;
     border: 1px solid #ccc;
-    height: 200px; /* Establece una altura fija */
     background-color: #fff;
     border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column; /* Organiza los elementos verticalmente */
+    justify-content: space-between; /* Espaciado adecuado */
 }
 
+.resumen-compra h3 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    color: #333;
+}
 
 .checkout-btn {
     background-color: #027ef3;
@@ -118,17 +127,17 @@ p {
     font-size: 1rem;
     transition: background-color 0.3s ease;
     margin-top: 20px;
-    width: 100%;
+    width: 100%; /* Asegura que ocupe todo el ancho */
 }
 
 .checkout-btn:hover {
     background-color: #005bb5;
 }
 
-/*Alerta*/
+/* Alerta personalizada */
 .custom-alert {
     padding: 20px;
-    background-color: #f44336;
+    background-color: #3639f4;
     color: white;
     margin-bottom: 15px;
     border-radius: 5px;
@@ -164,8 +173,8 @@ p {
 }
 
 .alert-buttons button {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #eef1ee;
+    color: black;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -174,7 +183,58 @@ p {
 }
 
 .alert-buttons button:hover {
-    background-color: #45a049;
+    background-color: #a0a2a0;
+}
+
+/* alerta */
+.alert {
+    padding: 20px;
+    margin: 15px;
+    border-radius: 5px;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.alert.success {
+    background-color: #4CAF50; /* Verde para éxito */
+    color: white;
+}
+
+.alert.error {
+    background-color: #f44336; /* Rojo para error */
+    color: white;
+}
+
+.alert .closebtn {
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.alert .closebtn:hover {
+    color: black;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
 }
 
 
