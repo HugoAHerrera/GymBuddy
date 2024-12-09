@@ -19,7 +19,7 @@ main {
 
 .offers-slider .slides {
     display: flex;
-    animation: slideAnimation 15s infinite linear;
+    animation: slideAnimation 30s infinite linear;
 }
 
 .slide {
@@ -31,10 +31,9 @@ main {
 /* Slide animation */
 @keyframes slideAnimation {
     0% { transform: translateX(0); }
-    33% { transform: translateX(-100%); }
-    66% { transform: translateX(-200%); }
-    100% { transform: translateX(0); }
+    100% { transform: translateX(-300%); }
 }
+
 
 /* About Us Section */
 .about-us {
