@@ -1,5 +1,6 @@
 .idea
 .vscode
+‎.vscode/settings.json
 
 # Logs
 logs
