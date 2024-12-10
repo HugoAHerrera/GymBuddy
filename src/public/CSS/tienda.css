@@ -66,17 +66,29 @@ main {
 }
 
 .imagen-producto img {
-    width: 100%;
-    height: auto;
-    max-width: 150px;
-    max-height: 150px;
+    width: 150px;
+    height: 150px;
     object-fit: cover;
 }
 
+ /* Precio base */
 .precio-producto {
     font-weight: bold;
     margin-bottom: 10px;
 }
+
+ /* Precio tachado */
+.precio-original {
+    color: #999;
+    font-size: 0.9em;
+}
+
+ /* Precio con descuento aplicado */
+.nuevo-precio {
+    color: red;
+    font-weight: bold;
+}
+
 
 .boton-comprar {
     padding: 10px 20px;

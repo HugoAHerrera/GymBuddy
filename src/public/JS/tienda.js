@@ -119,7 +119,29 @@ function crearTarjetaProducto(producto) {
     // Precio del producto
     const precioProducto = document.createElement("div");
     precioProducto.classList.add("precio-producto");
-    precioProducto.textContent = `${producto.precio} KC`;
+
+    // Verificar si el producto tiene descuento
+    if (producto.descuentoArticulo && producto.descuentoArticulo > 0) {
+        // Calcular el precio con descuento
+        const precioConDescuento = (producto.precio * (1 - producto.descuentoArticulo)).toFixed(2);
+
+        // Mostrar precio original tachado (antes de aplicar el descuento)
+        const precioOriginal = document.createElement("span");
+        precioOriginal.classList.add("precio-original");
+        precioOriginal.textContent = `${producto.precio} KC`;
+        precioOriginal.style.textDecoration = "line-through";
+        precioProducto.appendChild(precioOriginal);
+        precioProducto.innerHTML += "&nbsp;";
+
+        // Mostrar el nuevo precio con descuento
+        const nuevoPrecio = document.createElement("span");
+        nuevoPrecio.classList.add("nuevo-precio");
+        nuevoPrecio.textContent = `${precioConDescuento} KC`;
+        precioProducto.appendChild(nuevoPrecio);
+    } else {
+        // Si no tiene descuento, solo mostrar el precio normal
+        precioProducto.textContent = `${producto.precio} KC`;
+    }
 
     // Botón de "Comprar"
     const botonComprar = document.createElement("button");
