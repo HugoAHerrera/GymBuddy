@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error('Error fetching messages:', err);
         }
-    }    
+    }
 
     function renderMessages(messages) {
         chatMessages.innerHTML = '';
@@ -45,9 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Aquí dejamos el sort por si quieres mantener el orden cronológico.
         // Si la BBDD ya devuelve en el orden deseado, podrías comentar esto.
         messages.sort((a, b) => {
-            const fechaA = new Date(a.fecha + 'T' + a.hora); 
-            const fechaB = new Date(b.fecha + 'T' + b.hora); 
-            return fechaA - fechaB; 
+            const fechaA = new Date(a.fecha + 'T' + a.hora);
+            const fechaB = new Date(b.fecha + 'T' + b.hora);
+            return fechaA - fechaB;
         });
 
         messages.forEach(msg => {
