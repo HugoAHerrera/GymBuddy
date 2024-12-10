@@ -21,7 +21,7 @@ GymBuddy es una aplicación web diseñada para los entusiastas del deporte. Entr
 
 ## Información de Despliegue
 La aplicación está desplegada mediante servicios de **Azure** y es accesible en la siguiente URL:  
-**[gymbuddy-sw.net](gymbuddy-sw.azurewebsites.net)**
+**[gymbuddy-sw.net](http://gymbuddy-sw.azurewebsites.net)**
 
 ---
 
