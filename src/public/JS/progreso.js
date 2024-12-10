@@ -228,10 +228,6 @@ document.addEventListener('DOMContentLoaded', function () {
     obtenerDatosSesiones();
     obtenerRutinasHechas();
     obtenerEstadisticas();
-    const logoImage = document.getElementById('logotype');
-    logoImage.addEventListener('click', function() {
-        window.location.href = 'perfil.html';
-    });
 });
 
 function updateChart(chart, labels, data) {
