@@ -174,34 +174,58 @@ app.post('/api/cambiar-contrasena', async (req, res) => {
 
 //Redirecciones del header
 app.get('/inicio', (req, res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'src/public/HTML/inicio.html'));
 });
 
 app.get('/tienda', (req, res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'src/public/HTML/tienda.html'));
 });
 
 app.get('/comunidad', (req, res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'src/public/HTML/comunidad.html'));
 });
 
 app.get('/progreso', (req, res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'src/public/HTML/progreso.html'));
 });
 
 app.get('/rutina', (req, res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
   res.sendFile(path.join(__dirname, 'src/public/HTML/rutina.html'));
 });
 
 app.get('/rutina-concreta', (req, res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_concreta.html'));
 });
 
 app.get('/editar-rutina', (req, res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_editar.html'));
 });
 
 app.get('/rutina-nueva', (req,res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'src/public/HTML/rutina_nueva.html'));
 })
 
@@ -296,11 +320,10 @@ app.get('/obtenerProducto', (req, res) => {
 
 //Redireciones del footer
 app.get('/terminosCondiciones', (req, res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'src/public/HTML/terminosCondiciones.html'));
-});
-
-app.get('/contacto', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src/public/HTML/Contacto.html'));
 });
 
 app.get('/api/rutina-concreta', async (req, res) => {
@@ -429,12 +452,15 @@ app.listen(PORT, async () => {
 });
 
 app.get('/IMC', (req,res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'src/public/HTML/imc.html'));
 })
 
 app.get('/perfil', (req, res) => {
     if (!req.session.id_usuario) {
-        return res.status(400).send('ID de usuario no proporcionado');
+        return res.redirect('/');
     }
     res.sendFile(path.join(__dirname, 'src/public/HTML/perfil.html'));
 });
@@ -931,6 +957,9 @@ const comunidadRouter = require('./routes/comunidad');
 app.use('/api/mensajes', comunidadRouter);  // La ruta de la API será '/api/mensajes'
 
 app.get('/comunidad', (req, res) => {
+    if (!req.session.id_usuario) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'src/public/HTML/comunidad.html'));
 });
 
