@@ -103,7 +103,9 @@ const databaseMethods = {
                     return reject(err);
                 }
     
-                const ejercicioNames = ejercicios.map(ejercicio => `'${ejercicio}'`).join(", ");
+                const ejerciciosSinPrefijo = ejercicios.map(ejercicio => ejercicio.replace(/^Ejercicio \d+: /, ''));
+            
+                const ejercicioNames = ejerciciosSinPrefijo.map(ejercicio => `'${ejercicio}'`).join(", ");
                 
                 const sqlUpdate = `
                     UPDATE rutina
