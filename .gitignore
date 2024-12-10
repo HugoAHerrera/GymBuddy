@@ -1,4 +1,5 @@
 .idea
+.vscode
 
 # Logs
 logs
@@ -73,8 +74,6 @@ web_modules/
 
 # Yarn Integrity file
 .yarn-integrity
-
-.vscode
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
