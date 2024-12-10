@@ -17,7 +17,6 @@ router.get('/', async (req, res) => {
 });
 
 // Enviar mensaje a una comunidad
-// Enviar mensaje a una comunidad
 router.post('/', async (req, res) => {
     const { contenido, comunidad, id_emisor } = req.body;
     if (!contenido || !comunidad || !id_emisor) {
@@ -44,5 +43,5 @@ router.post('/', async (req, res) => {
     }
 });
 
-
 module.exports = router;
+

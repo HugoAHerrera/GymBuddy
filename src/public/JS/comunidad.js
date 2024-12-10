@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
 
+    // Aseguramos un valor por defecto para la comunidad
     let currentCommunity = 'General';
     let currentUserId = null;
     let currentUserName = null;
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadMessages(comunidad) {
         try {
+            // Aquí siempre se enviará comunidad con un valor, por ejemplo "General"
             const response = await fetch(`/api/mensajes?comunidad=${encodeURIComponent(comunidad)}`);
             if (!response.ok) {
                 console.error('Error al cargar los mensajes');
@@ -41,9 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderMessages(messages) {
         chatMessages.innerHTML = '';
 
-        // Ordenar por fecha/hora ascendente (si se requiere)
-        // Aquí dejamos el sort por si quieres mantener el orden cronológico.
-        // Si la BBDD ya devuelve en el orden deseado, podrías comentar esto.
+        // Si quieres seguir ordenando, puedes hacerlo aquí
         messages.sort((a, b) => {
             const fechaA = new Date(a.fecha + 'T' + a.hora);
             const fechaB = new Date(b.fecha + 'T' + b.hora);
@@ -68,9 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
             contentEl.classList.add('content');
             contentEl.textContent = msg.contenido;
 
-            // Antes creábamos el timeEl, ahora lo omitimos
-            // De esta forma no aparece nada de fecha/hora en pantalla.
-
+            // No mostramos fecha/hora, ya lo eliminamos
             msgDiv.appendChild(senderEl);
             msgDiv.appendChild(contentEl);
 
@@ -78,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // No bajamos el scroll automáticamente
-        // chatMessages.scrollTop = chatMessages.scrollHeight; // Eliminado
     }
 
     async function sendMessage() {
@@ -92,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const data = {
             contenido: contenido,
-            comunidad: currentCommunity,
+            comunidad: currentCommunity, // Siempre tendrá el valor actual de la comunidad
             id_emisor: currentUserId
         };
 
@@ -135,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     (async function init() {
         await getCurrentUser();
+        // Llamamos con la comunidad por defecto "General"
         loadMessages(currentCommunity);
 
         // Seguir recargando cada segundo si lo deseas
