@@ -41,12 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderMessages(messages) {
         chatMessages.innerHTML = '';
 
-        // Ordenar mensajes por fecha/hora ascendente sin tocar la BBDD
+        // Ordenar por fecha/hora ascendente
         messages.sort((a, b) => {
-            const fechaA = new Date(a.fecha + ' ' + a.hora);
-            const fechaB = new Date(b.fecha + ' ' + b.hora);
+            const fechaA = new Date(a.fecha + 'T' + a.hora);
+            const fechaB = new Date(b.fecha + 'T' + b.hora);
             return fechaA - fechaB;
         });
+
+        // Ahora el primer mensaje del array es el más antiguo
+        // y el último mensaje del array es el más nuevo.
+        // Se añade en orden, así el más antiguo queda arriba y el más nuevo abajo.
 
         messages.forEach(msg => {
             const msgDiv = document.createElement('div');
@@ -68,7 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const timeEl = document.createElement('div');
             timeEl.classList.add('time');
-            const fecha = new Date(msg.fecha + ' ' + msg.hora);
+            const fecha = new Date(msg.fecha + 'T' + msg.hora);
+            // Formateamos solo la hora
             const horaFormateada = fecha.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
             timeEl.textContent = horaFormateada;
 
@@ -79,8 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages.appendChild(msgDiv);
         });
 
-        // Ya no hacemos scrollTop = scrollHeight, así no se baja la barra automáticamente
-        // chatMessages.scrollTop = chatMessages.scrollHeight;  // Eliminado
+        // Ya no bajamos el scroll automáticamente
+        // chatMessages.scrollTop = chatMessages.scrollHeight; (Eliminado)
     }
 
     async function sendMessage() {
@@ -139,14 +144,14 @@ document.addEventListener('DOMContentLoaded', () => {
         await getCurrentUser();
         loadMessages(currentCommunity);
 
-        // Se sigue actualizando cada segundo, si lo deseas
+        // Se sigue recargando cada segundo
         setInterval(() => {
             loadMessages(currentCommunity);
         }, 1000);
     })();
 });
 
-// Cargar el header y el footer
+// Cargar el header y el footer con fetch
 fetch('../HTML/header.html')
 .then(res => res.text())
 .then(html => {
