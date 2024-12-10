@@ -105,7 +105,9 @@ body { /* Esto ocultará cualquier contenido que se desborde */
     box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3); /* Sombra normal */
 }
 
-.boton-crear-rutina {
+.boton-crear-rutina,
+.boton-guardar-rutina,
+.boton-cancelar-rutina {
     height: 70%;
     width: 20%;
     margin-right: 40px;
@@ -115,6 +117,13 @@ body { /* Esto ocultará cualquier contenido que se desborde */
     align-items: center;
 }
 
+.boton-guardar-rutina {
+    background-color: #4CAF50;
+}
+
+.boton-guardar-rutina:hover {
+    background-color: #409443;
+}
 
 .boton-crear-rutina {
     background-color: #f44336;
@@ -124,6 +133,13 @@ body { /* Esto ocultará cualquier contenido que se desborde */
     background-color: #d83a2f;
 }
 
+.boton-cancelar-rutina {
+    background-color: #afad4c;
+}
+
+.boton-cancelar-rutina:hover {
+    background-color: #8e9440;
+}
 
 .ejercicio {
     display: flex;
