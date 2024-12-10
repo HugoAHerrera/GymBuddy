@@ -84,14 +84,12 @@ async function actualizarCarrito() {
     try {
         // Solicitud a la API para obtener los productos en el carrito
         const response = await fetch('/api/obtenerCarro');
-        console.log('Respuesta de la API:', response);
 
         if (!response.ok) {
             throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
         }
 
         const productos = await response.json();
-        console.log('Productos recibidos desde la API:', productos);
 
         // Referencia al contenedor del resumen del carrito
         const resumenCarrito = document.getElementById('cart-summary');
@@ -100,7 +98,6 @@ async function actualizarCarrito() {
         let total = 0; // Inicializar el total
 
         if (productos.length === 0) {
-            console.log('El carrito está vacío');
             ul.innerHTML = `<li>No tienes ningún producto en el carrito.</li>`; // Mensaje de carrito vacío
 
             // Deshabilitar el botón de pago
@@ -117,23 +114,25 @@ async function actualizarCarrito() {
 
             // Agregar productos a la lista
             productos.forEach((producto) => {
-                const precioConDescuento = producto.precio * (1 - producto.descuentoArticulo); // Calcular precio final
-                total += precioConDescuento; // Sumar al total
+                const precioConDescuento = producto.precio * (1 - producto.descuentoArticulo); // Calcular precio con descuento
+                const subtotal = precioConDescuento * producto.cantidad; // Multiplicar por la cantidad
+                total += subtotal; // Sumar al total
 
                 const li = document.createElement('li'); // Crear un elemento de lista
-                li.textContent = `${producto.nombreArticulo}: $${precioConDescuento.toFixed(2)}`;
+                li.textContent = `${producto.nombreArticulo} x ${producto.cantidad}: ${subtotal.toFixed(2)} KC`;
                 ul.appendChild(li); // Agregar el producto a la lista
             });
 
             // Agregar el total al final de la lista
             const liTotal = document.createElement('li');
-            liTotal.innerHTML = `<strong>Total:</strong> $${total.toFixed(2)}`;
+            liTotal.innerHTML = `<strong>Total:</strong> ${total.toFixed(2)} KC`;
             ul.appendChild(liTotal);
         }
     } catch (error) {
         console.error('Error al actualizar el carrito:', error);
     }
 }
+
 
 
 

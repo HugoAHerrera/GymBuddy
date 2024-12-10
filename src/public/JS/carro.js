@@ -1,14 +1,14 @@
 async function actualizarCarrito() {
     try {
         const response = await fetch('/api/obtenerCarro');
-        console.log('Respuesta de la API:', response); // Verificar la respuesta completa de la API
+        //console.log('Respuesta de la API:', response); // Verificar la respuesta completa de la API
 
         if (!response.ok) {
             throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
         }
 
         const productos = await response.json();
-        console.log('Productos recibidos desde la API:', productos); // Verificar los productos recibidos
+        //console.log('Productos recibidos desde la API:', productos); // Verificar los productos recibidos
 
         // Obtener el contenedor de productos (el div con la clase 'producto')
         const contenedorProducto = document.querySelector('.producto');
@@ -16,7 +16,7 @@ async function actualizarCarrito() {
 
         // Verificar si productos está vacío o no
         if (productos.length === 0) {
-            console.log('El carrito está vacío');
+            //console.log('El carrito está vacío');
             contenedorProducto.innerHTML = `<p>No tienes ningún producto en el carrito.</p>`;  // Mensaje de carrito vacío
 
             // Deshabilitar el botón de pago
@@ -24,7 +24,6 @@ async function actualizarCarrito() {
             if (procederPagoBtn) {
                 procederPagoBtn.disabled = true;  // Deshabilitar el botón de pago si no hay productos
             }
-
         } else {
             // Habilitar el botón de pago
             const procederPagoBtn = document.getElementById('proceder-pago');
@@ -35,13 +34,21 @@ async function actualizarCarrito() {
             productos.forEach(producto => {
                 const precioConDescuento = producto.precio * (1 - producto.descuentoArticulo); // Calculamos el precio con descuento
                 const descuentoPorcentaje = producto.descuentoArticulo * 100; // Convertir el descuento a porcentaje
+
+                // Convertir el Buffer en Blob y luego en URL
+                const byteArray = new Uint8Array(producto.imagenArticulo.data); // Crear un array de bytes
+                const blob = new Blob([byteArray], { type: 'image/png' }); // Crear un Blob con el tipo MIME correcto
+                const imagenURL = URL.createObjectURL(blob); // Crear una URL de objeto para la imagen
+
+                // Añadir el producto al contenedor
                 contenedorProducto.innerHTML += `
                 <div class="producto">
-                    <img src="${producto.imagenArticulo}" alt="Imagen de: ${producto.nombreArticulo}">
+                    <img src="${imagenURL}" alt="Imagen de: ${producto.nombreArticulo}">
                     <h2>${producto.nombreArticulo}</h2>
-                    <p class="precio">Precio: $${producto.precio.toFixed(2)}</p>
-                    <p class="precioDescuento">Precio con descuento: $${precioConDescuento.toFixed(2)}</p>
-                    <p class="descripcion">Descuento: ${descuentoPorcentaje.toFixed(2)}%</p>
+                    <p class="precio">Precio: ${producto.precio.toFixed(2)} KC</p>
+                    <p class="precioDescuento">Precio con descuento: ${precioConDescuento.toFixed(2)} KC</p>
+                    <p class="descripcion">Descuento: ${descuentoPorcentaje.toFixed(2)} %</p>
+                    <p class="cantidad">Cantidad: ${producto.cantidad}</p>
                 </div>
                 `;
             });
@@ -50,6 +57,8 @@ async function actualizarCarrito() {
         console.error('Error al actualizar el carrito:', error);
     }
 }
+
+
 
 
 // Llamar a la función cuando la página cargue

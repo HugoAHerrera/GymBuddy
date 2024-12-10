@@ -6,9 +6,7 @@ document.getElementById('añadir-ejercicio').addEventListener('click', function(
 });
 
 document.getElementById('contenedor-guardar').addEventListener('click', async function() {
-    console.log("Entra Guardar")
     try {
-        console.log("Entra try")
         const response = await fetch('/api/rutPersonalizada', {
             method: 'GET',
             headers: {
@@ -20,15 +18,13 @@ document.getElementById('contenedor-guardar').addEventListener('click', async fu
         const rutinas = result.map(rutina => rutina.nombre_rutina);
         const nuevoTitulo = document.getElementById('titulo-rutina').textContent;
     
-        console.log("R:",rutinas)
-        console.log("R:",nuevoTitulo)
+
         const contieneNuevaRutina = rutinas.includes(nuevoTitulo);
         if (contieneNuevaRutina == true){
             document.getElementById("mensaje-advertencia").textContent = "¡La rutina 'Nueva Rutina' está en el sistema!";
             document.getElementById("mensaje-advertencia").style.display = "block";  // Mostrar el mensaje
             return;  // Salir de la función
         }
-        console.log(contieneNuevaRutina)
     } catch (error) {
         console.error('Error de comunicación con el servidor:', error);
     }
@@ -41,7 +37,6 @@ document.getElementById('contenedor-guardar').addEventListener('click', async fu
     
     // Verificamos si existen elementos <h1> dentro de ".ejercicio"
     if (headers.length === 0) {
-        console.log("Entra: No hay <h1> en ejercicio");
         
         // Mostramos el mensaje de advertencia en la página
         document.getElementById("mensaje-advertencia").textContent = "¡No se puede crear la rutina. No hay ejercicios disponibles.!";

@@ -36,16 +36,26 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error('Error fetching messages:', err);
         }
-    }
+    }    
 
     function renderMessages(messages) {
         chatMessages.innerHTML = '';
 
+<<<<<<< HEAD
         // Ordenar por fecha/hora ascendente
         messages.sort((a, b) => {
             const fechaA = new Date(a.fecha + 'T' + a.hora);
             const fechaB = new Date(b.fecha + 'T' + b.hora);
             return fechaA - fechaB;
+=======
+        // Ordenar por fecha/hora ascendente (si se requiere)
+        // Aquí dejamos el sort por si quieres mantener el orden cronológico.
+        // Si la BBDD ya devuelve en el orden deseado, podrías comentar esto.
+        messages.sort((a, b) => {
+            const fechaA = new Date(a.fecha + 'T' + a.hora); 
+            const fechaB = new Date(b.fecha + 'T' + b.hora); 
+            return fechaA - fechaB; 
+>>>>>>> b8a35f5e155b1fc4f52e2da5080664a12ab8d5c9
         });
 
         // Ahora el primer mensaje del array es el más antiguo
@@ -70,22 +80,31 @@ document.addEventListener('DOMContentLoaded', () => {
             contentEl.classList.add('content');
             contentEl.textContent = msg.contenido;
 
+<<<<<<< HEAD
             const timeEl = document.createElement('div');
             timeEl.classList.add('time');
             const fecha = new Date(msg.fecha + 'T' + msg.hora);
             // Formateamos solo la hora
             const horaFormateada = fecha.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
             timeEl.textContent = horaFormateada;
+=======
+            // Antes creábamos el timeEl, ahora lo omitimos
+            // De esta forma no aparece nada de fecha/hora en pantalla.
+>>>>>>> b8a35f5e155b1fc4f52e2da5080664a12ab8d5c9
 
             msgDiv.appendChild(senderEl);
             msgDiv.appendChild(contentEl);
-            msgDiv.appendChild(timeEl);
 
             chatMessages.appendChild(msgDiv);
         });
 
+<<<<<<< HEAD
         // Ya no bajamos el scroll automáticamente
         // chatMessages.scrollTop = chatMessages.scrollHeight; (Eliminado)
+=======
+        // No bajamos el scroll automáticamente
+        // chatMessages.scrollTop = chatMessages.scrollHeight; // Eliminado
+>>>>>>> b8a35f5e155b1fc4f52e2da5080664a12ab8d5c9
     }
 
     async function sendMessage() {
@@ -144,7 +163,11 @@ document.addEventListener('DOMContentLoaded', () => {
         await getCurrentUser();
         loadMessages(currentCommunity);
 
+<<<<<<< HEAD
         // Se sigue recargando cada segundo
+=======
+        // Seguir recargando cada segundo si lo deseas
+>>>>>>> b8a35f5e155b1fc4f52e2da5080664a12ab8d5c9
         setInterval(() => {
             loadMessages(currentCommunity);
         }, 1000);

@@ -514,6 +514,29 @@ const databaseMethods = {
         });
     },
 
+    //Articulo
+    añadirFotoArticulo: async (idArticulo, blob) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'UPDATE tienda SET imagenArticulo = ? WHERE idArticulo = ?';
+            
+            connection.query(sql, [blob, idArticulo], (err, result) => {
+                if (err) {
+                    console.error('Error al actualizar la base de datos:', err);
+                    return reject('Error al actualizar la imagen.');
+                }
+    
+                // Verifica si se actualizó alguna fila
+                if (result.affectedRows === 0) {
+                    return reject('No se encontró el artículo con el ID proporcionado.');
+                }
+    
+                resolve('Imagen actualizada exitosamente.');
+            });
+        });
+    },
+    
+
+    // PERFIL
     // 
     obtenertiempoEjercicio: async (idUsuario) => {
         return new Promise((resolve, reject) => {
@@ -642,7 +665,35 @@ const databaseMethods = {
                 }
             });
         });
-    },    
+    },
+    
+    convertirBlobImagenArticulo: async (idArticulo) => {
+        return new Promise((resolve, reject) => {
+            const sql = 'SELECT imagenArticulo FROM tienda WHERE idArticulo = ?';
+    
+            connection.query(sql, [idArticulo], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+    
+                // Si no hay resultados o la columna `imagenArticulo` es NULL
+                if (results.length === 0 || !results[0].imagenArticulo) {
+                    return resolve(null); // No devolvemos una imagen por defecto
+                }
+    
+                try {
+                    const blob = results[0].imagenArticulo;
+    
+                    // Convertimos el blob a base64
+                    const base64Image = `data:image/jpeg;base64,${blob.toString('base64')}`;
+    
+                    resolve(base64Image);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
+    },
 
     obtenerDatosUsuario: async (idUsuario) => {
         return new Promise((resolve, reject) => {
@@ -758,7 +809,7 @@ const databaseMethods = {
     // Función para obtener los productos del carrito desde la base de datos
     obtenerProductosCarro: async (idUsuario) => {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo FROM carro JOIN tienda ON carro.idArticulo = tienda.idArticulo WHERE carro.id_usuario = ?`;
+            const sql = `SELECT tienda.idArticulo, tienda.nombreArticulo, tienda.precio, tienda.imagenArticulo, tienda.descuentoArticulo, cantidad FROM carro JOIN tienda ON carro.idArticulo = tienda.idArticulo WHERE carro.id_usuario = ?`;
             connection.query(sql, [idUsuario], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
@@ -769,8 +820,8 @@ const databaseMethods = {
     pasarAPedido: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
-                INSERT INTO pedido (id_usuario, idArticulo)
-                SELECT id_usuario, idArticulo
+                INSERT INTO pedido (id_usuario, idArticulo, cantidad)
+                SELECT id_usuario, idArticulo, cantidad
                 FROM carro
                 WHERE id_usuario = ?;
             `;
@@ -876,7 +927,7 @@ const databaseMethods = {
     obtenerPedido: async (idUsuario) => {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT tienda.nombreArticulo AS nombreProducto, tienda.descuentoArticulo AS descuento, tienda.precio AS precio
+                SELECT tienda.nombreArticulo AS nombreProducto, tienda.descuentoArticulo AS descuento, tienda.precio AS precio, cantidad
                 FROM pedido
                 JOIN tienda ON pedido.idArticulo = tienda.idArticulo
                 WHERE pedido.id_usuario = ?;`;

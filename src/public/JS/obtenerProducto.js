@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Realizamos la solicitud a la API sin incluir el ID del usuario
         const response = await fetch('/api/obtenerProductos');
-        console.log('Respuesta de la API:', response);
         if (!response.ok) {
             throw new Error(`Error al obtener productos: ${response.status} ${response.statusText}`);
         }
@@ -16,17 +15,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         const ul = document.createElement('ul'); // Crear una lista para mostrar los productos
 
         productos.forEach((producto) => {
-            // Calcular el precio final con descuento
             const precioFinal = producto.precio * (1 - producto.descuento);
+            const precioxcantidad = precioFinal * producto.cantidad; // Multiplicar por la cantidad
 
             // Crear un elemento de lista para cada producto
             const li = document.createElement('li');
             li.innerHTML = `
                 <strong>${producto.nombreProducto}</strong> - 
-                Precio original: $${producto.precio.toFixed(2)} 
+                Precio original: ${producto.precio.toFixed(2)} KC
                 ${producto.descuento > 0 ? `(Descuento: ${(producto.descuento * 100).toFixed(0)}%)` : ''}
                 <br>
-                <strong>Precio final:</strong> $${precioFinal.toFixed(2)}
+                <strong>Cantidad:</strong> ${producto.cantidad}
+                <strong>Precio final:</strong> ${precioxcantidad.toFixed(2)} KC
             `;
             ul.appendChild(li);
         });

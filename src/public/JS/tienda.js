@@ -101,7 +101,15 @@ function crearTarjetaProducto(producto) {
     // Imagen del producto
     const imagenProducto = document.createElement("div");
     imagenProducto.classList.add("imagen-producto");
-    imagenProducto.textContent = "Imagen de Producto"; 
+
+    const img = document.createElement("img");
+    if (producto.imagenBase64) {
+        img.src = producto.imagenBase64; // Usar la imagen extraída de la base de datos en formato base64
+        img.alt = `Imagen de ${producto.nombreArticulo}`;
+    } else {
+        console.error(`El producto "${producto.nombreArticulo}" no tiene una imagen asignada.`);
+    }
+    imagenProducto.appendChild(img);
 
     // Nombre del producto
     const nombreProducto = document.createElement("div");
@@ -111,7 +119,29 @@ function crearTarjetaProducto(producto) {
     // Precio del producto
     const precioProducto = document.createElement("div");
     precioProducto.classList.add("precio-producto");
-    precioProducto.textContent = `${producto.precio} €`;
+
+    // Verificar si el producto tiene descuento
+    if (producto.descuentoArticulo && producto.descuentoArticulo > 0) {
+        // Calcular el precio con descuento
+        const precioConDescuento = (producto.precio * (1 - producto.descuentoArticulo)).toFixed(2);
+
+        // Mostrar precio original tachado (antes de aplicar el descuento)
+        const precioOriginal = document.createElement("span");
+        precioOriginal.classList.add("precio-original");
+        precioOriginal.textContent = `${producto.precio} KC`;
+        precioOriginal.style.textDecoration = "line-through";
+        precioProducto.appendChild(precioOriginal);
+        precioProducto.innerHTML += "&nbsp;";
+
+        // Mostrar el nuevo precio con descuento
+        const nuevoPrecio = document.createElement("span");
+        nuevoPrecio.classList.add("nuevo-precio");
+        nuevoPrecio.textContent = `${precioConDescuento} KC`;
+        precioProducto.appendChild(nuevoPrecio);
+    } else {
+        // Si no tiene descuento, solo mostrar el precio normal
+        precioProducto.textContent = `${producto.precio} KC`;
+    }
 
     // Botón de "Comprar"
     const botonComprar = document.createElement("button");
@@ -179,15 +209,10 @@ async function añadirAlCarrito(idArticulo, nombreProducto, precio) {
         if (response.ok) {
             const data = await response.json();
             alert(`El producto "${nombreProducto}" ha sido añadido al carrito.`);
-
-            // Actualizamos el carrito visualmente
-            const scriptHeader = document.querySelector("script[src='../JS/header.js']");
-            if (scriptHeader) {
-                // Invocamos la función actualizarCarrito que está en header.js
-                if (typeof window.actualizarCarrito === 'function') {
-                    window.actualizarCarrito();
-                }
-            }
+            // Incrementamos el contador del carrito
+            let contadorCarrito = parseInt(document.getElementById('contador-carrito').textContent) || 0;
+            contadorCarrito += 1;
+            document.getElementById('contador-carrito').textContent = contadorCarrito;
         } else {
             alert('Error al añadir el producto al carrito.');
         }
@@ -196,7 +221,6 @@ async function añadirAlCarrito(idArticulo, nombreProducto, precio) {
         alert('Error al añadir el producto al carrito.');
     }
 }
-
 
 // Cargar el header y el footer con fetch
 fetch('../HTML/header.html')

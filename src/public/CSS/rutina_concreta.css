@@ -104,7 +104,7 @@ input[type="number"] {
 
 #ejercicio-imagen {
     height: 50%;
-    width: auto;
+    width: 80%;
     object-fit: cover;
 }
 

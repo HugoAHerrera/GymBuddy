@@ -8,6 +8,8 @@ async function cargarEjercicio() {
         if (!nombreEjercicio) {
             throw new Error('No se proporcionó un nombre de ejercicio en la URL.');
         }
+        
+        cargarImagenUsuario()
 
         // Realizamos una solicitud POST al servidor para obtener los datos del ejercicio
         const responseEjercicio = await fetch('/api/guia-ejercicios', {
@@ -46,15 +48,10 @@ async function cargarEjercicio() {
             .map(step => `<li>${step.trim()}.</li>`)
             .join('');
 
-        // Solicitar la imagen si está disponible
-        if (ejercicio.imagen) {
-            cargarImagenUsuario()
-        }
 
     } catch (error) {
         console.error('Error al cargar los datos del ejercicio:', error);
     }
-    cargarImagenUsuario()
 }
 
 

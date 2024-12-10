@@ -66,6 +66,7 @@ body {
     justify-content: center;
     align-items: center;
     grid-template-columns: repeat(5, 1fr);
+    min-height: 230px;
 }
 
 /* Media Queries para ajustar el número de columnas */

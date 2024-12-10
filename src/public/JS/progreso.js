@@ -24,7 +24,6 @@ async function obtenerDatosSesiones() {
     try {
         const response = await fetch('/api/sesiones');
         const data = await response.json();
-        console.log('Datos de sesiones:', data);
         const sesiones = transformarDatosParaGraficas(data);
         actualizarGraficoTiempo(sesiones);
 
@@ -38,7 +37,6 @@ async function obtenerRutinasHechas() {
     try {
         const response = await fetch('/api/rutinasHechas');
         const datos = await response.json();
-        console.log('Rutinas hechas:', datos);
         const sesiones = transformarDatosParaGraficas(datos);
         actualizarGraficoRutinas(sesiones);
     } catch (error) {
@@ -52,12 +50,13 @@ async function obtenerEstadisticas() {
         const response = await fetch(`/api/estadisticas`);
         const data = await response.json();
         const sesionesCompletadas = data.sesionesCompletadas || 0;
-        const distanciaRecorrida = data.distanciaRecorrida || 0;
-        const ultimaSesion = data.ultimaSesion || 'Nunca';
+        const distanciaRecorrida = data.distanciaRecorrida.toFixed(1) || 0;
+        const ultimaSesion = dayjs(data.ultimaSesion).format('DD-MM-YYYY') || 'Nunca';
+
         // Actualizar el DOM con los datos
         document.getElementById('sesiones-completadas').innerText = sesionesCompletadas;
-        document.getElementById('distancia-recorrida').innerText = distanciaRecorrida.toFixed(1); // Para un decimal
-        document.getElementById('ultima-sesion').innerText = dayjs(ultimaSesion).format('DD-MM-YYYY');
+        document.getElementById('distancia-recorrida').innerText = distanciaRecorrida;
+        document.getElementById('ultima-sesion').innerText = ultimaSesion;
     } catch (error) {
         console.error('Error al obtener estadísticas del usuario:', error);
     }
@@ -76,10 +75,6 @@ function transformarDatosParaGraficas(data) {
         nombresRutina.push(sesion.nombre_rutina); // Almacena el nombre de la rutina
         cantidades.push(sesion.total_rutina); // Almacena la cantidad de veces que se hizo
     });
-    console.log('Tiempo de rutina:', tiempoRutina);
-    console.log('Fechas:', fechas);
-    console.log('Nombres de rutina:', nombresRutina);
-    console.log('Cantidades:', cantidades);
 
     return {
         tiempoRutina,
