@@ -934,21 +934,7 @@ app.post('/api/guardarDatosTarjeta', async (req, res) => {
 });
 
 // Nueva versión del endpoint /api/mensajes con JOIN a usuario
-app.get('/api/mensajes', async (req, res) => {
-    const { comunidad } = req.query;
 
-    if (!comunidad) {
-        return res.status(400).json({ error: 'El nombre de la comunidad es requerido' });
-    }
-
-    try {
-        const mensajes = await database.obtenerMensajesComunidad(comunidad);
-        res.status(200).json(mensajes);
-    } catch (error) {
-        console.error("Error al obtener los mensajes:", error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
 
 // Importar la ruta comunidadRouter sólo una vez, al final
 const comunidadRouter = require('./routes/comunidad');

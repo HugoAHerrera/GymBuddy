@@ -5,10 +5,13 @@ const database = require('../database');
 // Obtener mensajes de una comunidad
 router.get('/', async (req, res) => {
     const { comunidad } = req.query;
-    if (!comunidad) return res.status(400).json({ error: 'El nombre de la comunidad es requerido' });
+    if (!comunidad) {
+        console.error('GET /api/mensajes - El nombre de la comunidad es requerido');
+        return res.status(400).json({ error: 'El nombre de la comunidad es requerido' });
+    }
 
     try {
-        const mensajes = await database.obtenerMensajes(comunidad);
+        const mensajes = await database.obtenerMensajesComunidad(comunidad);
         res.status(200).json(mensajes);
     } catch (error) {
         console.error('Error al obtener mensajes:', error);
@@ -20,6 +23,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     const { contenido, comunidad, id_emisor } = req.body;
     if (!contenido || !comunidad || !id_emisor) {
+        console.error('POST /api/mensajes - Contenido, comunidad y emisor son requeridos');
         return res.status(400).json({ error: 'Contenido, comunidad y emisor son requeridos' });
     }
 
@@ -39,7 +43,7 @@ router.post('/', async (req, res) => {
         res.status(200).json({ message: 'Mensaje enviado con éxito' });
     } catch (error) {
         console.error('Error al guardar el mensaje:', error);
-        res.status(500).json({ error: 'Error al guardar el mensaje' });
+        res.status(500).json({ error: 'Error al guardar el mensaje', details: error.message });
     }
 });
 
