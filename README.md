@@ -31,8 +31,9 @@ No se necesita instalación adicional para usar la aplicación. Simplemente acce
 
 ### Ejecución Local
 Para ejecutar el proyecto localmente en **Visual Studio**, sigue estos pasos:  
-1. Clona el repositorio del proyecto.  
-2. Instala las dependencias necesarias ejecutando los siguientes comandos en la terminal:  
+1. Clona el repositorio del proyecto.
+2. Versión de node utilizada: v20.18.0
+3. Instala las dependencias necesarias ejecutando los siguientes comandos en la terminal:  
    ```bash
    npm install mysql2
    npm install dotenv
@@ -40,4 +41,4 @@ Para ejecutar el proyecto localmente en **Visual Studio**, sigue estos pasos:
    npm install express-session
    npm install multer
    npm install node-wit
-3. npm start
+4. npm start
