@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/b30aee39-08b5-4718-be30-db1b3f59294e/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/gymbuddy-sw",
+    "appService.deploySubpath": "."
+}

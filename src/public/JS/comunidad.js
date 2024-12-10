@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadMessages(comunidad) {
         try {
-            const response = await fetch(/api/mensajes?comunidad=${encodeURIComponent(comunidad)});
+            const response = await fetch(`/api/mensajes?comunidad=${encodeURIComponent(comunidad)}`);
             if (!response.ok) {
                 console.error('Error al cargar los mensajes');
                 return;
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error('Error fetching messages:', err);
         }
-    }
+    }    
 
     function renderMessages(messages) {
         chatMessages.innerHTML = '';
