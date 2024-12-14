@@ -41,4 +41,5 @@ Para ejecutar el proyecto localmente en **Visual Studio**, sigue estos pasos:
    npm install express-session
    npm install multer
    npm install node-wit
+   npm install dayjs
 4. npm start
