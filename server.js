@@ -936,11 +936,50 @@ app.post('/api/guardarDatosTarjeta', async (req, res) => {
 // Nueva versión del endpoint /api/mensajes con JOIN a usuario
 
 
-// Importar la ruta comunidadRouter sólo una vez, al final
-const comunidadRouter = require('./routes/comunidad');
+app.get('/api/obtenerMensajes', async (req, res) => {
+    const { comunidad } = req.query;
+    if (!comunidad) {
+        console.error('GET /api/mensajes - El nombre de la comunidad es requerido');
+        return res.status(400).json({ error: 'El nombre de la comunidad es requerido' });
+    }
 
-// Usa la ruta para los mensajes de comunidad
-app.use('/api/mensajes', comunidadRouter);  // La ruta de la API será '/api/mensajes'
+    try {
+        const mensajes = await database.obtenerMensajesComunidad(comunidad);
+        res.status(200).json(mensajes);
+    } catch (error) {
+        console.error('Error al obtener mensajes:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+app.post('/api/mandarMensaje', async (req, res) => {
+    const { contenido, comunidad, id_emisor } = req.body;
+    if (!contenido || !comunidad || !id_emisor) {
+        console.error('POST /api/mensajes - Contenido, comunidad y emisor son requeridos');
+        return res.status(400).json({ error: 'Contenido, comunidad y emisor son requeridos' });
+    }
+
+    const dayjs = require('dayjs');
+
+    const fecha = dayjs();
+    const hora = fecha.format('HH:mm:ss');
+    const fechaHoy = fecha.format('YYYY-MM-DD');
+
+    try {
+        await database.agregarMensaje({
+            id_emisor,
+            receptor: comunidad,
+            contenido,
+            hora,
+            fecha: fechaHoy
+        });
+
+        res.status(200).json({ message: 'Mensaje enviado con éxito' });
+    } catch (error) {
+        console.error('Error al guardar el mensaje:', error);
+        res.status(500).json({ error: 'Error al guardar el mensaje', details: error.message });
+    }
+});
 
 app.get('/comunidad', (req, res) => {
     if (!req.session.id_usuario) {

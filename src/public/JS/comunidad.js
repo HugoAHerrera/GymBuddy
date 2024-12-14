@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadMessages(comunidad) {
         try {
             // Aquí siempre se enviará comunidad con un valor, por ejemplo "General"
-            const response = await fetch(`/api/mensajes?comunidad=${encodeURIComponent(comunidad)}`);
+            const response = await fetch(`/api/obtenerMensajes?comunidad=${encodeURIComponent(comunidad)}`);
             if (!response.ok) {
                 console.error('Error al cargar los mensajes');
                 return;
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('/api/mensajes', {
+            const response = await fetch('/api/mandarMensaje', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
