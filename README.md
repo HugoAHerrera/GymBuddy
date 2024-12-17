@@ -33,7 +33,11 @@ No se necesita instalación adicional para usar la aplicación. Simplemente acce
 Para ejecutar el proyecto localmente en **Visual Studio**, sigue estos pasos:  
 1. Clona el repositorio del proyecto.
 2. Versión de node utilizada: v20.18.0
-3. Instala las dependencias necesarias ejecutando los siguientes comandos en la terminal:  
+3. Instalar las dependencias con npm update:
+   ```bash
+   npm install
+   ```
+   En caso de no funcionar, las dependencias son:  
    ```bash
    npm install mysql2
    npm install dotenv
@@ -42,4 +46,4 @@ Para ejecutar el proyecto localmente en **Visual Studio**, sigue estos pasos:
    npm install multer
    npm install node-wit
    npm install dayjs
-4. npm start
+5. npm start
